@@ -29,9 +29,9 @@ import y111studios.buildings.premade_variants.*;
 
 public class World {
     // Proportional width of the display.
-    private static final int WIDTH = 640;
+    private static final int WIDTH = 1920;
     // Proportional height of the display.
-    private static final int HEIGHT = 480;
+    private static final int HEIGHT = 1080;
     // Width of map in tiles.
     public static final int TILE_WIDTH = 75;
     // Height of map in tiles.

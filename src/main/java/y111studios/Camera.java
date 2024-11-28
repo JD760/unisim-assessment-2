@@ -35,19 +35,7 @@ public class Camera {
    */
   public void shift() {
     x += (int) (vx * scale);
-    if (x > 5110 - width * scale) {
-      x = 5110 - (int) (width * scale); 
-    }
-    if (x < 0) {
-      x = 0;
-    }
     y += (int) (vy * scale);
-    if (y > 2680 - (height - 100) * scale) {
-      y = 2680 - (int) ((height - 100) * scale); 
-    }
-    if (y < 0) {
-      y = 0;
-    }
   }
 
   /**

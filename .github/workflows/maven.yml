@@ -30,7 +30,16 @@ jobs:
       uses: mikepenz/action-junit-report@v5.0.0
       with:
         report_paths: "**/target/surefire-reports/TEST-*.xml"
-
+    - name: Upload JaCoCo Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report
+        path: target/jacoco/
+    - name: Upload Checkstyle Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: checkstyle.html
+        path: target/checkstyle.html
   build:
     needs: [test]
     runs-on: [ubuntu-latest]
@@ -50,6 +59,30 @@ jobs:
       with:
         name: unisim-0.1.0.jar
         path: target/unisim-0.1.0.jar
-    - name: Maven Dependency Tree Dependency Submission
-      uses: advanced-security/maven-dependency-submission-action@v4.1.0
+
+  release:
+    needs: [build]
+    runs-on: [ubuntu-latest]
+    if: startsWith(github.ref, "refs/tags")
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: unisim-0.1.0.jar
+    - name: Create GitHub Release
+      # You may pin to the exact commit or the version.
+      # uses: softprops/action-gh-release@01570a1f39cb168c169c802c3bceb9e93fb10974
+      uses: softprops/action-gh-release@v2.1.0
+      with:
+        # Preserve the order of the artifacts when uploading
+        preserve_order: true
+        # Repository to make releases against, in <owner>/<repo> format
+        repository: JD760/unisim-assessment-2
+        # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise, a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
+        generate_release_notes: true
+        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest. Can be `true`, `false`, or `legacy`. Uses GitHub api default if not provided
+        make_latest: true
+        files:
+          unisim-0.1.0.jar
           
+    

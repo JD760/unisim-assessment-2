@@ -34,12 +34,12 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: jacoco-report
-        path: target/jacoco/
+        path: "**/target/jacoco/"
     - name: Upload Checkstyle Report
       uses: actions/upload-artifact@v4
       with:
         name: checkstyle.html
-        path: target/checkstyle.html
+        path: "**/target/checkstyle.html"
   build:
     needs: [test]
     runs-on: [ubuntu-latest]
@@ -58,7 +58,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: unisim-0.1.0.jar
-        path: target/unisim-0.1.0.jar
+        path: "**/target/unisim-0.1.0.jar"
 
   release:
     needs: [build]

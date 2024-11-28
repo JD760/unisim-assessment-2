@@ -63,15 +63,14 @@ jobs:
   release:
     needs: [build]
     runs-on: [ubuntu-latest]
-    if: startsWith(github.ref, "refs/tags")
+    # run the release job when a new release tag is added
+    if: github.ref_type == 'tag' && contains(github.ref_name, 'release')
     steps:
     - name: Download Build Artifact
       uses: actions/download-artifact@v4
       with:
         name: unisim-0.1.0.jar
     - name: Create GitHub Release
-      # You may pin to the exact commit or the version.
-      # uses: softprops/action-gh-release@01570a1f39cb168c169c802c3bceb9e93fb10974
       uses: softprops/action-gh-release@v2.1.0
       with:
         # Preserve the order of the artifacts when uploading

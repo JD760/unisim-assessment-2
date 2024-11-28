@@ -30,11 +30,15 @@ jobs:
       uses: mikepenz/action-junit-report@v5.0.0
       with:
         report_paths: "target/surefire-reports/TEST-*.xml"
+    - name: Generate JaCoCo Coverage Report
+      run: mvn jacoco:report
     - name: Upload JaCoCo Coverage Report
       uses: actions/upload-artifact@v4
       with:
         name: jacoco-report
         path: "target/jacoco/"
+    - name: Generate Checkstyle Report
+      run: mvn checkstyle:checkstyle
     - name: Upload Checkstyle Report
       uses: actions/upload-artifact@v4
       with:

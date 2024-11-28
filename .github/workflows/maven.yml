@@ -29,8 +29,21 @@ jobs:
     - name: JUnit Test Report
       uses: mikepenz/action-junit-report@v5.0.0
       with:
-        report_paths: "**/target/surefire-reports/TEST-*.xml"
-
+        report_paths: "target/surefire-reports/TEST-*.xml"
+    - name: Generate JaCoCo Coverage Report
+      run: mvn jacoco:report
+    - name: Upload JaCoCo Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: jacoco-report
+        path: "target/jacoco/"
+    - name: Generate Checkstyle Report
+      run: mvn checkstyle:checkstyle
+    - name: Upload Checkstyle Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: checkstyle.html
+        path: "target/site/checkstyle.html"
   build:
     needs: [test]
     runs-on: [ubuntu-latest]
@@ -49,6 +62,30 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: unisim-0.1.0.jar
-        path: target/unisim-0.1.0.jar
-    - name: Update Dependency Graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+        path: "target/unisim-0.1.0.jar"
+
+  release:
+    needs: [build]
+    runs-on: [ubuntu-latest]
+    # run the release job when a new release tag is added
+    if: github.ref_type == 'tag' && contains(github.ref_name, 'release')
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: unisim-0.1.0.jar
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2.1.0
+      with:
+        # Preserve the order of the artifacts when uploading
+        preserve_order: true
+        # Repository to make releases against, in <owner>/<repo> format
+        repository: JD760/unisim-assessment-2
+        # Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise, a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes.
+        generate_release_notes: true
+        # Specifies whether this release should be set as the latest release for the repository. Drafts and prereleases cannot be set as latest. Can be `true`, `false`, or `legacy`. Uses GitHub api default if not provided
+        make_latest: true
+        files:
+          unisim-0.1.0.jar
+          
+    

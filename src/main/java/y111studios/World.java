@@ -61,13 +61,11 @@ public class World {
         if (!gameState.push(building)) {
             return false;
         }
+        int buildingHeight = coords.getY() - coords.getX();
         int index;
         for (index = 0; index < buildings.size(); index++) {
             Building current = buildings.get(index);
-            if (current.getArea().getY() > building.getArea().getY()) {
-                break;
-            }
-            if (current.getArea().getX() < building.getArea().getX()) {
+            if (current.getArea().getY() - current.getArea().getX() > buildingHeight) {
                 break;
             }
         }

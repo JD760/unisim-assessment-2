@@ -70,11 +70,9 @@ public class MapScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         world.render(delta);
-
         buildingMenu.render();
 
         viewport.apply();
-
         game.spritebatch.begin();
 
         // Render the time remaining at the top of the screen

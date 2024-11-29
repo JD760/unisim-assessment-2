@@ -1,33 +1,14 @@
 package y111studios;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+import java.util.HashMap;
+import java.util.Map;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
+import com.badlogic.gdx.graphics.Texture;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Vector3;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import y111studios.position.GridPosition;
 import y111studios.utils.MenuTab;
-import y111studios.utils.UnreachableException;
-import y111studios.buildings.Building;
-import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.*;
 
 /**
@@ -57,7 +38,7 @@ public class BuildingMenu {
     public BuildingMenu(final Main game, GameState gameState) {
         this.game = game;
         this.gameState = gameState;
-        viewport = new FitViewport(640, 480);
+        viewport = new ScreenViewport();
         menu = game.getAsset(AssetPaths.MENU);
         accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
         cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
@@ -87,11 +68,23 @@ public class BuildingMenu {
      */
     public void render() {
         viewport.apply();
-
         game.spritebatch.begin();
 
         // Draw the menu
-        game.spritebatch.draw(menu, (currentMenuTab.toInt() - 2) * 243, 0, 1126, 100, 0, 0, menu.getWidth(), menu.getHeight(), false, false);
+        float preferredMenuHeight = viewport.getScreenHeight() * 0.15f;
+        float preferredMenuWidth = preferredMenuHeight / menu.getHeight() * menu.getWidth();
+        float menuWidth = preferredMenuWidth;
+        float menuHeight = preferredMenuHeight;
+        game.spritebatch.draw(menu,
+            0, 0,
+            640,
+            menuHeight * 480f / viewport.getScreenHeight(),
+            -(int)((1 - menuWidth / viewport.getScreenWidth()) * menu.getWidth() / 2),
+            0,
+            menu.getWidth() + (int)((1 - menuWidth / viewport.getScreenWidth()) * menu.getWidth()),
+            menu.getHeight(),
+            false, false
+        );
         game.spritebatch.draw(accommodationMenu, 5, 85);
         game.spritebatch.draw(cateringMenu, 248, 85);
         game.spritebatch.draw(teachingMenu, 491, 85);
@@ -110,22 +103,7 @@ public class BuildingMenu {
             game.spritebatch.draw(buildingTextures[j], 10 + i * 80, 15, 50, (int)((float)buildingTextures[j].getHeight() / buildingTextures[j].getWidth() * 50), 0, 0, buildingTextures[j].getWidth(), buildingTextures[j].getHeight(), false, false);
         }
 
-        // Render the time remaining at the top of the screen
-        Duration timeRemaining = gameState.timeRemaining();
-        String timeString = String.format("%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
-
-        GlyphLayout layout = new GlyphLayout(game.font, timeString);
-        float textWidth = layout.width;
-        float textX = (viewport.getWorldWidth() - textWidth) / 2;
-        float textY = viewport.getWorldHeight() - 20;
-        game.font.draw(game.spritebatch, timeString, textX, textY);
-
         game.spritebatch.end();
-
-        // Check for game over
-        if (gameState.isTimeUp()) {
-            gameState.pause(); // Lock pause
-        }
     }
 
     /**

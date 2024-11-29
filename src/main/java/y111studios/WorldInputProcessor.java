@@ -10,11 +10,8 @@ import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.utils.MenuTab;
 
 public class WorldInputProcessor implements InputProcessor {
-    private int[] currentMenuItem;
     private World world;
-    private GameState gameState;
-    private Map<MenuTab, VariantProperties[]> buildingVariants;
-    private MenuTab[] currentMenuTab;
+    private BuildingMenu buildingMenu;
     private int cursorX;
     private int cursorY;
     private int clickX;
@@ -22,15 +19,9 @@ public class WorldInputProcessor implements InputProcessor {
     private boolean clickedOnMap = false;
     private boolean dragging = true;
 
-    WorldInputProcessor(
-        int[] currentMenuItem, World world, GameState gameState, Map<MenuTab,
-        VariantProperties[]> buildingVariants, MenuTab[] currentMenuTab
-    ) {
-        this.currentMenuItem = currentMenuItem;
+    WorldInputProcessor(World world, BuildingMenu buildingMenu) {
         this.world = world;
-        this.gameState = gameState;
-        this.buildingVariants = buildingVariants;
-        this.currentMenuTab = currentMenuTab;
+        this.buildingMenu = buildingMenu;
     }
 
     public boolean keyDown(int keyCode) {
@@ -62,16 +53,16 @@ public class WorldInputProcessor implements InputProcessor {
             world.getViewport().getScreenX(), world.getViewport().getScreenY(),
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         );
-        if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
-            world.addObject(buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]],
+        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
+            world.addObject(buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()],
                 world.pixelToTile(
                     (int)(screenPos.x * world.getCamera().scale),
                     (int)(screenPos.y * world.getCamera().scale)
                 )
             );
-            currentMenuItem[0] = -1;
+            buildingMenu.setCurrentMenuItem(-1);
             world.setSelectedBuilding(null);
-        } else if(currentMenuItem[0] == 5) {
+        } else if(buildingMenu.getCurrentMenuItem() == 5) {
             try{
                 world.removeObject(world.pixelToTile((int)(screenPos.x * world.getCamera().scale), (int)(screenPos.y * world.getCamera().scale)));
             } catch(IllegalStateException ignored) {}
@@ -105,8 +96,9 @@ public class WorldInputProcessor implements InputProcessor {
             world.getViewport().getScreenX(), world.getViewport().getScreenY(),
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         ));
-        if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
-            VariantProperties variant = buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]];
+        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
+            VariantProperties variant = buildingMenu.getBuildingVariants().get(
+                buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
             world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
         }
         return true;

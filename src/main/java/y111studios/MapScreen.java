@@ -30,19 +30,11 @@ public class MapScreen extends ScreenAdapter {
 
     final Main game;
     GameState gameState;
-    Texture[] gameMap = new Texture[4];
-    Texture menu;
-    Texture accommodationMenu;
-    Texture cateringMenu;
-    Texture teachingMenu;
-    MenuTab[] currentMenuTab = new MenuTab[1];
-    int[] currentMenuItem = new int[1];
-    Texture[] buildingTextures;
-    Map<MenuTab, VariantProperties[]> buildingVariants;
     Viewport viewport;
     Texture pauseMenu;
     boolean[] showDebugInfo = {false};
     World world;
+    BuildingMenu buildingMenu;
     InputMultiplexer inputMultiplexer;
     UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
 
@@ -57,80 +49,33 @@ public class MapScreen extends ScreenAdapter {
         viewport = new FitViewport(width, height);
         viewport.getCamera().position.set(width / 2f, height / 2f, 0);
         viewport.getCamera().update();
-        gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
-        gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
-        gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
-        gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
-        menu = game.getAsset(AssetPaths.MENU);
-        accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
-        cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
-        teachingMenu = game.getAsset(AssetPaths.TEACHING_MENU);
         pauseMenu = game.getAsset(AssetPaths.PAUSE);
-        currentMenuTab[0] = MenuTab.ACCOMMODATION;
-        currentMenuItem[0] = -1;
-        buildingTextures = new Texture[] {game.getAsset(AssetPaths.ACC1), game.getAsset(AssetPaths.ACC2), game.getAsset(AssetPaths.ACC3),
-                                          game.getAsset(AssetPaths.ACC4), game.getAsset(AssetPaths.ACC5), game.getAsset(AssetPaths.TRASH), game.getAsset(AssetPaths.CATER1),
-                                          game.getAsset(AssetPaths.CATER2), game.getAsset(AssetPaths.CATER3), game.getAsset(AssetPaths.REC1),
-                                          game.getAsset(AssetPaths.REC2), game.getAsset(AssetPaths.TRASH), game.getAsset(AssetPaths.TEACH1), game.getAsset(AssetPaths.TEACH2),
-                                          game.getAsset(AssetPaths.TEACH3), game.getAsset(AssetPaths.TEACH4), game.getAsset(AssetPaths.TEACH5), game.getAsset(AssetPaths.TRASH)};
-        buildingVariants = new HashMap<>();
-        buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
-        buildingVariants.put(MenuTab.TEACHING, TeachingVariant.values());
-
-        VariantProperties[] jointTabVariants = new VariantProperties[CateringVariant.values().length + RecreationVariant.values().length];
-        System.arraycopy(CateringVariant.values(), 0, jointTabVariants, 0, CateringVariant.values().length);
-        System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, CateringVariant.values().length, RecreationVariant.values().length);
-
-        buildingVariants.put(MenuTab.CATERING_RECREATION, jointTabVariants);
 
         world = new World(game, gameState);
+        buildingMenu = new BuildingMenu(game, gameState);
 
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(universalInputProcessor);
-        inputMultiplexer.addProcessor(new UIInputProcessor(viewport, currentMenuTab, currentMenuItem, world, gameState, buildingVariants, showDebugInfo));
-        inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab));
+        inputMultiplexer.addProcessor(new UIInputProcessor(
+            buildingMenu, world, gameState, showDebugInfo
+        ));
+        inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
     }
 
-    /**
-     * Handles input for panning and zooming the camera.
-     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    /**
-     * Renders the game each tick.
-     *
-     * @param delta The time since the previous tick.
-     */
     @Override
     public void render(float delta) {
         world.render(delta);
 
+        buildingMenu.render();
+
         viewport.apply();
 
         game.spritebatch.begin();
-
-        // Draw the menu
-        game.spritebatch.draw(menu, (currentMenuTab[0].toInt() - 2) * 243, 0, 1126, 100, 0, 0, menu.getWidth(), menu.getHeight(), false, false);
-        game.spritebatch.draw(accommodationMenu, 5, 85);
-        game.spritebatch.draw(cateringMenu, 248, 85);
-        game.spritebatch.draw(teachingMenu, 491, 85);
-
-        // Draw the appropriate items in the menu
-        for(int i = 0; i < 6; i++) {
-            if(i == currentMenuItem[0] || gameState.isPaused()) {
-                game.spritebatch.setColor(1, 1, 1, 0.5f);
-            } else {
-                game.spritebatch.setColor(1, 1, 1, 1);
-            }
-            int j = i;
-            if(currentMenuTab[0].toInt() > 0) {
-                j += currentMenuTab[0].toInt() * 6;
-            }
-            game.spritebatch.draw(buildingTextures[j], 10 + i * 80, 15, 50, (int)((float)buildingTextures[j].getHeight() / buildingTextures[j].getWidth() * 50), 0, 0, buildingTextures[j].getWidth(), buildingTextures[j].getHeight(), false, false);
-        }
 
         // Render the time remaining at the top of the screen
         Duration timeRemaining = gameState.timeRemaining();
@@ -182,30 +127,17 @@ public class MapScreen extends ScreenAdapter {
         }
     }
 
-    /**
-     * Handles resizing of the game window.
-     *
-     * @param width The new width of the window.
-     * @param height The new height of the window.
-     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         world.resize(width, height);
         universalInputProcessor.resize(width, height);
+        buildingMenu.resize(width, height);
     }
 
-    /**
-     * Handles hiding of the game window.
-     */
     @Override
-    public void hide() {
-        Gdx.input.setInputProcessor(null);
-    }
+    public void hide() {}
 
-    /**
-     * Handles closing of the game window.
-     */
     @Override
     public void dispose() {
         game.dispose();

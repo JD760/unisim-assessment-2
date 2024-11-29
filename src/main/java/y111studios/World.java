@@ -53,7 +53,7 @@ public class World {
 
     /**
      * Adds an object to the game.
-     * 
+     *
      * @param variant The object to add.
      * @return Whether the object was added.
      */
@@ -76,7 +76,7 @@ public class World {
 
     /**
      * Removes an object from the game.
-     * 
+     *
      * @param coords The tile coordinates of the object to remove.
      * @return Whether an object was removed.
      */
@@ -96,7 +96,7 @@ public class World {
 
     /**
      * Sets up the camera and loads the background
-     * 
+     *
      * @param game Reference to game manager
      */
     public World(final Main game, GameState gameState) {
@@ -114,8 +114,9 @@ public class World {
     }
 
     /**
-     * Converts building tile coordinates to pixel coordinates. Must account for camera.scale and building depth separately.
-     * 
+     * Converts building tile coordinates to pixel coordinates.
+     * Must account for camera.scale and building depth separately.
+     *
      * @param coords The tile coordinates to convert.
      * @return The pixel coordinates.
      */
@@ -127,7 +128,7 @@ public class World {
 
     /**
      * Converts pixel coordinates to tile coordinates. Must account for camera.scale separately.
-     * 
+     *
      * @param x The x pixel coordinate to convert.
      * @param y The y pixel coordinate to convert.
      * @return A {@link GridPosition} containing the tile coordinates.
@@ -146,7 +147,7 @@ public class World {
 
     /**
      * Returns the current grid position of the cursor.
-     * 
+     *
      * @return The current grid position of the cursor.
      */
     public GridPosition currentGridPosition() {
@@ -177,7 +178,7 @@ public class World {
     }
 
     /**
-     * Renders the game each tick.
+     * Renders the world each tick.
      *
      * @param delta The time since the previous tick.
      */
@@ -234,6 +235,13 @@ public class World {
         }
     }
 
+    /**
+     * Resizes the world object to fill the window.
+     * Should be called every time the window is resized.
+     *
+     * @param width - The new width of the window.
+     * @param height - The new height of the window.
+     */
     void resize(int width, int height) {
         this.width = width;
         this.height = height;

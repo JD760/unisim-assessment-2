@@ -119,10 +119,10 @@ public class World {
      * @param coords The tile coordinates to convert.
      * @return The pixel coordinates.
      */
-    public int[] tileToPixel(GridPosition coords) {
-        int pixelX = 129 + (coords.getX() + coords.getY()) * 32 - (int)camera.x;
-        int pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + (int)camera.y + (int)(height * camera.scale);
-        return new int[] {pixelX, pixelY};
+    public float[] tileToPixel(GridPosition coords) {
+        float pixelX = 129 + (coords.getX() + coords.getY()) * 32 - camera.x;
+        float pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + camera.y + (height * camera.scale);
+        return new float[] {pixelX, pixelY};
     }
 
     /**
@@ -132,11 +132,11 @@ public class World {
      * @param y The y pixel coordinate to convert.
      * @return A {@link GridPosition} containing the tile coordinates.
      */
-    public GridPosition pixelToTile(int x, int y) {
-        int sum = (x + (int)camera.x - 129) / 32;
-        int diff = (y - (int)camera.y - (int)(height * camera.scale) + 1343) / 16;
-        int tileY = (sum - diff) / 2;
-        int tileX = sum - tileY;
+    public GridPosition pixelToTile(float x, float y) {
+        float sum = (x + camera.x - 129) / 32;
+        float diff = (y - camera.y - (height * camera.scale) + 1343) / 16;
+        int tileY = (int)((sum - diff) / 2);
+        int tileX = (int)(sum - tileY);
         try {
             return new GridPosition(tileX, tileY);
         } catch(IllegalArgumentException e) {
@@ -160,12 +160,12 @@ public class World {
         //     game.spritebatch.setColor(INVALID_PREVIEW);
         // }
         Texture texture = game.getAsset(building.getTexturePath());
-        int[] pixelCoords = tileToPixel(building.getArea().getOrigin());
+        float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (int)((float)pixelCoords[0] / camera.scale * 640 / width),
-            (int)(((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height),
-            (int)(2f * texture.getWidth() / camera.scale * 640 / width),
-            (int)(2f * texture.getHeight() / camera.scale * 480 / height),
+            (float)pixelCoords[0] / camera.scale * 640 / width,
+            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height,
+            2f * texture.getWidth() / camera.scale * 640 / width,
+            2f * texture.getHeight() / camera.scale * 480 / height,
             0, 0, texture.getWidth(), texture.getHeight(),
             false, false
         );
@@ -185,7 +185,7 @@ public class World {
         viewport.apply();
         ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
-        camera.shift();
+        camera.updateZoom(delta);
 
         game.spritebatch.begin();
         // Change colour based to dull the screen if paused

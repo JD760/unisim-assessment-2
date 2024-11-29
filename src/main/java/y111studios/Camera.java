@@ -14,8 +14,12 @@ public class Camera {
 
   float vx;
   float vy;
+  float vZoom;
 
   float scale;
+
+  private float time;
+  private float timeStepSize = 1/1000f;
 
   /**
    * Initializes the camera at the given coordinates.
@@ -27,6 +31,7 @@ public class Camera {
     this.height = height;
     vx = 0;
     vy = 0;
+    vZoom = 0;
     scale = 1080f / height;
   }
 
@@ -74,5 +79,19 @@ public class Camera {
     scale *= factor;
     x -= width * scale / 2;
     y -= height * scale / 2;
+  }
+
+  public void updateZoom(float delta) {
+    time += delta;
+    while (time > 0) {
+      vZoom *= 0.99f;
+      zoom(1.0f + vZoom);
+      time -= timeStepSize;
+    }
+  }
+
+  public void pan(int x, int y) {
+    this.x += x * scale;
+    this.y += y * scale;
   }
 }

@@ -5,7 +5,8 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,9 +31,9 @@ import y111studios.buildings.premade_variants.*;
  */
 public class MapScreen extends ScreenAdapter {
     // Proportional width of the display.
-    static final int WIDTH = 1920;
+    int width = 640;
     // Proportional height of the display.
-    static final int HEIGHT = 1080;
+    int height = 480;
     // Width of map in tiles.
     public static final int TILE_WIDTH = 75;
     // Height of map in tiles.
@@ -49,12 +50,13 @@ public class MapScreen extends ScreenAdapter {
     int[] currentMenuItem = new int[1];
     Texture[] buildingTextures;
     Map<MenuTab, VariantProperties[]> buildingVariants;
-    FitViewport viewport;
+    Viewport viewport;
     Texture pauseMenu;
     VariantProperties currentVariant;
     boolean[] showDebugInfo = {false};
     World world;
     InputMultiplexer inputMultiplexer;
+    UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
 
     /**
      * Sets up the camera and loads the background
@@ -64,8 +66,8 @@ public class MapScreen extends ScreenAdapter {
     public MapScreen(final Main game) {
         this.game = game;
         this.gameState = new GameState(TILE_WIDTH, TILE_HEIGHT);
-        viewport = new FitViewport(WIDTH, HEIGHT);
-        viewport.getCamera().position.set(WIDTH / 2f, HEIGHT / 2f, 0);
+        viewport = new ScreenViewport();
+        viewport.getCamera().position.set(width / 2f, height / 2f, 0);
         viewport.getCamera().update();
         gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
         gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
@@ -96,6 +98,7 @@ public class MapScreen extends ScreenAdapter {
         world = new World(game, gameState);
 
         inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(universalInputProcessor);
         inputMultiplexer.addProcessor(new UIInputProcessor(viewport, currentMenuTab, currentMenuItem, world, gameState, buildingVariants, showDebugInfo));
         inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab, viewport));
     }
@@ -201,7 +204,9 @@ public class MapScreen extends ScreenAdapter {
      */
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        viewport.update(width, height, true);
+        world.resize(width, height);
+        universalInputProcessor.resize(width, height);
     }
 
     /**

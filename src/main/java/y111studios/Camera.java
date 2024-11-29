@@ -27,7 +27,7 @@ public class Camera {
     this.height = height;
     vx = 0;
     vy = 0;
-    scale = 2.25f;
+    scale = 1080f / height;
   }
 
   /**
@@ -58,4 +58,13 @@ public class Camera {
     this.vy = 0;
   }
 
+  public void resize(int width, int height) {
+    zoom((float)this.height / height);
+    this.width = width;
+    this.height = height;
+  }
+
+  public void zoom(float factor) {
+    scale *= factor;
+  }
 }

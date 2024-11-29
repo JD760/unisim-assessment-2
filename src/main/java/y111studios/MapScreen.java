@@ -5,7 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
@@ -66,7 +66,7 @@ public class MapScreen extends ScreenAdapter {
     public MapScreen(final Main game) {
         this.game = game;
         this.gameState = new GameState(TILE_WIDTH, TILE_HEIGHT);
-        viewport = new ScreenViewport();
+        viewport = new FitViewport(width, height);
         viewport.getCamera().position.set(width / 2f, height / 2f, 0);
         viewport.getCamera().update();
         gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
@@ -100,7 +100,7 @@ public class MapScreen extends ScreenAdapter {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(universalInputProcessor);
         inputMultiplexer.addProcessor(new UIInputProcessor(viewport, currentMenuTab, currentMenuItem, world, gameState, buildingVariants, showDebugInfo));
-        inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab, viewport));
+        inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab));
     }
 
     /**
@@ -118,11 +118,9 @@ public class MapScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 0);
+        world.render(delta);
 
         viewport.apply();
-
-        world.render(delta);
 
         game.spritebatch.begin();
 

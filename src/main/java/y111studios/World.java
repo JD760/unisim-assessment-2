@@ -1,11 +1,10 @@
 package y111studios;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -13,11 +12,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import y111studios.position.GridPosition;
 import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
@@ -49,6 +49,7 @@ public class World {
     private @Getter Camera camera;
     private @Setter Building selectedBuilding;
     private @Getter List<Building> buildings;
+    private @Getter Viewport viewport;
 
     /**
      * Adds an object to the game.
@@ -99,6 +100,7 @@ public class World {
      * @param game Reference to game manager
      */
     public World(final Main game, GameState gameState) {
+        viewport = new ScreenViewport();
         this.game = game;
         this.gameState = gameState;
         buildings = new LinkedList<>();
@@ -160,10 +162,10 @@ public class World {
         Texture texture = game.getAsset(building.getTexturePath());
         int[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (int)(pixelCoords[0] / camera.scale * 640 / width),
-            (int)((pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height),
-            (int)(2 * texture.getWidth() / camera.scale * 640 / width),
-            (int)(2 * texture.getHeight() / camera.scale * 480 / height),
+            (int)((float)pixelCoords[0] / camera.scale * 640 / width),
+            (int)(((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height),
+            (int)(2f * texture.getWidth() / camera.scale * 640 / width),
+            (int)(2f * texture.getHeight() / camera.scale * 480 / height),
             0, 0, texture.getWidth(), texture.getHeight(),
             false, false
         );
@@ -180,7 +182,8 @@ public class World {
      * @param delta The time since the previous tick.
      */
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 0);
+        viewport.apply();
+        ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
         camera.shift();
 
@@ -234,5 +237,7 @@ public class World {
     void resize(int width, int height) {
         this.width = width;
         this.height = height;
+        camera.resize(width, height);
+        viewport.update(width, height, true);
     }
 }

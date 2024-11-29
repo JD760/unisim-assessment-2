@@ -18,18 +18,16 @@ public class WorldInputProcessor implements InputProcessor {
     GameState gameState;
     Map<MenuTab, VariantProperties[]> buildingVariants;
     MenuTab[] currentMenuTab;
-    Viewport viewport;
 
     WorldInputProcessor(
         int[] currentMenuItem, World world, GameState gameState, Map<MenuTab,
-        VariantProperties[]> buildingVariants, MenuTab[] currentMenuTab, Viewport viewport
+        VariantProperties[]> buildingVariants, MenuTab[] currentMenuTab
     ) {
         this.currentMenuItem = currentMenuItem;
         this.world = world;
         this.gameState = gameState;
         this.buildingVariants = buildingVariants;
         this.currentMenuTab = currentMenuTab;
-        this.viewport = viewport;
     }
 
     public boolean keyDown(int keyCode) {
@@ -42,9 +40,11 @@ public class WorldInputProcessor implements InputProcessor {
         } else if(keyCode == Input.Keys.UP || keyCode == Input.Keys.W) {
             world.getCamera().addVelocity(0, -8);
         } else if(keyCode == Input.Keys.X) {
-            if(world.getCamera().scale < 5) world.getCamera().scale *= 1.5f;
+            if(world.getCamera().scale < 2400f / world.getCamera().height)
+                world.getCamera().zoom(1.5f);
         } else if(keyCode == Input.Keys.Z) {
-            if(world.getCamera().scale > 0.5) world.getCamera().scale /= 1.5f;
+            if(world.getCamera().scale > 480f / world.getCamera().height)
+                world.getCamera().zoom(1 / 1.5f);
         }
         return true;
     }
@@ -55,16 +55,12 @@ public class WorldInputProcessor implements InputProcessor {
         }
         if(keyCode == Input.Keys.RIGHT || keyCode == Input.Keys.D) {
             world.getCamera().addVelocity(-8, 0);
-            world.getCamera().velocityReset();
         } else if(keyCode == Input.Keys.LEFT || keyCode == Input.Keys.A) {
             world.getCamera().addVelocity(8, 0);
-            world.getCamera().velocityReset();
         } else if(keyCode == Input.Keys.DOWN || keyCode == Input.Keys.S) {
             world.getCamera().addVelocity(0, -8);
-            world.getCamera().velocityReset();
         } else if(keyCode == Input.Keys.UP || keyCode == Input.Keys.W) {
             world.getCamera().addVelocity(0, 8);
-            world.getCamera().velocityReset();
         }
         return true;
     }
@@ -74,10 +70,10 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-        Vector3 screenPos = viewport.getCamera().unproject(
+        Vector3 screenPos = world.getViewport().getCamera().unproject(
             new Vector3(screenX, screenY, 0),
-            viewport.getScreenX(), viewport.getScreenY(),
-            viewport.getScreenWidth(), viewport.getScreenHeight()
+            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         );
         if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
             world.addObject(buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]],
@@ -109,10 +105,10 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean mouseMoved(int x, int y) {
-        world.setCursorScreenPos(viewport.getCamera().unproject(
+        world.setCursorScreenPos(world.getViewport().getCamera().unproject(
             new Vector3(x, y, 0),
-            viewport.getScreenX(), viewport.getScreenY(),
-            viewport.getScreenWidth(), viewport.getScreenHeight()
+            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         ));
         if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
             VariantProperties variant = buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]];

@@ -5,15 +5,15 @@ package y111studios;
  */
 public class Camera {
   @SuppressWarnings("MemberName")
-  int x;
+  float x;
   @SuppressWarnings("MemberName")
-  int y;
+  float y;
 
   int width;
   int height;
 
-  int vx;
-  int vy;
+  float vx;
+  float vy;
 
   float scale;
 
@@ -44,7 +44,7 @@ public class Camera {
    * @param vx The change to horizontal velocity.
    * @param vy The change to vertical velocity.
    */
-  public void addVelocity(int vx, int vy) {
+  public void addVelocity(float vx, float vy) {
     this.vx += vx;
     this.vy += vy;
   }
@@ -59,12 +59,20 @@ public class Camera {
   }
 
   public void resize(int width, int height) {
-    zoom((float)this.height / height);
+    x += this.width * scale / 2;
+    y += this.height * scale / 2;
+    scale *= (float)this.height / height;
     this.width = width;
     this.height = height;
+    x -= this.width * scale / 2;
+    y -= this.height * scale / 2;
   }
 
   public void zoom(float factor) {
+    x += width * scale / 2;
+    y += height * scale / 2;
     scale *= factor;
+    x -= width * scale / 2;
+    y -= height * scale / 2;
   }
 }

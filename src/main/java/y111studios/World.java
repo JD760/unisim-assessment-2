@@ -120,8 +120,8 @@ public class World {
      * @return The pixel coordinates.
      */
     public int[] tileToPixel(GridPosition coords) {
-        int pixelX = 129 + (coords.getX() + coords.getY()) * 32 - camera.x;
-        int pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + camera.y + (int)(height * camera.scale);
+        int pixelX = 129 + (coords.getX() + coords.getY()) * 32 - (int)camera.x;
+        int pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + (int)camera.y + (int)(height * camera.scale);
         return new int[] {pixelX, pixelY};
     }
 
@@ -133,8 +133,8 @@ public class World {
      * @return A {@link GridPosition} containing the tile coordinates.
      */
     public GridPosition pixelToTile(int x, int y) {
-        int sum = (x + camera.x - 129) / 32;
-        int diff = (y - camera.y - (int)(height * camera.scale) + 1343) / 16;
+        int sum = (x + (int)camera.x - 129) / 32;
+        int diff = (y - (int)camera.y - (int)(height * camera.scale) + 1343) / 16;
         int tileY = (sum - diff) / 2;
         int tileX = sum - tileY;
         try {
@@ -195,13 +195,13 @@ public class World {
             game.spritebatch.setColor(NORMAL);
         }
         // Draw the game map
-        game.spritebatch.draw(gameMap[0], 0, 0, 640, 480, camera.x + 1, camera.y + 1,
+        game.spritebatch.draw(gameMap[0], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[1], 0, 0, 640, 480, camera.x - gameMap[0].getWidth() + 3, camera.y + 1,
+        game.spritebatch.draw(gameMap[1], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[2], 0, 0, 640, 480, camera.x + 1, camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[2], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, camera.x - gameMap[0].getWidth() + 3, camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
 
         // Add building placement hologram

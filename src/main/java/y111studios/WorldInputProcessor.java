@@ -2,11 +2,8 @@ package y111studios;
 
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.VariantProperties;

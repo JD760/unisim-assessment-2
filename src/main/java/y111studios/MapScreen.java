@@ -2,25 +2,15 @@ package y111studios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Vector3;
 import java.time.Duration;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import y111studios.position.GridPosition;
 import y111studios.utils.MenuTab;
-import y111studios.utils.UnreachableException;
-import y111studios.buildings.Building;
-import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.*;
@@ -30,9 +20,9 @@ import y111studios.buildings.premade_variants.*;
  */
 public class MapScreen extends ScreenAdapter {
     // Proportional width of the display.
-    static final int WIDTH = 640;
+    int width = 640;
     // Proportional height of the display.
-    static final int HEIGHT = 480;
+    int height = 480;
     // Width of map in tiles.
     public static final int TILE_WIDTH = 75;
     // Height of map in tiles.
@@ -49,23 +39,23 @@ public class MapScreen extends ScreenAdapter {
     int[] currentMenuItem = new int[1];
     Texture[] buildingTextures;
     Map<MenuTab, VariantProperties[]> buildingVariants;
-    FitViewport viewport;
+    Viewport viewport;
     Texture pauseMenu;
-    VariantProperties currentVariant;
     boolean[] showDebugInfo = {false};
     World world;
     InputMultiplexer inputMultiplexer;
+    UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
 
     /**
      * Sets up the camera and loads the background
-     * 
+     *
      * @param game Reference to game manager
      */
     public MapScreen(final Main game) {
         this.game = game;
         this.gameState = new GameState(TILE_WIDTH, TILE_HEIGHT);
-        viewport = new FitViewport(WIDTH, HEIGHT);
-        viewport.getCamera().position.set(WIDTH / 2f, HEIGHT / 2f, 0);
+        viewport = new FitViewport(width, height);
+        viewport.getCamera().position.set(width / 2f, height / 2f, 0);
         viewport.getCamera().update();
         gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
         gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
@@ -96,8 +86,9 @@ public class MapScreen extends ScreenAdapter {
         world = new World(game, gameState);
 
         inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(universalInputProcessor);
         inputMultiplexer.addProcessor(new UIInputProcessor(viewport, currentMenuTab, currentMenuItem, world, gameState, buildingVariants, showDebugInfo));
-        inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab, viewport));
+        inputMultiplexer.addProcessor(new WorldInputProcessor(currentMenuItem, world, gameState, buildingVariants, currentMenuTab));
     }
 
     /**
@@ -110,16 +101,14 @@ public class MapScreen extends ScreenAdapter {
 
     /**
      * Renders the game each tick.
-     * 
+     *
      * @param delta The time since the previous tick.
      */
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 0);
+        world.render(delta);
 
         viewport.apply();
-
-        world.render(delta);
 
         game.spritebatch.begin();
 
@@ -195,13 +184,15 @@ public class MapScreen extends ScreenAdapter {
 
     /**
      * Handles resizing of the game window.
-     * 
+     *
      * @param width The new width of the window.
      * @param height The new height of the window.
      */
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        viewport.update(width, height, true);
+        world.resize(width, height);
+        universalInputProcessor.resize(width, height);
     }
 
     /**

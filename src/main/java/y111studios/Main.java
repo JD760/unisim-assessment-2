@@ -31,7 +31,7 @@ public class Main extends Game {
     font = new BitmapFont();
     font.setColor(Color.BLACK);
     font.getData().setScale(1.3f);
-    Gdx.graphics.setWindowedMode(1280, 960);
+    Gdx.graphics.setWindowedMode(1280, 720);
     this.setScreen(new MapScreen(this));
 
     // Templates

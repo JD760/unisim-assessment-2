@@ -7,10 +7,11 @@ import lombok.Getter;
  * 
  * <p>
  * This class is used to store the constant paths to the internal assets to
- * reduce the occurence of
+ * reduce the occurrence of
  * magic strings in the code.
  * </p>
  */
+@Getter
 public enum AssetPaths {
   START_SCREEN("assets/StartScreen.png"),
   MAP_BACKGROUND_TOP_LEFT("assets/UnisimMapTL.png"),
@@ -37,10 +38,10 @@ public enum AssetPaths {
   TEACH3("assets/Teach3.png"),
   TEACH4("assets/Teach4.png"),
   TEACH5("assets/Teach5.png"),
-  TRASH("iconduck_assets/Trash.png"),
+  TRASH("assets/Trash.png"),
   GAME_OVER("assets/GameOver.png");
 
-  private @Getter final String path;
+  private final String path;
 
   AssetPaths(String path) {
     this.path = path;

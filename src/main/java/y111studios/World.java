@@ -1,11 +1,10 @@
 package y111studios;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -13,11 +12,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import y111studios.position.GridPosition;
 import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
@@ -29,9 +29,9 @@ import y111studios.buildings.premade_variants.*;
 
 public class World {
     // Proportional width of the display.
-    static final int WIDTH = 640;
+    private int width = 640;
     // Proportional height of the display.
-    static final int HEIGHT = 480;
+    private int height = 480;
     // Width of map in tiles.
     public static final int TILE_WIDTH = 75;
     // Height of map in tiles.
@@ -42,13 +42,14 @@ public class World {
     private final static Color PAUSED_DULLING = new Color(0.5f, 0.5f, 0.5f, 1f);
     private final static Color NORMAL = new Color(1, 1, 1, 1);
 
-    final Main game;
-    GameState gameState;
-    Texture[] gameMap = new Texture[4];
-    @Setter Vector3 cursorScreenPos;
-    @Getter Camera camera;
-    @Setter Building selectedBuilding;
-    List<Building> renderOrdering;
+    private final Main game;
+    private GameState gameState;
+    private Texture[] gameMap = new Texture[4];
+    private @Setter Vector3 cursorScreenPos;
+    private @Getter Camera camera;
+    private @Setter Building selectedBuilding;
+    private @Getter List<Building> buildings;
+    private @Getter Viewport viewport;
 
     /**
      * Adds an object to the game.
@@ -61,17 +62,15 @@ public class World {
         if (!gameState.push(building)) {
             return false;
         }
+        int buildingHeight = coords.getY() - coords.getX();
         int index;
-        for (index = 0; index < renderOrdering.size(); index++) {
-            Building current = renderOrdering.get(index);
-            if (current.getArea().getY() > building.getArea().getY()) {
-                break;
-            }
-            if (current.getArea().getX() < building.getArea().getX()) {
+        for (index = 0; index < buildings.size(); index++) {
+            Building current = buildings.get(index);
+            if (current.getArea().getY() - current.getArea().getX() > buildingHeight) {
                 break;
             }
         }
-        renderOrdering.add(index, building);
+        buildings.add(index, building);
         return true;
     }
 
@@ -85,10 +84,10 @@ public class World {
         if (!gameState.removePosition(coords)) {
             return false;
         }
-        for (int i = 0; i < renderOrdering.size(); i++) {
-            Building current = renderOrdering.get(i);
+        for (int i = 0; i < buildings.size(); i++) {
+            Building current = buildings.get(i);
             if (current.contains(coords)) {
-                renderOrdering.remove(i);
+                buildings.remove(i);
                 return true;
             }
         }
@@ -101,14 +100,17 @@ public class World {
      * @param game Reference to game manager
      */
     public World(final Main game, GameState gameState) {
+        viewport = new ScreenViewport();
         this.game = game;
         this.gameState = gameState;
-        renderOrdering = new LinkedList<>();
-        gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
-        gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
-        gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
-        gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
-        camera = new Camera(2000, 1000, WIDTH, HEIGHT);
+        buildings = new LinkedList<>();
+        camera = new Camera(2000, 1000, width, height);
+        if (game != null) {
+            gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
+            gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
+            gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
+            gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
+        }
     }
 
     /**
@@ -117,10 +119,10 @@ public class World {
      * @param coords The tile coordinates to convert.
      * @return The pixel coordinates.
      */
-    public int[] tileToPixel(GridPosition coords) {
-        int pixelX = 129 + (coords.getX() + coords.getY()) * 32 - camera.x;
-        int pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + camera.y + (int)(HEIGHT * camera.scale);
-        return new int[] {pixelX, pixelY};
+    public float[] tileToPixel(GridPosition coords) {
+        float pixelX = 129 + (coords.getX() + coords.getY()) * 32 - camera.x;
+        float pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + camera.y + (height * camera.scale);
+        return new float[] {pixelX, pixelY};
     }
 
     /**
@@ -130,11 +132,11 @@ public class World {
      * @param y The y pixel coordinate to convert.
      * @return A {@link GridPosition} containing the tile coordinates.
      */
-    public GridPosition pixelToTile(int x, int y) {
-        int sum = (x + camera.x - 129) / 32;
-        int diff = (y - camera.y - (int)(HEIGHT * camera.scale) + 1343) / 16;
-        int tileY = (sum - diff) / 2;
-        int tileX = sum - tileY;
+    public GridPosition pixelToTile(float x, float y) {
+        float sum = (x + camera.x - 129) / 32;
+        float diff = (y - camera.y - (height * camera.scale) + 1343) / 16;
+        int tileY = (int)((sum - diff) / 2);
+        int tileX = (int)(sum - tileY);
         try {
             return new GridPosition(tileX, tileY);
         } catch(IllegalArgumentException e) {
@@ -158,12 +160,12 @@ public class World {
         //     game.spritebatch.setColor(INVALID_PREVIEW);
         // }
         Texture texture = game.getAsset(building.getTexturePath());
-        int[] pixelCoords = tileToPixel(building.getArea().getOrigin());
+        float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (int)(pixelCoords[0] / camera.scale),
-            (int)((pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale),
-            (int)(2 * texture.getWidth() / camera.scale),
-            (int)(2 * texture.getHeight() / camera.scale),
+            (float)pixelCoords[0] / camera.scale * 640 / width,
+            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height,
+            2f * texture.getWidth() / camera.scale * 640 / width,
+            2f * texture.getHeight() / camera.scale * 480 / height,
             0, 0, texture.getWidth(), texture.getHeight(),
             false, false
         );
@@ -180,9 +182,10 @@ public class World {
      * @param delta The time since the previous tick.
      */
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 0);
+        viewport.apply();
+        ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
-        camera.shift();
+        camera.updateZoom(delta);
 
         game.spritebatch.begin();
         // Change colour based to dull the screen if paused
@@ -192,14 +195,14 @@ public class World {
             game.spritebatch.setColor(NORMAL);
         }
         // Draw the game map
-        game.spritebatch.draw(gameMap[0], 0, 0, WIDTH, HEIGHT, camera.x + 1, camera.y + 1,
-            (int)(WIDTH * camera.scale), (int)(HEIGHT * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[1], 0, 0, WIDTH, HEIGHT, camera.x - gameMap[0].getWidth() + 3, camera.y + 1,
-            (int)(WIDTH * camera.scale), (int)(HEIGHT * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[2], 0, 0, WIDTH, HEIGHT, camera.x + 1, camera.y - gameMap[0].getHeight() + 3,
-            (int)(WIDTH * camera.scale), (int)(HEIGHT * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[3], 0, 0, WIDTH, HEIGHT, camera.x - gameMap[0].getWidth() + 3, camera.y - gameMap[0].getHeight() + 3,
-            (int)(WIDTH * camera.scale), (int)(HEIGHT * camera.scale), false, false);
+        game.spritebatch.draw(gameMap[0], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y + 1,
+            (int)(width * camera.scale), (int)(height * camera.scale), false, false);
+        game.spritebatch.draw(gameMap[1], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
+            (int)(width * camera.scale), (int)(height * camera.scale), false, false);
+        game.spritebatch.draw(gameMap[2], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
+            (int)(width * camera.scale), (int)(height * camera.scale), false, false);
+        game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
+            (int)(width * camera.scale), (int)(height * camera.scale), false, false);
 
         // Add building placement hologram
         if (!gameState.isPaused() && selectedBuilding != null) {
@@ -221,7 +224,7 @@ public class World {
         }
 
         // Render buildings
-        renderOrdering.forEach(this::renderBuilding);
+        buildings.forEach(this::renderBuilding);
 
         game.spritebatch.end();
 
@@ -229,5 +232,12 @@ public class World {
         if (gameState.isTimeUp()) {
             camera.velocityReset(); // Lock camera
         }
+    }
+
+    void resize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        camera.resize(width, height);
+        viewport.update(width, height, true);
     }
 }

@@ -5,17 +5,21 @@ package y111studios;
  */
 public class Camera {
   @SuppressWarnings("MemberName")
-  int x;
+  float x;
   @SuppressWarnings("MemberName")
-  int y;
+  float y;
 
   int width;
   int height;
 
-  int vx;
-  int vy;
+  float vx;
+  float vy;
+  float vZoom;
 
   float scale;
+
+  private float time;
+  private float timeStepSize = 1/1000f;
 
   /**
    * Initializes the camera at the given coordinates.
@@ -27,7 +31,8 @@ public class Camera {
     this.height = height;
     vx = 0;
     vy = 0;
-    scale = 2.25f;
+    vZoom = 0;
+    scale = 1080f / height;
   }
 
   /**
@@ -35,19 +40,7 @@ public class Camera {
    */
   public void shift() {
     x += (int) (vx * scale);
-    if (x > 5110 - width * scale) {
-      x = 5110 - (int) (width * scale); 
-    }
-    if (x < 0) {
-      x = 0;
-    }
     y += (int) (vy * scale);
-    if (y > 2680 - (height - 100) * scale) {
-      y = 2680 - (int) ((height - 100) * scale); 
-    }
-    if (y < 0) {
-      y = 0;
-    }
   }
 
   /**
@@ -56,7 +49,7 @@ public class Camera {
    * @param vx The change to horizontal velocity.
    * @param vy The change to vertical velocity.
    */
-  public void addVelocity(int vx, int vy) {
+  public void addVelocity(float vx, float vy) {
     this.vx += vx;
     this.vy += vy;
   }
@@ -70,4 +63,35 @@ public class Camera {
     this.vy = 0;
   }
 
+  public void resize(int width, int height) {
+    x += this.width * scale / 2;
+    y += this.height * scale / 2;
+    scale *= (float)this.height / height;
+    this.width = width;
+    this.height = height;
+    x -= this.width * scale / 2;
+    y -= this.height * scale / 2;
+  }
+
+  public void zoom(float factor) {
+    x += width * scale / 2;
+    y += height * scale / 2;
+    scale *= factor;
+    x -= width * scale / 2;
+    y -= height * scale / 2;
+  }
+
+  public void updateZoom(float delta) {
+    time += delta;
+    while (time > 0) {
+      vZoom *= 0.99f;
+      zoom(1.0f + vZoom);
+      time -= timeStepSize;
+    }
+  }
+
+  public void pan(int x, int y) {
+    this.x += x * scale;
+    this.y += y * scale;
+  }
 }

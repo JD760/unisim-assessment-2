@@ -2,71 +2,43 @@ package y111studios;
 
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.utils.MenuTab;
 
 public class WorldInputProcessor implements InputProcessor {
-    int[] currentMenuItem;
-    World world;
-    GameState gameState;
-    Map<MenuTab, VariantProperties[]> buildingVariants;
-    MenuTab[] currentMenuTab;
-    Viewport viewport;
+    private int[] currentMenuItem;
+    private World world;
+    private GameState gameState;
+    private Map<MenuTab, VariantProperties[]> buildingVariants;
+    private MenuTab[] currentMenuTab;
+    private int cursorX;
+    private int cursorY;
+    private int clickX;
+    private int clickY;
+    private boolean clickedOnMap = false;
+    private boolean dragging = true;
 
     WorldInputProcessor(
         int[] currentMenuItem, World world, GameState gameState, Map<MenuTab,
-        VariantProperties[]> buildingVariants, MenuTab[] currentMenuTab, Viewport viewport
+        VariantProperties[]> buildingVariants, MenuTab[] currentMenuTab
     ) {
         this.currentMenuItem = currentMenuItem;
         this.world = world;
         this.gameState = gameState;
         this.buildingVariants = buildingVariants;
         this.currentMenuTab = currentMenuTab;
-        this.viewport = viewport;
     }
 
     public boolean keyDown(int keyCode) {
-        if(keyCode == Input.Keys.RIGHT || keyCode == Input.Keys.D) {
-            world.getCamera().addVelocity(8, 0);
-        } else if(keyCode == Input.Keys.LEFT || keyCode == Input.Keys.A) {
-            world.getCamera().addVelocity(-8, 0);
-        } else if(keyCode == Input.Keys.DOWN || keyCode == Input.Keys.S) {
-            world.getCamera().addVelocity(0, 8);
-        } else if(keyCode == Input.Keys.UP || keyCode == Input.Keys.W) {
-            world.getCamera().addVelocity(0, -8);
-        } else if(keyCode == Input.Keys.X) {
-            if(world.getCamera().scale < 5) world.getCamera().scale *= 1.5f;
-        } else if(keyCode == Input.Keys.Z) {
-            if(world.getCamera().scale > 0.5) world.getCamera().scale /= 1.5f;
-        }
-        return true;
+        return false;
     }
 
     public boolean keyUp(int keyCode) {
-        if(gameState.isPaused()) {
-            return true;
-        }
-        if(keyCode == Input.Keys.RIGHT || keyCode == Input.Keys.D) {
-            world.getCamera().addVelocity(-8, 0);
-            world.getCamera().velocityReset();
-        } else if(keyCode == Input.Keys.LEFT || keyCode == Input.Keys.A) {
-            world.getCamera().addVelocity(8, 0);
-            world.getCamera().velocityReset();
-        } else if(keyCode == Input.Keys.DOWN || keyCode == Input.Keys.S) {
-            world.getCamera().addVelocity(0, -8);
-            world.getCamera().velocityReset();
-        } else if(keyCode == Input.Keys.UP || keyCode == Input.Keys.W) {
-            world.getCamera().addVelocity(0, 8);
-            world.getCamera().velocityReset();
-        }
-        return true;
+        return false;
     }
 
     public boolean keyTyped (char character) {
@@ -74,10 +46,21 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-        Vector3 screenPos = viewport.getCamera().unproject(
-            new Vector3(screenX, screenY, 0),
-            viewport.getScreenX(), viewport.getScreenY(),
-            viewport.getScreenWidth(), viewport.getScreenHeight()
+        clickX = cursorX = screenX;
+        clickY = cursorY = screenY;
+        clickedOnMap = true;
+        dragging = false;
+        return true;
+    }
+
+  public boolean touchUp(int x, int y, int pointer, int button) {
+    clickedOnMap = false;
+    if (!dragging) {
+        // Try to place a building in the world
+        Vector3 screenPos = world.getViewport().getCamera().unproject(
+            new Vector3(x, y, 0),
+            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         );
         if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
             world.addObject(buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]],
@@ -93,26 +76,34 @@ public class WorldInputProcessor implements InputProcessor {
                 world.removeObject(world.pixelToTile((int)(screenPos.x * world.getCamera().scale), (int)(screenPos.y * world.getCamera().scale)));
             } catch(IllegalStateException ignored) {}
         }
-        return true;
     }
+    dragging = true;
+    return false;
+  }
 
-    public boolean touchUp (int x, int y, int pointer, int button) {
-        return false;
+  public boolean touchDragged(int x, int y, int pointer) {
+    if (clickedOnMap) {
+      if (Math.max(Math.abs(cursorX - clickX),
+          Math.abs(cursorY - clickY)) > 5) {
+        dragging= true;
+      }
+      world.getCamera().pan(cursorX - x, cursorY - y);
+      cursorX = x;
+      cursorY = y;
+      return true;
     }
-
-    public boolean touchDragged (int x, int y, int pointer) {
-        return false;
-    }
+    return false;
+  }
 
     public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
     public boolean mouseMoved(int x, int y) {
-        world.setCursorScreenPos(viewport.getCamera().unproject(
+        world.setCursorScreenPos(world.getViewport().getCamera().unproject(
             new Vector3(x, y, 0),
-            viewport.getScreenX(), viewport.getScreenY(),
-            viewport.getScreenWidth(), viewport.getScreenHeight()
+            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         ));
         if (currentMenuItem[0] >= 0 && currentMenuItem[0] < 5) {
             VariantProperties variant = buildingVariants.get(currentMenuTab[0])[currentMenuItem[0]];
@@ -122,6 +113,7 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean scrolled (float amountX, float amountY) {
-        return false;
+        world.getCamera().vZoom += 0.001f * amountY;
+        return true;
     }
 }

@@ -61,7 +61,6 @@ public class WorldInputProcessor implements InputProcessor {
                 )
             );
             buildingMenu.setCurrentMenuItem(-1);
-            buildingMenu.updateSelectedBuildingHighlight();
             world.setSelectedBuilding(null);
         } else if(buildingMenu.getCurrentMenuItem() == 5) {
             try{
@@ -74,6 +73,11 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean touchDragged(int x, int y, int pointer) {
+    world.setCursorScreenPos(world.getViewport().getCamera().unproject(
+        new Vector3(x, y, 0),
+        world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
+    ));
     if (clickedOnMap) {
       if (Math.max(Math.abs(cursorX - clickX),
           Math.abs(cursorY - clickY)) > 5) {
@@ -97,11 +101,6 @@ public class WorldInputProcessor implements InputProcessor {
             world.getViewport().getScreenX(), world.getViewport().getScreenY(),
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         ));
-        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-            VariantProperties variant = buildingMenu.getBuildingVariants().get(
-                buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-            world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
-        }
         return true;
     }
 

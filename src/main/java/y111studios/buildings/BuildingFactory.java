@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import y111studios.buildings.premade_variants.AccommodationVariant;
 import y111studios.buildings.premade_variants.CateringVariant;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
@@ -50,12 +51,13 @@ public final class BuildingFactory {
   // runtime.
 
   static {
-    CONSTRUCTORS = new HashMap<>(4);
+    CONSTRUCTORS = new HashMap<>(5);
     try {
       tryRegisterConstructor(AccommodationVariant.class, AccommodationBuilding.class);
       tryRegisterConstructor(CateringVariant.class, CateringBuilding.class);
       tryRegisterConstructor(RecreationVariant.class, RecreationBuilding.class);
       tryRegisterConstructor(TeachingVariant.class, TeachingBuilding.class);
+      tryRegisterConstructor(MiscellaneousVariant.class, MiscellaneousBuilding.class);
     } catch (UnreachableException e) {
       // This should not happen, as the constructors should be defined in the classes
       e.printStackTrace();

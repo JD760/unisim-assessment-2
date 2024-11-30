@@ -61,6 +61,7 @@ public class WorldInputProcessor implements InputProcessor {
                 )
             );
             buildingMenu.setCurrentMenuItem(-1);
+            buildingMenu.updateSelectedBuildingHighlight();
             world.setSelectedBuilding(null);
         } else if(buildingMenu.getCurrentMenuItem() == 5) {
             try{

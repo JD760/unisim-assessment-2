@@ -84,6 +84,7 @@ public class BuildingMenu {
                     currentMenuItem = -1;
                     world.setSelectedBuilding(null);
                     updateTab(tab);
+                    updateSelectedBuildingHighlight();
                 }
             });
         }
@@ -101,6 +102,7 @@ public class BuildingMenu {
                     } else {
                         currentMenuItem = buildingIndex;
                     }
+                    updateSelectedBuildingHighlight();
                 }
             });
         }
@@ -191,6 +193,7 @@ public class BuildingMenu {
         }
 
         updateCellSizes();
+        updateSelectedBuildingHighlight();
     }
 
     /**
@@ -199,22 +202,34 @@ public class BuildingMenu {
      */
     private void updateCellSizes() {
         for (Cell<Actor> cell : buildingTable.getCells()) {
-          Image buildingImage = (Image)(cell.getActor());
-          Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
-          cell.width(
-            viewport.getScreenHeight() * 0.1f
-                * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
-          ).height(
-            viewport.getScreenHeight() * 0.1f
-                * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
-          ).pad(viewport.getScreenHeight() * 0.01f);
+            Image buildingImage = (Image)(cell.getActor());
+            Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
+            cell.width(
+                viewport.getScreenHeight() * 0.1f
+                    * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
+            ).height(
+                viewport.getScreenHeight() * 0.1f
+                    * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
+            ).pad(viewport.getScreenHeight() * 0.01f);
         }
         for (Cell<Actor> cell : tabTable.getCells()) {
-          Image tabImage = (Image)(cell.getActor());
-          Vector2 textureSize = new Vector2(tabImage.getWidth(), tabImage.getHeight());
-          cell.width(
-            viewport.getScreenHeight() * 0.025f * 6.667f
-          ).height(viewport.getScreenHeight() * 0.025f);
+            Image tabImage = (Image)(cell.getActor());
+            Vector2 textureSize = new Vector2(tabImage.getWidth(), tabImage.getHeight());
+            cell.width(
+                viewport.getScreenHeight() * 0.025f * 6.667f
+            ).height(viewport.getScreenHeight() * 0.025f);
+        }
+    }
+
+    /**
+     * Updates the opacity of the building Images to be correct according to the currentMenuItem.
+     */
+    public void updateSelectedBuildingHighlight() {
+        int i = 0;
+        for (Cell<Actor> cell : buildingTable.getCells()) {
+            Image buildingImage = (Image)(cell.getActor());
+            buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.5f : 1f);
+            i++;
         }
     }
 }

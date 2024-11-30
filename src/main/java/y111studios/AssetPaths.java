@@ -33,15 +33,26 @@ public enum AssetPaths {
   CATER1("assets/Cater1.png"),
   CATER2("assets/Cater2.png"),
   CATER3("assets/Cater3.png"),
+  CATER4("assets/Cater4.png"),
+  CATER5("assets/Cater5.png"),
   REC1("assets/Rec1.png"),
   REC2("assets/Rec2.png"),
+  TREE1("assets/tree1.png"),
+  TREE2("assets/tree3.png"),
+  TREE3("assets/tree8.png"),
   TEACH1("assets/Teach1.png"),
   TEACH2("assets/Teach2.png"),
   TEACH3("assets/Teach3.png"),
   TEACH4("assets/Teach4.png"),
   TEACH5("assets/Teach5.png"),
+  BIKE_SHED("assets/bike-storage.png"),
+  STRAIGHT_ROAD("assets/road1.png"),
+  ROAD_CROSS("assets/road5.png"),
+  ROAD_BEND1("assets/road4.png"),
+  ROAD_BEND2("assets/road7.png"),
+  GAME_OVER("assets/GameOver.png"),
   TRASH("assets/Trash.png"),
-  GAME_OVER("assets/GameOver.png");
+  ROTATE("assets/axis-z-rotate-clockwise.png");
 
   private final String path;
 

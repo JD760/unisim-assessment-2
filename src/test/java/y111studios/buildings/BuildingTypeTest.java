@@ -22,16 +22,16 @@ public class BuildingTypeTest {
     final GridPosition origin = new GridPosition(0, 0);
     Building building;
 
-    building = BuildingFactory.createBuilding(AccommodationVariant.SMALL_HOUSE, origin);
+    building = BuildingFactory.createBuilding(AccommodationVariant.SMALL_HOUSE, origin, false);
     assertEquals(BuildingType.ACCOMMODATION, BuildingType.fromBuilding(building));
 
-    building = BuildingFactory.createBuilding(CateringVariant.FAST_FOOD, origin);
+    building = BuildingFactory.createBuilding(CateringVariant.FAST_FOOD, origin, false);
     assertEquals(BuildingType.CATERING, BuildingType.fromBuilding(building));
 
-    building = BuildingFactory.createBuilding(RecreationVariant.PARK, origin);
+    building = BuildingFactory.createBuilding(RecreationVariant.PARK, origin, false);
     assertEquals(BuildingType.RECREATION, BuildingType.fromBuilding(building));
 
-    building = BuildingFactory.createBuilding(TeachingVariant.SMALL_CLASSROOM, origin);
+    building = BuildingFactory.createBuilding(TeachingVariant.SMALL_CLASSROOM, origin, false);
     assertEquals(BuildingType.TEACHING, BuildingType.fromBuilding(building));
   }
 }

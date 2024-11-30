@@ -14,6 +14,7 @@ public abstract class MapObject {
 
   protected @Getter GridArea area;
   protected @Getter AssetPaths texturePath;
+  protected boolean flipped;
 
   /**
    * Constructs a new map object with the specified area.
@@ -22,7 +23,7 @@ public abstract class MapObject {
    *
    * @throws IllegalArgumentException if the area or texture are null
    */
-  protected MapObject(GridArea area, AssetPaths texturePath) {
+  protected MapObject(GridArea area, AssetPaths texturePath, boolean flipped) {
     if (area == null) {
       throw new IllegalArgumentException("GridArea must not be null");
     }
@@ -31,6 +32,7 @@ public abstract class MapObject {
     }
     this.area = area;
     this.texturePath = texturePath;
+    this.flipped = flipped;
   }
 
   /**
@@ -45,4 +47,7 @@ public abstract class MapObject {
     return area.contains(position);
   }
 
+  public boolean getFlipped() {
+    return flipped;
+  }
 }

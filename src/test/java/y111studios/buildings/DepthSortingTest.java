@@ -15,8 +15,8 @@ public class DepthSortingTest {
     gameState.resume();
     World world = new World(null, gameState);
 
-    world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3));
-    world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(6, 5));
+    world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3), false);
+    world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(6, 5), false);
 
       assertEquals(world.getBuildings().get(0).getArea().getOrigin(), new GridPosition(6, 5),
               "Adding a building behind another building should result in it being sorted first");
@@ -28,8 +28,8 @@ public class DepthSortingTest {
     gameState.resume();
     World world = new World(null, gameState);
 
-    world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3));
-    world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(5, 6));
+    world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3), false);
+    world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(5, 6), false);
 
       assertEquals(world.getBuildings().get(1).getArea().getOrigin(), new GridPosition(5, 6),
               "Adding a building in front of another building should result in it being sorted second");

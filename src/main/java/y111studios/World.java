@@ -50,6 +50,7 @@ public class World {
     private @Setter Building selectedBuilding;
     private @Getter List<Building> buildings;
     private @Getter Viewport viewport;
+    private @Setter boolean deleteMode = false;
 
     /**
      * Adds an object to the game.
@@ -57,8 +58,8 @@ public class World {
      * @param variant The object to add.
      * @return Whether the object was added.
      */
-    public boolean addObject(VariantProperties variant, GridPosition coords) {
-        Building building = BuildingFactory.createBuilding(variant, coords);
+    public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
+        Building building = BuildingFactory.createBuilding(variant, coords, flipped);
         if (!gameState.push(building)) {
             return false;
         }
@@ -155,11 +156,9 @@ public class World {
     }
 
     public void renderBuilding(Building building) {
-        // TODO:
-        // Add back highlight below
-        // if (menuItem == 5 && building.getArea().contains(currentGridPosition())) {
-        //     game.spritebatch.setColor(INVALID_PREVIEW);
-        // }
+        if (deleteMode && building.getArea().contains(currentGridPosition())) {
+            game.spritebatch.setColor(INVALID_PREVIEW);
+        }
         Texture texture = game.getAsset(building.getTexturePath());
         float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
@@ -168,7 +167,7 @@ public class World {
             2f * texture.getWidth() / camera.scale * 640 / width,
             2f * texture.getHeight() / camera.scale * 480 / height,
             0, 0, texture.getWidth(), texture.getHeight(),
-            false, false
+            building.getFlipped(), false
         );
         if (gameState.isPaused()) {
             game.spritebatch.setColor(PAUSED_DULLING);

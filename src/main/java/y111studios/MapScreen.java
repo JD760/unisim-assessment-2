@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import y111studios.utils.MenuTab;
+import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.*;
@@ -57,7 +58,7 @@ public class MapScreen extends ScreenAdapter {
         pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
         world = new World(game, gameState);
-        buildingMenu = new BuildingMenu(game, stage, world);
+        buildingMenu = new BuildingMenu(game, stage);
 
         uiInputProcessor = new UIInputProcessor(
             buildingMenu, world, gameState, showDebugInfo
@@ -77,6 +78,15 @@ public class MapScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
+            VariantProperties variant = buildingMenu.getBuildingVariants().get(
+                buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
+            world.setSelectedBuilding(BuildingFactory.createBuilding(
+                variant, world.currentGridPosition(), buildingMenu.getFlipped()
+            ));
+        } else {
+            world.setSelectedBuilding(null);
+        }
         world.render(delta);
         buildingMenu.render();
         stage.act(delta);

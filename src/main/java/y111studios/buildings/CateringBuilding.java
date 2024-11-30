@@ -18,8 +18,8 @@ public class CateringBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public CateringBuilding(GridPosition position, CateringVariant variant) {
-    super(position, variant);
+  public CateringBuilding(GridPosition position, CateringVariant variant, boolean flipped) {
+    super(position, variant, flipped);
   }
 
 }

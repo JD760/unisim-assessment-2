@@ -18,8 +18,8 @@ public class TeachingBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public TeachingBuilding(GridPosition position, TeachingVariant variant) {
-    super(position, variant);
+  public TeachingBuilding(GridPosition position, TeachingVariant variant, boolean flipped) {
+    super(position, variant, flipped);
   }
 
 }

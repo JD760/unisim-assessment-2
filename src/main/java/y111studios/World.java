@@ -50,6 +50,7 @@ public class World {
     private @Setter Building selectedBuilding;
     private @Getter List<Building> buildings;
     private @Getter Viewport viewport;
+    private @Setter boolean deleteMode = false;
 
     /**
      * Adds an object to the game.
@@ -155,11 +156,9 @@ public class World {
     }
 
     public void renderBuilding(Building building) {
-        // TODO:
-        // Add back highlight below
-        // if (menuItem == 5 && building.getArea().contains(currentGridPosition())) {
-        //     game.spritebatch.setColor(INVALID_PREVIEW);
-        // }
+        if (deleteMode && building.getArea().contains(currentGridPosition())) {
+            game.spritebatch.setColor(INVALID_PREVIEW);
+        }
         Texture texture = game.getAsset(building.getTexturePath());
         float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,

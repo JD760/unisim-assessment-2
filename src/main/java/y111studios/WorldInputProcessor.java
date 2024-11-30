@@ -98,6 +98,7 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean mouseMoved(int x, int y) {
+        world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
         world.setCursorScreenPos(world.getViewport().getCamera().unproject(
             new Vector3(x, y, 0),
             world.getViewport().getScreenX(), world.getViewport().getScreenY(),

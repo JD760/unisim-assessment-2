@@ -33,6 +33,8 @@ public enum AssetPaths {
   CATER1("assets/Cater1.png"),
   CATER2("assets/Cater2.png"),
   CATER3("assets/Cater3.png"),
+  CATER4("assets/Cater4.png"),
+  CATER5("assets/Cater5.png"),
   REC1("assets/Rec1.png"),
   REC2("assets/Rec2.png"),
   TREE1("assets/tree1.png"),

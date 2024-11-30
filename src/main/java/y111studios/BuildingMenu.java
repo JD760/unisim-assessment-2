@@ -64,8 +64,8 @@ public class BuildingMenu {
             game.getAsset(AssetPaths.ACC5), game.getAsset(AssetPaths.ROTATE),
             game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.CATER1), game.getAsset(AssetPaths.CATER2),
-            game.getAsset(AssetPaths.CATER3), game.getAsset(AssetPaths.REC1),
-            game.getAsset(AssetPaths.REC2), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.CATER3), game.getAsset(AssetPaths.CATER4),
+            game.getAsset(AssetPaths.CATER5), game.getAsset(AssetPaths.ROTATE),
             game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.TEACH1), game.getAsset(AssetPaths.TEACH2),
             game.getAsset(AssetPaths.TEACH3), game.getAsset(AssetPaths.TEACH4),
@@ -82,15 +82,10 @@ public class BuildingMenu {
         };
         buildingVariants = new HashMap<>();
         buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
-
-        VariantProperties[] jointTabVariants = new VariantProperties[CateringVariant.values().length + RecreationVariant.values().length];
-        System.arraycopy(CateringVariant.values(), 0, jointTabVariants, 0, CateringVariant.values().length);
-        System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, CateringVariant.values().length, RecreationVariant.values().length);
-
-        buildingVariants.put(MenuTab.CATERING, jointTabVariants);
+        buildingVariants.put(MenuTab.CATERING, CateringVariant.values());
         buildingVariants.put(MenuTab.TEACHING, TeachingVariant.values());
 
-        jointTabVariants = new VariantProperties[5];
+        VariantProperties[] jointTabVariants = new VariantProperties[5];
         System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, 0, 2);
         System.arraycopy(MiscellaneousVariant.values(), 0, jointTabVariants, 2, 3);
         buildingVariants.put(MenuTab.RECREATION, jointTabVariants);

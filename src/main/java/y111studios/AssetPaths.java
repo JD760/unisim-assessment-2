@@ -43,13 +43,14 @@ public enum AssetPaths {
   TEACH3("assets/Teach3.png"),
   TEACH4("assets/Teach4.png"),
   TEACH5("assets/Teach5.png"),
-  TRASH("assets/Trash.png"),
   BIKE_SHED("assets/bike-storage.png"),
   STRAIGHT_ROAD("assets/road1.png"),
   ROAD_CROSS("assets/road5.png"),
   ROAD_BEND1("assets/road4.png"),
   ROAD_BEND2("assets/road7.png"),
-  GAME_OVER("assets/GameOver.png");
+  GAME_OVER("assets/GameOver.png"),
+  TRASH("assets/Trash.png"),
+  ROTATE("assets/axis-z-rotate-clockwise.png");
 
   private final String path;
 

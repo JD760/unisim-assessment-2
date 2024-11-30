@@ -37,6 +37,7 @@ public class BuildingMenu {
     @Getter Texture[] buildingTextures;
     @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
     @Getter Viewport viewport;
+    @Getter boolean[] flipped = new boolean[5];
     VariantProperties currentVariant;
     InputMultiplexer inputMultiplexer;
     UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -44,14 +45,14 @@ public class BuildingMenu {
     Table tabTable;
     Image[] unselectedTabImages = new Image[5];
     Image[] selectedTabImages = new Image[5];
-    Image[] buildingImages = new Image[30];
+    Image[] buildingImages = new Image[35];
 
     /**
      * Sets up the camera and loads the background
      *
      * @param game Reference to game manager
      */
-    public BuildingMenu(final Main game, Stage stage, World world) {
+    public BuildingMenu(final Main game, Stage stage) {
         this.game = game;
         viewport = new ScreenViewport();
         menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
@@ -63,19 +64,24 @@ public class BuildingMenu {
         buildingTextures = new Texture[] {
             game.getAsset(AssetPaths.ACC1), game.getAsset(AssetPaths.ACC2),
             game.getAsset(AssetPaths.ACC3), game.getAsset(AssetPaths.ACC4),
-            game.getAsset(AssetPaths.ACC5), game.getAsset(AssetPaths.TRASH),
+            game.getAsset(AssetPaths.ACC5), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.CATER1), game.getAsset(AssetPaths.CATER2),
             game.getAsset(AssetPaths.CATER3), game.getAsset(AssetPaths.REC1),
-            game.getAsset(AssetPaths.REC2), game.getAsset(AssetPaths.TRASH),
+            game.getAsset(AssetPaths.REC2), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.TEACH1), game.getAsset(AssetPaths.TEACH2),
             game.getAsset(AssetPaths.TEACH3), game.getAsset(AssetPaths.TEACH4),
-            game.getAsset(AssetPaths.TEACH5), game.getAsset(AssetPaths.TRASH),
+            game.getAsset(AssetPaths.TEACH5), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.REC1), game.getAsset(AssetPaths.REC2),
             game.getAsset(AssetPaths.TREE1), game.getAsset(AssetPaths.TREE2),
-            game.getAsset(AssetPaths.TREE3), game.getAsset(AssetPaths.TRASH),
+            game.getAsset(AssetPaths.TREE3), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.BIKE_SHED), game.getAsset(AssetPaths.STRAIGHT_ROAD),
             game.getAsset(AssetPaths.ROAD_CROSS), game.getAsset(AssetPaths.ROAD_BEND1),
-            game.getAsset(AssetPaths.ROAD_BEND2), game.getAsset(AssetPaths.TRASH)
+            game.getAsset(AssetPaths.ROAD_BEND2), game.getAsset(AssetPaths.ROTATE),
+            game.getAsset(AssetPaths.TRASH)
         };
         buildingVariants = new HashMap<>();
         buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
@@ -98,6 +104,7 @@ public class BuildingMenu {
 
         tabTable = new Table();
         for (int i = 0; i < 5; i++) {
+            flipped[i] = false;
             unselectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_UNSELECTED_TAB));
             selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
             final int tab = i;
@@ -106,33 +113,32 @@ public class BuildingMenu {
                 @Override
                 public void clicked(InputEvent e, float x, float y) {
                     setCurrentMenuItem(-1);
-                    world.setSelectedBuilding(null);
                     updateTab(tab);
                 }
             });
         }
 
         buildingTable = new Table();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 35; i++) {
             buildingImages[i] = new Image(buildingTextures[i]);
-            final int buildingIndex = i % 6;
+            final int buildingIndex = i % 7;
             buildingImages[i].addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent e, float x, float y) {
-                    if(buildingIndex == currentMenuItem || buildingIndex > 5) {
+                    if (buildingIndex == currentMenuItem || buildingIndex > 6 || buildingIndex == 5) {
                         setCurrentMenuItem(-1);
-                        world.setSelectedBuilding(null);
+                        if (buildingIndex == 5)
+                            flipBuildings();
                     } else {
                         setCurrentMenuItem(buildingIndex);
                     }
                 }
             });
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 7; i++) {
             buildingTable.add(buildingImages[i]);
         }
 
-        updateTab(0);
         stage.addActor(tabTable);
         stage.addActor(buildingTable);
     }
@@ -171,6 +177,7 @@ public class BuildingMenu {
         buildingTable.setBounds(0, height * 0.01f, width, height * 0.11f);
         tabTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
         updateCellSizes();
+        updateBuildingRotations();
     }
 
     /**
@@ -206,12 +213,12 @@ public class BuildingMenu {
         // Update the buildings depending on the tab
         i = 0;
         for (Cell<Actor> cell : buildingTable.getCells()) {
-            cell.setActor(buildingImages[6 * tabNumber + i]);
+            cell.setActor(buildingImages[7 * tabNumber + i]);
             i++;
         }
 
-        updateCellSizes();
         updateSelectedBuildingHighlight();
+        updateCellSizes();
     }
 
     /**
@@ -254,5 +261,19 @@ public class BuildingMenu {
     public void setCurrentMenuItem(int itemNum) {
         currentMenuItem = itemNum;
         updateSelectedBuildingHighlight();
+    }
+
+    private void updateBuildingRotations() {
+        int i = 0;
+        for (Image buildingImage : buildingImages) {
+            buildingImage.setScaleX(flipped[currentMenuTab.toInt()] ? -1f : 1f);
+            buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
+            i++;
+        }
+    }
+
+    private void flipBuildings() {
+        flipped[currentMenuTab.toInt()] = !flipped[currentMenuTab.toInt()];
+        updateBuildingRotations();
     }
 }

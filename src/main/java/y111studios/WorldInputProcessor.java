@@ -61,8 +61,7 @@ public class WorldInputProcessor implements InputProcessor {
                 )
             );
             buildingMenu.setCurrentMenuItem(-1);
-            world.setSelectedBuilding(null);
-        } else if(buildingMenu.getCurrentMenuItem() == 5) {
+        } else if(buildingMenu.getCurrentMenuItem() == 6) {
             try{
                 world.removeObject(world.pixelToTile((int)(screenPos.x * world.getCamera().scale), (int)(screenPos.y * world.getCamera().scale)));
             } catch(IllegalStateException ignored) {}

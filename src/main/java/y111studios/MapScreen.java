@@ -58,7 +58,7 @@ public class MapScreen extends ScreenAdapter {
         pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
         world = new World(game, gameState);
-        buildingMenu = new BuildingMenu(game, stage, world);
+        buildingMenu = new BuildingMenu(game, stage);
 
         uiInputProcessor = new UIInputProcessor(
             buildingMenu, world, gameState, showDebugInfo
@@ -82,6 +82,8 @@ public class MapScreen extends ScreenAdapter {
             VariantProperties variant = buildingMenu.getBuildingVariants().get(
                 buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
             world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
+        } else {
+            world.setSelectedBuilding(null);
         }
         world.render(delta);
         buildingMenu.render();

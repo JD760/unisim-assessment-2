@@ -44,7 +44,7 @@ public class BuildingMenu {
     Table tabTable;
     Image[] unselectedTabImages = new Image[5];
     Image[] selectedTabImages = new Image[5];
-    Image[] buildingImages = new Image[24];
+    Image[] buildingImages = new Image[30];
 
     /**
      * Sets up the camera and loads the background
@@ -72,7 +72,10 @@ public class BuildingMenu {
             game.getAsset(AssetPaths.TEACH5), game.getAsset(AssetPaths.TRASH),
             game.getAsset(AssetPaths.REC1), game.getAsset(AssetPaths.REC2),
             game.getAsset(AssetPaths.TREE1), game.getAsset(AssetPaths.TREE2),
-            game.getAsset(AssetPaths.TREE3), game.getAsset(AssetPaths.TRASH)
+            game.getAsset(AssetPaths.TREE3), game.getAsset(AssetPaths.TRASH),
+            game.getAsset(AssetPaths.BIKE_SHED), game.getAsset(AssetPaths.STRAIGHT_ROAD),
+            game.getAsset(AssetPaths.ROAD_CROSS), game.getAsset(AssetPaths.ROAD_BEND1),
+            game.getAsset(AssetPaths.ROAD_BEND2), game.getAsset(AssetPaths.TRASH)
         };
         buildingVariants = new HashMap<>();
         buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
@@ -88,6 +91,10 @@ public class BuildingMenu {
         System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, 0, 2);
         System.arraycopy(MiscellaneousVariant.values(), 0, jointTabVariants, 2, 3);
         buildingVariants.put(MenuTab.RECREATION, jointTabVariants);
+
+        jointTabVariants = new VariantProperties[5];
+        System.arraycopy(MiscellaneousVariant.values(), 3, jointTabVariants, 0, 5);
+        buildingVariants.put(MenuTab.MISCELLANEOUS, jointTabVariants);
 
         tabTable = new Table();
         for (int i = 0; i < 5; i++) {
@@ -106,7 +113,7 @@ public class BuildingMenu {
         }
 
         buildingTable = new Table();
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 30; i++) {
             buildingImages[i] = new Image(buildingTextures[i]);
             final int buildingIndex = i % 6;
             buildingImages[i].addListener(new ClickListener() {
@@ -188,8 +195,6 @@ public class BuildingMenu {
                 currentMenuTab = MenuTab.MISCELLANEOUS;
                 break;
         }
-
-        if (tabNumber > 3) return;
 
         // Update the tabs to show the correct tab selected
         int i = 0;

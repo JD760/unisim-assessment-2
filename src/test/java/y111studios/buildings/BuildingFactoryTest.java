@@ -28,13 +28,13 @@ public class BuildingFactoryTest {
     @Test
     void preventNullCreation() {
       assertThrows(IllegalArgumentException.class, () -> {
-        BuildingFactory.createBuilding((AccommodationVariant) null, DEFAULT_POSITION);
-        BuildingFactory.createBuilding((CateringVariant) null, DEFAULT_POSITION);
-        BuildingFactory.createBuilding((RecreationVariant) null, DEFAULT_POSITION);
-        BuildingFactory.createBuilding((TeachingVariant) null, DEFAULT_POSITION);
+        BuildingFactory.createBuilding((AccommodationVariant) null, DEFAULT_POSITION, false);
+        BuildingFactory.createBuilding((CateringVariant) null, DEFAULT_POSITION, false);
+        BuildingFactory.createBuilding((RecreationVariant) null, DEFAULT_POSITION, false);
+        BuildingFactory.createBuilding((TeachingVariant) null, DEFAULT_POSITION, false);
       });
       assertThrows(IllegalArgumentException.class, () -> {
-        BuildingFactory.createBuilding(AccommodationVariant.SMALL_HOUSE, null);
+        BuildingFactory.createBuilding(AccommodationVariant.SMALL_HOUSE, null, false);
       });
     }
 
@@ -42,7 +42,7 @@ public class BuildingFactoryTest {
     @EnumSource(value = AccommodationVariant.class)
     void accommodationBuildingCreation(AccommodationVariant variant) {
       assertDoesNotThrow(() -> {
-        BuildingFactory.createBuilding(variant, DEFAULT_POSITION);
+        BuildingFactory.createBuilding(variant, DEFAULT_POSITION, false);
       });
     }
 
@@ -50,7 +50,7 @@ public class BuildingFactoryTest {
     @EnumSource(value = CateringVariant.class)
     void cateringBuildingCreation(CateringVariant variant) {
       assertDoesNotThrow(() -> {
-        BuildingFactory.createBuilding(variant, DEFAULT_POSITION);
+        BuildingFactory.createBuilding(variant, DEFAULT_POSITION, false);
       });
     }
 
@@ -58,7 +58,7 @@ public class BuildingFactoryTest {
     @EnumSource(value = RecreationVariant.class)
     void recreationBuildingCreation(RecreationVariant variant) {
       assertDoesNotThrow(() -> {
-        BuildingFactory.createBuilding(variant, DEFAULT_POSITION);
+        BuildingFactory.createBuilding(variant, DEFAULT_POSITION, false);
       });
     }
 
@@ -66,7 +66,7 @@ public class BuildingFactoryTest {
     @EnumSource(value = TeachingVariant.class)
     void teachingBuildingCreation(TeachingVariant variant) {
       assertDoesNotThrow(() -> {
-        BuildingFactory.createBuilding(variant, DEFAULT_POSITION);
+        BuildingFactory.createBuilding(variant, DEFAULT_POSITION, false);
       });
     }
 

@@ -19,8 +19,10 @@ public class AccommodationBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public AccommodationBuilding(GridPosition position, AccommodationVariant variant) {
-    super(position, variant);
+  public AccommodationBuilding(
+      GridPosition position, AccommodationVariant variant, boolean flipped
+  ) {
+    super(position, variant, flipped);
   }
 
 }

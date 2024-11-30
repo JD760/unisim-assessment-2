@@ -36,8 +36,7 @@ public final class BuildingFactory {
 
   /**
    * A map of the constructors for each building class. The key is the class of
-   * the building and the
-   * value is the constructor of the building.
+   * the building and the value is the constructor of the building.
    *
    * @see #tryRegisterConstructor(Class, Class)
    */
@@ -45,11 +44,8 @@ public final class BuildingFactory {
       CONSTRUCTORS;
 
   // At startup, try to register the constructors of the building classes using
-  // each variant. This
-  // is done to ensure that the constructors are correctly defined at the start
-  // rather than during
-  // runtime.
-
+  // each variant. This is done to ensure that the constructors are correctly
+  // defined at the start rather than during runtime.
   static {
     CONSTRUCTORS = new HashMap<>(5);
     try {
@@ -84,7 +80,8 @@ public final class BuildingFactory {
     Constructor<? extends Building> constructor;
     try {
       // Get the constructor of the building class
-      constructor = buildingClass.getConstructor(GridPosition.class, variantClass);
+      Class[] parameterTypes = new Class[] {GridPosition.class, variantClass, boolean.class};
+      constructor = buildingClass.getConstructor(parameterTypes);
     } catch (NoSuchMethodException e) {
       // This should not happen, as the constructor should be defined in the class
       throw new UnreachableException("Constructor undefined", e);
@@ -107,7 +104,9 @@ public final class BuildingFactory {
    * @return a new instance of the building
    * @throws IllegalArgumentException if the variant or position is null
    */
-  public static Building createBuilding(VariantProperties variant, GridPosition position) {
+  public static Building createBuilding(
+      VariantProperties variant, GridPosition position, boolean flipped
+  ) {
     if (variant == null) {
       throw new IllegalArgumentException("BuildingProperties must not be null");
     }
@@ -118,7 +117,7 @@ public final class BuildingFactory {
     Constructor<? extends Building> constructor = CONSTRUCTORS.get(variant.getVariantClass());
     try {
       // Return the new instance of the Building
-      return constructor.newInstance(position, variant);
+      return constructor.newInstance(position, variant, flipped);
     } catch (Exception e) {
       // This should not happen, as the constructor should be defined in the class
       e.printStackTrace();

@@ -57,8 +57,8 @@ public class World {
      * @param variant The object to add.
      * @return Whether the object was added.
      */
-    public boolean addObject(VariantProperties variant, GridPosition coords) {
-        Building building = BuildingFactory.createBuilding(variant, coords);
+    public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
+        Building building = BuildingFactory.createBuilding(variant, coords, flipped);
         if (!gameState.push(building)) {
             return false;
         }
@@ -168,7 +168,7 @@ public class World {
             2f * texture.getWidth() / camera.scale * 640 / width,
             2f * texture.getHeight() / camera.scale * 480 / height,
             0, 0, texture.getWidth(), texture.getHeight(),
-            false, false
+            building.getFlipped(), false
         );
         if (gameState.isPaused()) {
             game.spritebatch.setColor(PAUSED_DULLING);

@@ -81,7 +81,9 @@ public class MapScreen extends ScreenAdapter {
         if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
             VariantProperties variant = buildingMenu.getBuildingVariants().get(
                 buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-            world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
+            world.setSelectedBuilding(BuildingFactory.createBuilding(
+                variant, world.currentGridPosition(), buildingMenu.getFlipped()
+            ));
         } else {
             world.setSelectedBuilding(null);
         }

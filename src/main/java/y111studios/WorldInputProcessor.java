@@ -54,11 +54,14 @@ public class WorldInputProcessor implements InputProcessor {
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         );
         if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-            world.addObject(buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()],
+            world.addObject(
+                buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[
+                    buildingMenu.getCurrentMenuItem()],
                 world.pixelToTile(
                     (int)(screenPos.x * world.getCamera().scale),
                     (int)(screenPos.y * world.getCamera().scale)
-                )
+                ),
+                buildingMenu.getFlipped()
             );
             buildingMenu.setCurrentMenuItem(-1);
         } else if(buildingMenu.getCurrentMenuItem() == 6) {

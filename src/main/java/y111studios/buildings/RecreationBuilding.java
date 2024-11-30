@@ -18,8 +18,8 @@ public class RecreationBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public RecreationBuilding(GridPosition position, RecreationVariant variant) {
-    super(position, variant);
+  public RecreationBuilding(GridPosition position, RecreationVariant variant, boolean flipped) {
+    super(position, variant, flipped);
   }
 
 }

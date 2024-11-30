@@ -18,7 +18,9 @@ public class MiscellaneousBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public MiscellaneousBuilding(GridPosition position, MiscellaneousVariant variant) {
-    super(position, variant);
+  public MiscellaneousBuilding(
+      GridPosition position, MiscellaneousVariant variant, boolean flipped
+  ) {
+    super(position, variant, flipped);
   }
 }

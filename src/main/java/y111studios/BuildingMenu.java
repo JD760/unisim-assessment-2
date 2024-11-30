@@ -3,8 +3,6 @@ package y111studios;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JTree;
-
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import lombok.Getter;
-import lombok.Setter;
 import y111studios.utils.MenuTab;
 import y111studios.buildings.premade_variants.*;
 
@@ -27,25 +24,25 @@ import y111studios.buildings.premade_variants.*;
  * A class to interact with LibGDX to render the game window.
  */
 public class BuildingMenu {
-    final Main game;
-    Texture menuBackground;
-    Texture accommodationMenu;
-    Texture cateringMenu;
-    Texture teachingMenu;
-    @Setter @Getter MenuTab currentMenuTab;
-    @Getter int currentMenuItem;
-    @Getter Texture[] buildingTextures;
-    @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
-    @Getter Viewport viewport;
-    @Getter boolean[] flipped = new boolean[5];
-    VariantProperties currentVariant;
-    InputMultiplexer inputMultiplexer;
-    UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
-    Table buildingTable;
-    Table tabTable;
-    Image[] unselectedTabImages = new Image[5];
-    Image[] selectedTabImages = new Image[5];
-    Image[] buildingImages = new Image[35];
+    private final Main game;
+    private Texture menuBackground;
+    private Texture accommodationMenu;
+    private Texture cateringMenu;
+    private Texture teachingMenu;
+    private @Getter MenuTab currentMenuTab;
+    private @Getter int currentMenuItem;
+    private @Getter Texture[] buildingTextures;
+    private @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
+    private @Getter Viewport viewport;
+    private boolean flipped;
+    private VariantProperties currentVariant;
+    private InputMultiplexer inputMultiplexer;
+    private UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
+    private Table buildingTable;
+    private Table tabTable;
+    private Image[] unselectedTabImages = new Image[5];
+    private Image[] selectedTabImages = new Image[5];
+    private Image[] buildingImages = new Image[35];
 
     /**
      * Sets up the camera and loads the background
@@ -104,7 +101,7 @@ public class BuildingMenu {
 
         tabTable = new Table();
         for (int i = 0; i < 5; i++) {
-            flipped[i] = false;
+            flipped = false;
             unselectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_UNSELECTED_TAB));
             selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
             final int tab = i;
@@ -219,6 +216,8 @@ public class BuildingMenu {
 
         updateSelectedBuildingHighlight();
         updateCellSizes();
+        flipped = false;
+        updateBuildingRotations();
     }
 
     /**
@@ -264,16 +263,19 @@ public class BuildingMenu {
     }
 
     private void updateBuildingRotations() {
-        int i = 0;
-        for (Image buildingImage : buildingImages) {
-            buildingImage.setScaleX(flipped[currentMenuTab.toInt()] ? -1f : 1f);
+        for (Cell<Actor> cell : buildingTable.getCells()) {
+            Image buildingImage = (Image)(cell.getActor());
+            buildingImage.setScaleX(flipped ? -1f : 1f);
             buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
-            i++;
         }
     }
 
     private void flipBuildings() {
-        flipped[currentMenuTab.toInt()] = !flipped[currentMenuTab.toInt()];
+        flipped = !flipped;
         updateBuildingRotations();
+    }
+
+    public boolean getFlipped() {
+        return flipped;
     }
 }

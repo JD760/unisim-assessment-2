@@ -17,8 +17,8 @@ public abstract class Building extends MapObject {
 
    * @param area the area in grid space occupied by the building
    */
-  protected Building(GridArea area, AssetPaths texturePath) {
-    super(area, texturePath);
+  protected Building(GridArea area, AssetPaths texturePath, boolean flipped) {
+    super(area, texturePath, flipped);
   }
 
   /**
@@ -29,8 +29,10 @@ public abstract class Building extends MapObject {
    * @param width    the width of the building
    * @param height   the height of the building
    */
-  protected Building(GridPosition position, int width, int height, AssetPaths texturePath) {
-    this(new GridArea(position, width, height), texturePath);
+  protected Building(
+      GridPosition position, int width, int height, AssetPaths texturePath, boolean flipped
+  ) {
+    this(new GridArea(position, width, height), texturePath, flipped);
   }
 
   /**
@@ -40,8 +42,8 @@ public abstract class Building extends MapObject {
    * @param position the position of the building
    * @param variant  the variant information of the building
    */
-  protected Building(GridPosition position, VariantProperties variant) {
-    this(position, variant.getWidth(), variant.getHeight(), variant.getTexturePath());
+  protected Building(GridPosition position, VariantProperties variant, boolean flipped) {
+    this(position, variant.getWidth(), variant.getHeight(), variant.getTexturePath(), flipped);
   }
 
 }

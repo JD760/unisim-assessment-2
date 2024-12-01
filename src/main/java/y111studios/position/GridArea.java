@@ -25,14 +25,12 @@ public class GridArea {
 
   /**
    * The continuous range of x-coordinates that are within this GridArea. This
-   * field is
-   * lazily-initialised with the first call to {@link #getrangeX()}.
+   * field is lazily-initialised with the first call to {@link #getrangeX()}.
    */
   private IntRange rangeX = null;
   /**
    * The continuous range of y-coordinates that are within this GridArea. This
-   * field is
-   * lazily-initialised with the first call to {@link #getrangeY()}.
+   * field is lazily-initialised with the first call to {@link #getrangeY()}.
    */
   private IntRange rangeY = null;
 
@@ -103,10 +101,9 @@ public class GridArea {
    * 
    * <p>
    * This method returns true if the x-coordinate of the other position is within
-   * the range
-   * [origin.x, origin.x + width) and the y-coordinate is within the range
-   * [origin.y, origin.y +
-   * height). If other is {@code null}, this method returns false.
+   * the range [origin.x, origin.x + width) and the y-coordinate is within the range
+   * [origin.y, origin.y + height). If other is {@code null}, this method returns
+   * false.
    * </p>
    *
    * @param other the GridPosition to check
@@ -125,8 +122,8 @@ public class GridArea {
    * 
    * <p>
    * This method returns true if the other area is completely encompassed by this
-   * area. This
-   * includes if the other area has the same origin and dimensions as this area.
+   * area. This includes if the other area has the same origin and dimensions as
+   * this area.
    * </p>
    *
    * @param other - A grid area to check containment with.

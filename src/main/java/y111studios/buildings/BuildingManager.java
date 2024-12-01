@@ -6,7 +6,7 @@ import y111studios.position.GridPosition;
 
 /**
  * A manager class to maintain the buildings and the count of them.
- * 
+ *
  * <p>
  * This class provides functionality to place buildings and keep track of the
  * number of buildings,
@@ -16,7 +16,6 @@ import y111studios.position.GridPosition;
  * fixed size array of
  * buildings, helped by a the building counter.
  * </p>
-
  * @see BuildingCounter
  * @see BuildingController
  */
@@ -29,24 +28,21 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Fixed sized array containing the buildings.
-   * 
+   *
    * <p>
    * This will always contain exactly {@link #MAX_BUILDINGS MAX_BUILDINGS}
    * ({@value #MAX_BUILDINGS}) elements
    * </p>
-   * 
+   *
    * <p>
    * This array is null-initialized and will contain null elements until a
-   * building is placed. The
-   * array should not contain any null elements in the range of 0 to the total
-   * number of buildings
-   * placed. This array should not contain any elements beyond the total number of
-   * buildings.
-   * Additionally, this array is unordered and the order of buildings is not
-   * guaranteed.
+   * building is placed. The array should not contain any null elements in the
+   * range of 0 to the total number of buildings placed. This array should not
+   * contain any elements beyond the total number of buildings. Additionally,
+   * this array is unordered and the order of buildings is not guaranteed.
    * </p>
    */
-  private Building[] buildings;
+  private @Getter Building[] buildings;
   /**
    * The building counter to keep track of the number of buildings placed.
    */
@@ -66,13 +62,11 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Pops the last building from the array of buildings.
-   * 
+   *
    * <p>
    * This method will remove the last building from the array of buildings and
-   * decrement the
-   * counter. The last building is returned. If there are no buildings to pop,
-   * this method returns
-   * null.
+   * decrement the counter. The last building is returned. If there are no
+   * buildings to pop, this method returns null.
    * </p>
    *
    * @return Last building from the array of buildings
@@ -91,13 +85,11 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Removes a building from the array of buildings at the specified index.
-   * 
+   *
    * <p>
    * This method will remove the building at the specified index from the array of
-   * buildings and
-   * decrement the counter, returning true. If the index is out of bounds, this
-   * method returns
-   * false.
+   * buildings and decrement the counter, returning true. If the index is out of
+   * bounds, this method returns false.
    * </p>
    *
    * @param index The index of the building to remove
@@ -123,13 +115,11 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Returns the index of the building that contains the specified position.
-   * 
+   *
    * <p>
    * This method will return the index of the building that contains the specified
-   * position. If no
-   * building contains the position or the position is null, this method returns
-   * an empty
-   * OptionalInt.
+   * position. If no building contains the position or the position is null, this
+   * method returns an empty OptionalInt.
    * </p>
    *
    * @param position The position to find the building for
@@ -160,13 +150,11 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Gets the building that contains the specified position.
-   * 
+   *
    * <p>
    * This method will return the building that contains the specified position. If
-   * no building
-   * contains the position, this method returns null. If the position is null,
-   * this method returns
-   * null.
+   * no building contains the position, this method returns null. If the position
+   * is null, this method returns null.
    * </p>
    *
    * @param position The position to check
@@ -186,17 +174,14 @@ public class BuildingManager implements BuildingController {
    *
    * <p>
    * This method will add the building to the array of buildings and increment the
-   * building
-   * counter. This method then returns true if the building was successfully
-   * added, and false if
-   * the building could not be added as the maximum number of buildings had been
-   * reached.
+   * building counter. This method then returns true if the building was
+   * successfully added, and false if the building could not be added as the
+   * maximum number of buildings had been reached.
    * </p>
-   * 
+   *
    * <p>
    * If the building is null, this method does nothing as there is no building to
-   * add and just
-   * short-circuits true.
+   * add and just short-circuits true.
    * </p>
    *
    * @param building The building to add to the array of buildings.
@@ -218,13 +203,12 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Removes the building that contains the specified position.
-   * 
+   *
    * <p>
    * This method will remove the building that contains the specified position
-   * from the array of
-   * buildings and decrement the counter, returning true. If the position is null
-   * or no building
-   * contains the position, this method returns false and does nothing.
+   * from the array of buildings and decrement the counter, returning true. If
+   * the position is null or no building contains the position, this method
+   * returns false and does nothing.
    * </p>
    *
    * @param position The position to remove
@@ -251,7 +235,7 @@ public class BuildingManager implements BuildingController {
 
   /**
    * Returns if the building manager is full.
-   * 
+   *
    * <p>
    * This method returns true if the number of buildings placed is equal to
    * {@link #MAX_BUILDINGS

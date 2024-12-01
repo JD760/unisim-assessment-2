@@ -1,6 +1,7 @@
 package y111studios.position;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.stream.Stream;
@@ -32,6 +33,13 @@ public class GridAreaTest {
     assertThrows(IllegalArgumentException.class, () -> {
       new GridArea(0, 0, 1, 0);
     });
+  }
+
+  @Test
+  public void testContainsNullArea() {
+    GridArea area = new GridArea(0, 0, 5, 10);
+    GridArea nullArea = null;
+    assertFalse(area.contains(nullArea));
   }
 
   @ParameterizedTest

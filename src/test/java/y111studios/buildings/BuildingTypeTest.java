@@ -2,6 +2,7 @@ package y111studios.buildings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 import y111studios.buildings.premade_variants.AccommodationVariant;
@@ -33,5 +34,26 @@ public class BuildingTypeTest {
 
     building = BuildingFactory.createBuilding(TeachingVariant.SMALL_CLASSROOM, origin);
     assertEquals(BuildingType.TEACHING, BuildingType.fromBuilding(building));
+  }
+
+  /**
+   * Attempt to create a building with a type that is not recognised
+   *  by creating a custom mock building class.
+   */
+  @Test
+  public void testUnrecognisedBuilding() {
+    AccommodationVariant variant = AccommodationVariant.MEDIUM_HOUSE;
+    try {
+      BuildingType.fromBuilding(new UnrecognisedBuilding(new GridPosition(0, 0), variant));
+    } catch (IllegalArgumentException e) {
+      return;
+    }
+    fail("Unrecognised building created");
+  }
+
+  class UnrecognisedBuilding extends Building {
+    public UnrecognisedBuilding(GridPosition position, AccommodationVariant variant) {
+      super(position, variant);
+    }
   }
 }

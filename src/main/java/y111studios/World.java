@@ -44,7 +44,7 @@ public class World {
     private final static Color NORMAL = new Color(1, 1, 1, 1);
 
     private final Main game;
-    private GameState gameState;
+    private @Getter GameState gameState;
     private Texture[] gameMap = new Texture[4];
     private @Setter Vector3 cursorScreenPos;
     private @Getter Camera camera;
@@ -82,7 +82,6 @@ public class World {
      * @return Whether the object was added.
      */
     public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
-        System.out.println(Integer.toString(coords.getX()) + ", " + Integer.toString(coords.getY()));
         Building building = BuildingFactory.createBuilding(variant, coords, flipped);
         if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
             return false;

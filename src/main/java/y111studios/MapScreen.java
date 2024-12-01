@@ -4,13 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import y111studios.utils.MenuTab;
+import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.*;
@@ -37,6 +41,8 @@ public class MapScreen extends ScreenAdapter {
     BuildingMenu buildingMenu;
     InputMultiplexer inputMultiplexer;
     UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
+    UIInputProcessor uiInputProcessor;
+    Stage stage = new Stage(new ScreenViewport());
 
     /**
      * Sets up the camera and loads the background
@@ -52,13 +58,16 @@ public class MapScreen extends ScreenAdapter {
         pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
         world = new World(game, gameState);
-        buildingMenu = new BuildingMenu(game, gameState);
+        buildingMenu = new BuildingMenu(game, stage);
+
+        uiInputProcessor = new UIInputProcessor(
+            buildingMenu, world, gameState, showDebugInfo
+        );
 
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(universalInputProcessor);
-        inputMultiplexer.addProcessor(new UIInputProcessor(
-            buildingMenu, world, gameState, showDebugInfo
-        ));
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(uiInputProcessor);
         inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
     }
 
@@ -69,12 +78,21 @@ public class MapScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
+            VariantProperties variant = buildingMenu.getBuildingVariants().get(
+                buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
+            world.setSelectedBuilding(BuildingFactory.createBuilding(
+                variant, world.currentGridPosition(), buildingMenu.getFlipped()
+            ));
+        } else {
+            world.setSelectedBuilding(null);
+        }
         world.render(delta);
-
         buildingMenu.render();
+        stage.act(delta);
+        stage.draw();
 
         viewport.apply();
-
         game.spritebatch.begin();
 
         // Render the time remaining at the top of the screen
@@ -132,7 +150,9 @@ public class MapScreen extends ScreenAdapter {
         viewport.update(width, height, true);
         world.resize(width, height);
         universalInputProcessor.resize(width, height);
+        uiInputProcessor.resize(width, height);
         buildingMenu.resize(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

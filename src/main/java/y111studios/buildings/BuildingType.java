@@ -4,7 +4,7 @@ package y111studios.buildings;
  * An enumeration of the different types of buildings that can be placed.
  */
 public enum BuildingType {
-  ACCOMMODATION, CATERING, RECREATION, TEACHING;
+  ACCOMMODATION, CATERING, RECREATION, TEACHING, MISCELLANEOUS;
 
   /**
    * Returns the building type of the specified building instance.
@@ -27,6 +27,8 @@ public enum BuildingType {
       return RECREATION;
     } else if (building instanceof TeachingBuilding) {
       return TEACHING;
+    } else if (building instanceof MiscellaneousBuilding) {
+      return MISCELLANEOUS;
     }
     throw new IllegalArgumentException("Building type not recognised.");
   }

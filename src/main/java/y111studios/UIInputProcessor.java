@@ -2,6 +2,8 @@ package y111studios;
 
 import java.util.Map;
 
+import javax.script.ScriptEngineManager;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
@@ -16,6 +18,8 @@ public class UIInputProcessor implements InputProcessor {
     GameState gameState;
     boolean[] showDebugInfo;
     BuildingMenu buildingMenu;
+    int windowWidth;
+    int windowHeight;
 
     UIInputProcessor(
             BuildingMenu buildingMenu, World world, GameState gameState, boolean[] showDebugInfo
@@ -26,15 +30,18 @@ public class UIInputProcessor implements InputProcessor {
         this.showDebugInfo = showDebugInfo;
     }
 
+  public void resize(int width, int height) {
+        windowWidth = width;
+        windowHeight = height;
+    }
+
     public boolean keyDown(int keyCode) {
         if (keyCode == Input.Keys.ESCAPE) {
             if (gameState.isPaused()) {
                 gameState.resume();
             } else {
-                world.getCamera().velocityReset();
                 gameState.pause();
             }
-            world.getCamera().addVelocity(-1 * world.getCamera().vx, -1 * world.getCamera().vy);
             return true;
         }
         if (gameState.isPaused()) {
@@ -56,43 +63,9 @@ public class UIInputProcessor implements InputProcessor {
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (gameState.isPaused()) {
+        if (gameState.isPaused() || screenY > windowHeight * 0.85f)
             return true;
-        }
-        Vector3 screenPos = buildingMenu.getViewport().getCamera().unproject(
-            new Vector3(screenX, screenY, 0),
-            buildingMenu.getViewport().getScreenX(),
-            buildingMenu.getViewport().getScreenY(),
-            buildingMenu.getViewport().getScreenWidth(),
-            buildingMenu.getViewport().getScreenHeight()
-        );
-        if(screenPos.y < 100) {
-            if(screenPos.y > 80) {
-                if(screenPos.x < 155) {
-                    buildingMenu.setCurrentMenuTab(MenuTab.ACCOMMODATION);
-                } else if(screenPos.x > 245 && screenPos.x < 395) {
-                    buildingMenu.setCurrentMenuTab(MenuTab.CATERING_RECREATION);
-                } else if(screenPos.x > 490) {
-                    buildingMenu.setCurrentMenuTab(MenuTab.TEACHING);
-                }
-                buildingMenu.setCurrentMenuItem(-1);
-                world.setSelectedBuilding(null);
-            } else if(screenPos.y < 75 && screenPos.y > 10){
-                int newItem = (int)((screenPos.x - 10) / 80);
-                if(newItem == buildingMenu.getCurrentMenuItem() || newItem > 5) {
-                    buildingMenu.setCurrentMenuItem(-1);
-                    world.setSelectedBuilding(null);
-                } else {
-                    buildingMenu.setCurrentMenuItem(newItem);
-                }
-            }
-            if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-                VariantProperties variant = buildingMenu.getBuildingVariants().get(
-                    buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-                world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
-            }
-            return true;
-        }
+
         return false;
     }
 

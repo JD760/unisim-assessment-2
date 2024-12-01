@@ -4,6 +4,7 @@ import java.time.Duration;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
+import y111studios.buildings.ObstacleBuilding;
 import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.map.CollisionDetection;
@@ -35,9 +36,15 @@ public class GameState implements GameTimer, BuildingController {
   public GameState(int width, int height) {
     timer = new Clock();
     buildingManager = new BuildingManager();
-    int[][] staticObjects = new int[][] { { 11, 35, 11, 13 }, { 14, 13, 7, 10 }, { 40, 13, 15, 15 },
-        { 42, 7, 17, 5 }, { 55, 29, 2, 5 }, { 30, 32, 27, 2 }, { 30, 32, 2, 21 }, { 26, 52, 5, 2 },
-        { 26, 52, 2, 8 }, { 20, 60, 7, 2 }, { 14, 58, 5, 5 }, { 55, 47, 10, 13 } };
+    int[][] staticObjects = new int[][] {
+        { 42, 12, 16, 16 }, { 46, 10, 11, 2 }, { 52, 15, 4, 13 }, { 46, 28, 6, 1 },  // Big rock
+        { 48, 29, 2, 1 }, { 41, 13, 1, 11 }, { 40, 17, 1, 2 },  // Big rock
+        { 56, 18, 2, 15 }, { 31, 32, 26, 2 }, { 30, 33, 2, 19 }, { 27, 52, 4, 2 },  // River
+        { 26, 53, 2, 7 }, { 19, 60, 7, 2 }, { 15, 59, 4, 4 },  // River
+        { 15, 15, 7, 8 }, { 18, 23, 3, 1 }, { 14, 17, 1, 5 }, { 17, 14, 6, 7 },  // Small rock
+        { 11, 35, 10, 14 }, { 21, 35, 2, 8 },  // Big cliff thing
+        { 55, 49, 8, 12 },  // Small cliff thing
+        { 32, 43, 1, 3 } };  // Bridge
     collisionDetection = new CollisionDetection(width, height, staticObjects);
   }
 
@@ -85,7 +92,7 @@ public class GameState implements GameTimer, BuildingController {
     }
     // Get building being removed
     final Building building = this.buildingManager.getBuilding(position);
-    if (building == null) {
+    if (building == null || building instanceof ObstacleBuilding) {
       // This should never happen provided push is correctly implemented
       throw new IllegalStateException("Building not found at position: " + position);
     }

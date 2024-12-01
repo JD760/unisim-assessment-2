@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import y111studios.buildings.premade_variants.AccommodationVariant;
 import y111studios.buildings.premade_variants.CateringVariant;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
+import y111studios.buildings.premade_variants.ObstacleVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
@@ -35,8 +37,7 @@ public final class BuildingFactory {
 
   /**
    * A map of the constructors for each building class. The key is the class of
-   * the building and the
-   * value is the constructor of the building.
+   * the building and the value is the constructor of the building.
    *
    * @see #tryRegisterConstructor(Class, Class)
    */
@@ -44,18 +45,17 @@ public final class BuildingFactory {
       CONSTRUCTORS;
 
   // At startup, try to register the constructors of the building classes using
-  // each variant. This
-  // is done to ensure that the constructors are correctly defined at the start
-  // rather than during
-  // runtime.
-
+  // each variant. This is done to ensure that the constructors are correctly
+  // defined at the start rather than during runtime.
   static {
-    CONSTRUCTORS = new HashMap<>(4);
+    CONSTRUCTORS = new HashMap<>(5);
     try {
       tryRegisterConstructor(AccommodationVariant.class, AccommodationBuilding.class);
       tryRegisterConstructor(CateringVariant.class, CateringBuilding.class);
       tryRegisterConstructor(RecreationVariant.class, RecreationBuilding.class);
       tryRegisterConstructor(TeachingVariant.class, TeachingBuilding.class);
+      tryRegisterConstructor(MiscellaneousVariant.class, MiscellaneousBuilding.class);
+      tryRegisterConstructor(ObstacleVariant.class, ObstacleBuilding.class);
     } catch (UnreachableException e) {
       // This should not happen, as the constructors should be defined in the classes
       e.printStackTrace();
@@ -82,7 +82,7 @@ public final class BuildingFactory {
     Constructor<? extends Building> constructor;
     try {
       // Get the constructor of the building class
-      constructor = buildingClass.getConstructor(GridPosition.class, variantClass);
+      constructor = buildingClass.getConstructor(GridPosition.class, variantClass, boolean.class);
     } catch (NoSuchMethodException e) {
       // This should not happen, as the constructor should be defined in the class
       throw new UnreachableException("Constructor undefined", e);
@@ -105,7 +105,9 @@ public final class BuildingFactory {
    * @return a new instance of the building
    * @throws IllegalArgumentException if the variant or position is null
    */
-  public static Building createBuilding(VariantProperties variant, GridPosition position) {
+  public static Building createBuilding(
+      VariantProperties variant, GridPosition position, boolean flipped
+  ) {
     if (variant == null) {
       throw new IllegalArgumentException("BuildingProperties must not be null");
     }
@@ -116,7 +118,7 @@ public final class BuildingFactory {
     Constructor<? extends Building> constructor = CONSTRUCTORS.get(variant.getVariantClass());
     try {
       // Return the new instance of the Building
-      return constructor.newInstance(position, variant);
+      return constructor.newInstance(position, variant, flipped);
     } catch (Exception e) {
       // This should not happen, as the constructor should be defined in the class
       e.printStackTrace();

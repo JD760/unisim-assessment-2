@@ -54,15 +54,17 @@ public class WorldInputProcessor implements InputProcessor {
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         );
         if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-            world.addObject(buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()],
+            world.addObject(
+                buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[
+                    buildingMenu.getCurrentMenuItem()],
                 world.pixelToTile(
                     (int)(screenPos.x * world.getCamera().scale),
                     (int)(screenPos.y * world.getCamera().scale)
-                )
+                ),
+                buildingMenu.getFlipped()
             );
             buildingMenu.setCurrentMenuItem(-1);
-            world.setSelectedBuilding(null);
-        } else if(buildingMenu.getCurrentMenuItem() == 5) {
+        } else if(buildingMenu.getCurrentMenuItem() == 6) {
             try{
                 world.removeObject(world.pixelToTile((int)(screenPos.x * world.getCamera().scale), (int)(screenPos.y * world.getCamera().scale)));
             } catch(IllegalStateException ignored) {}
@@ -73,6 +75,11 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean touchDragged(int x, int y, int pointer) {
+    world.setCursorScreenPos(world.getViewport().getCamera().unproject(
+        new Vector3(x, y, 0),
+        world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
+    ));
     if (clickedOnMap) {
       if (Math.max(Math.abs(cursorX - clickX),
           Math.abs(cursorY - clickY)) > 5) {
@@ -91,16 +98,12 @@ public class WorldInputProcessor implements InputProcessor {
     }
 
     public boolean mouseMoved(int x, int y) {
+        world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
         world.setCursorScreenPos(world.getViewport().getCamera().unproject(
             new Vector3(x, y, 0),
             world.getViewport().getScreenX(), world.getViewport().getScreenY(),
             world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
         ));
-        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-            VariantProperties variant = buildingMenu.getBuildingVariants().get(
-                buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-            world.setSelectedBuilding(BuildingFactory.createBuilding(variant, world.currentGridPosition()));
-        }
         return true;
     }
 

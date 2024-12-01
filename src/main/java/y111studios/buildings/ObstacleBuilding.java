@@ -1,6 +1,6 @@
 package y111studios.buildings;
 
-import y111studios.buildings.premade_variants.AccommodationVariant;
+import y111studios.buildings.premade_variants.ObstacleVariant;
 import y111studios.position.GridPosition;
 
 /**
@@ -10,8 +10,7 @@ import y111studios.position.GridPosition;
 
  * @see Building
  */
-public class AccommodationBuilding extends Building {
-
+public class ObstacleBuilding extends Building {
   /**
    * Creates a new accommodation building at the given position of the given
    * variant.
@@ -19,8 +18,8 @@ public class AccommodationBuilding extends Building {
    * @param position The position of the building
    * @param variant  The variant type of the building
    */
-  public AccommodationBuilding(
-      GridPosition position, AccommodationVariant variant, boolean flipped
+  public ObstacleBuilding(
+      GridPosition position, ObstacleVariant variant, boolean flipped
   ) {
     super(position, variant, flipped);
   }

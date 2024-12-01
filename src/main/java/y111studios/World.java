@@ -71,7 +71,6 @@ public class World {
             gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
             for (ObstacleVariant variant : ObstacleVariant.values()) {
                 addObject(variant, variant.getPosition(), false);
-                System.out.println(Integer.toString(variant.getPosition().getX()));
             }
         }
     }
@@ -83,6 +82,7 @@ public class World {
      * @return Whether the object was added.
      */
     public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
+        System.out.println(Integer.toString(coords.getX()) + ", " + Integer.toString(coords.getY()));
         Building building = BuildingFactory.createBuilding(variant, coords, flipped);
         if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
             return false;

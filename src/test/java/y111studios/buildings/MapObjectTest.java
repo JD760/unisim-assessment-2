@@ -15,7 +15,8 @@ public class MapObjectTest {
   public void testNonNullMapArea() {
     GridArea area = null;
     try {
-      new MapObjectMock(area, AssetPaths.ACC1);
+      new MapObjectMock(area, AssetPaths.ACC1, true);
+      new MapObjectMock(area, AssetPaths.ACC1, false);
     } catch (IllegalArgumentException e) {
       return;
     }
@@ -27,7 +28,8 @@ public class MapObjectTest {
     GridArea area = new GridArea(0, 0, 10, 10);
     AssetPaths path = null;
     try {
-      new MapObjectMock(area, path);
+      new MapObjectMock(area, path, true);
+      new MapObjectMock(area, path, false);
     } catch (IllegalArgumentException e) {
       return;
     }
@@ -35,8 +37,8 @@ public class MapObjectTest {
   }
 
   class MapObjectMock extends MapObject {
-    public MapObjectMock(GridArea area, AssetPaths path) {
-      super(area, path);
+    public MapObjectMock(GridArea area, AssetPaths path, boolean flipped) {
+      super(area, path, flipped);
     }
   }
 }

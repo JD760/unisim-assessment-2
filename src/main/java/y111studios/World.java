@@ -247,7 +247,7 @@ public class World {
      * @param width - The new width of the window.
      * @param height - The new height of the window.
      */
-    void resize(int width, int height) {
+    public void resize(int width, int height) {
         this.width = width;
         this.height = height;
         camera.resize(width, height);

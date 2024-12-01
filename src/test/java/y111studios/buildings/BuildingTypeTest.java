@@ -53,7 +53,7 @@ public class BuildingTypeTest {
 
   class UnrecognisedBuilding extends Building {
     public UnrecognisedBuilding(GridPosition position, AccommodationVariant variant) {
-      super(position, variant);
+      super(position, variant, true);
     }
   }
 }

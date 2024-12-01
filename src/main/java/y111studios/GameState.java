@@ -24,7 +24,7 @@ import y111studios.position.GridPosition;
 public class GameState implements GameTimer, BuildingController {
 
   private GameTimer timer;
-  BuildingManager buildingManager;
+  public BuildingManager buildingManager;
   CollisionDetection collisionDetection;
 
   /**

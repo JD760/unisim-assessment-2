@@ -1,0 +1,72 @@
+package y111studios.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import y111studios.AssetPaths;
+import y111studios.Main;
+
+/**
+ * The initial screen when the game is started.
+ */
+public class StartScreen extends ScreenAdapter {
+
+  final Main game;
+
+  Texture startScreen;
+
+  OrthographicCamera camera;
+
+  /**
+   * Sets up the camera and loads the background.
+   *
+   * @param game reference to game manager
+   */
+  public StartScreen(final Main game) {
+    this.game = game;
+    camera = new OrthographicCamera();
+    camera.setToOrtho(false, 960, 640);
+    startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
+  }
+
+  @Override
+  public void show() {
+    Gdx.input.setInputProcessor(new InputAdapter() {
+      @Override
+      public boolean keyDown(int keyCode) {
+        if (keyCode == Input.Keys.SPACE) {
+          game.setScreen(new MapScreen(game));
+        }
+        return true;
+      }
+    });
+  }
+
+  @Override
+  public void render(float delta) {
+    ScreenUtils.clear(0, 0, 0.2f, 0);
+
+    camera.update();
+    game.spritebatch.setProjectionMatrix(camera.combined);
+
+    game.spritebatch.begin();
+    game.spritebatch.draw(startScreen, 0, 0);
+    game.spritebatch.end();
+  }
+
+  @Override
+  public void hide() {
+    Gdx.input.setInputProcessor(null);
+  }
+
+  @Override
+  public void dispose() {
+    game.dispose();
+  }
+
+}

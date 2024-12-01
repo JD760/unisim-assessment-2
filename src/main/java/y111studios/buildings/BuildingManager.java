@@ -50,7 +50,7 @@ public class BuildingManager implements BuildingController {
   /**
    * The building counter to keep track of the number of buildings placed.
    */
-  private @Getter BuildingCounter counter;
+  public @Getter BuildingCounter counter;
 
   /**
    * Initializes the building manager with a null-initialized array of buildings

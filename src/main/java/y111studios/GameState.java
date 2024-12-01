@@ -4,6 +4,7 @@ import java.time.Duration;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
+import y111studios.buildings.ObstacleBuilding;
 import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.map.CollisionDetection;
@@ -85,7 +86,7 @@ public class GameState implements GameTimer, BuildingController {
     }
     // Get building being removed
     final Building building = this.buildingManager.getBuilding(position);
-    if (building == null) {
+    if (building == null || building instanceof ObstacleBuilding) {
       // This should never happen provided push is correctly implemented
       throw new IllegalStateException("Building not found at position: " + position);
     }

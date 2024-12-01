@@ -25,6 +25,7 @@ import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
+import y111studios.buildings.ObstacleBuilding;
 import y111studios.buildings.premade_variants.*;
 
 public class World {
@@ -53,14 +54,37 @@ public class World {
     private @Setter boolean deleteMode = false;
 
     /**
+     * Sets up the camera and loads the background
+     *
+     * @param game Reference to game manager
+     */
+    public World(final Main game, GameState gameState) {
+        viewport = new ScreenViewport();
+        this.game = game;
+        this.gameState = gameState;
+        buildings = new LinkedList<>();
+        camera = new Camera(2000, 1000, width, height);
+        if (game != null) {
+            gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
+            gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
+            gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
+            gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
+            for (ObstacleVariant variant : ObstacleVariant.values()) {
+                addObject(variant, variant.getPosition(), false);
+            }
+        }
+    }
+
+    /**
      * Adds an object to the game.
      *
      * @param variant The object to add.
      * @return Whether the object was added.
      */
     public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
+        System.out.println(Integer.toString(coords.getX()) + ", " + Integer.toString(coords.getY()));
         Building building = BuildingFactory.createBuilding(variant, coords, flipped);
-        if (!gameState.push(building)) {
+        if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
             return false;
         }
         int buildingHeight = coords.getY() - coords.getX();
@@ -87,31 +111,12 @@ public class World {
         }
         for (int i = 0; i < buildings.size(); i++) {
             Building current = buildings.get(i);
-            if (current.contains(coords)) {
+            if (current.contains(coords) && !(current instanceof ObstacleBuilding)) {
                 buildings.remove(i);
                 return true;
             }
         }
         throw new UnreachableException("State de-synced with renderOrdering");
-    }
-
-    /**
-     * Sets up the camera and loads the background
-     *
-     * @param game Reference to game manager
-     */
-    public World(final Main game, GameState gameState) {
-        viewport = new ScreenViewport();
-        this.game = game;
-        this.gameState = gameState;
-        buildings = new LinkedList<>();
-        camera = new Camera(2000, 1000, width, height);
-        if (game != null) {
-            gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
-            gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
-            gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
-            gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
-        }
     }
 
     /**
@@ -156,7 +161,8 @@ public class World {
     }
 
     public void renderBuilding(Building building) {
-        if (deleteMode && building.getArea().contains(currentGridPosition())) {
+        if (deleteMode && building.getArea().contains(currentGridPosition())
+                && !(building instanceof ObstacleBuilding)) {
             game.spritebatch.setColor(INVALID_PREVIEW);
         }
         Texture texture = game.getAsset(building.getTexturePath());

@@ -6,6 +6,7 @@ import java.util.Map;
 import y111studios.buildings.premade_variants.AccommodationVariant;
 import y111studios.buildings.premade_variants.CateringVariant;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
+import y111studios.buildings.premade_variants.ObstacleVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
@@ -54,6 +55,7 @@ public final class BuildingFactory {
       tryRegisterConstructor(RecreationVariant.class, RecreationBuilding.class);
       tryRegisterConstructor(TeachingVariant.class, TeachingBuilding.class);
       tryRegisterConstructor(MiscellaneousVariant.class, MiscellaneousBuilding.class);
+      tryRegisterConstructor(ObstacleVariant.class, ObstacleBuilding.class);
     } catch (UnreachableException e) {
       // This should not happen, as the constructors should be defined in the classes
       e.printStackTrace();
@@ -80,8 +82,7 @@ public final class BuildingFactory {
     Constructor<? extends Building> constructor;
     try {
       // Get the constructor of the building class
-      Class[] parameterTypes = new Class[] {GridPosition.class, variantClass, boolean.class};
-      constructor = buildingClass.getConstructor(parameterTypes);
+      constructor = buildingClass.getConstructor(GridPosition.class, variantClass, boolean.class);
     } catch (NoSuchMethodException e) {
       // This should not happen, as the constructor should be defined in the class
       throw new UnreachableException("Constructor undefined", e);

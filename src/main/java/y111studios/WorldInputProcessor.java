@@ -2,6 +2,7 @@ package y111studios;
 
 import java.util.Map;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 
@@ -25,6 +26,8 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keyCode) {
+    if (keyCode == Input.Keys.SPACE)
+      System.out.println(Double.toString(world.getGameState().getStudentSatisfaction().calculate()));
     return false;
   }
 

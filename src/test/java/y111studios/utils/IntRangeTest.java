@@ -37,4 +37,20 @@ public class IntRangeTest {
     assertFalse(range.contains(6));
   }
 
+  @Test
+  void testContainsOtherRange() {
+    IntRange range = new IntRange(1, 5);
+    // test null other range
+    assertFalse(range.contains(null));
+    // test self containment
+    assertTrue(range.contains(range));
+    // test disconnected ranges
+    assertFalse(range.contains(new IntRange(5, 8)));
+    // test overlapping but non contained ranges
+    assertFalse(range.contains(new IntRange(0, 2)));
+    assertFalse(range.contains(new IntRange(2, 6)));
+    // test contained range
+    assertTrue(range.contains(new IntRange(2, 4)));
+  }
+
 }

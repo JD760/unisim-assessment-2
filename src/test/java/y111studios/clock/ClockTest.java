@@ -48,8 +48,16 @@ public class ClockTest {
   }
 
   @Test
+  void playPause() {
+    Clock clock = new Clock();
+    clock.resume();
+    clock.pause();
+  }
+
+  @Test
   void resume() {
     Clock clock = new Clock();
+    clock.resume();
     clock.pause();
     clock.resume();
 

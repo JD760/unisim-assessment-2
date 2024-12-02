@@ -1,18 +1,13 @@
 package y111studios;
 
-import java.util.Map;
-
-import javax.script.ScriptEngineManager;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
-import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.MenuTab;
 
+/**
+ * Handles input events relating to the game UI such as resizing and pause/resume.
+ */
+@SuppressWarnings("AbbreviationAsWordInName")
 public class UIInputProcessor implements InputProcessor {
   World world;
   GameState gameState;
@@ -62,9 +57,9 @@ public class UIInputProcessor implements InputProcessor {
   }
 
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-    if (gameState.isPaused() || screenY > windowHeight * 0.85f)
+    if (gameState.isPaused() || screenY > windowHeight * 0.85f) {
       return true;
-
+    }
     return false;
   }
 

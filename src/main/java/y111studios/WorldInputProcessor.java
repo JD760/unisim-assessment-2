@@ -11,67 +11,65 @@ import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.utils.MenuTab;
 
 public class WorldInputProcessor implements InputProcessor {
-    private World world;
-    private BuildingMenu buildingMenu;
-    private int cursorX;
-    private int cursorY;
-    private int clickX;
-    private int clickY;
-    private boolean clickedOnMap = false;
-    private boolean dragging = true;
+  private World world;
+  private BuildingMenu buildingMenu;
+  private int cursorX;
+  private int cursorY;
+  private int clickX;
+  private int clickY;
+  private boolean clickedOnMap = false;
+  private boolean dragging = true;
 
-    WorldInputProcessor(World world, BuildingMenu buildingMenu) {
-        this.world = world;
-        this.buildingMenu = buildingMenu;
-    }
+  public WorldInputProcessor(World world, BuildingMenu buildingMenu) {
+    this.world = world;
+    this.buildingMenu = buildingMenu;
+  }
 
-    public boolean keyDown(int keyCode) {
-        if (keyCode == Input.Keys.SPACE)
-            System.out.println(Double.toString(world.getGameState().getStudentSatisfaction().calculate()));
-        return false;
-    }
+  public boolean keyDown(int keyCode) {
+    if (keyCode == Input.Keys.SPACE)
+      System.out.println(Double.toString(world.getGameState().getStudentSatisfaction().calculate()));
+    return false;
+  }
 
-    public boolean keyUp(int keyCode) {
-        return false;
-    }
+  public boolean keyUp(int keyCode) {
+    return false;
+  }
 
-    public boolean keyTyped (char character) {
-        return false;
-    }
+  public boolean keyTyped(char character) {
+    return false;
+  }
 
-    public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-        clickX = cursorX = screenX;
-        clickY = cursorY = screenY;
-        clickedOnMap = true;
-        dragging = false;
-        return true;
-    }
+  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    clickX = cursorX = screenX;
+    clickY = cursorY = screenY;
+    clickedOnMap = true;
+    dragging = false;
+    return true;
+  }
 
   public boolean touchUp(int x, int y, int pointer, int button) {
     clickedOnMap = false;
     if (!dragging) {
-        // Try to place a building in the world
-        Vector3 screenPos = world.getViewport().getCamera().unproject(
-            new Vector3(x, y, 0),
-            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
-            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
-        );
-        if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-            world.addObject(
-                buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[
-                    buildingMenu.getCurrentMenuItem()],
-                world.pixelToTile(
-                    (int)(screenPos.x * world.getCamera().scale),
-                    (int)(screenPos.y * world.getCamera().scale)
-                ),
-                buildingMenu.getFlipped()
-            );
-            buildingMenu.setCurrentMenuItem(-1);
-        } else if(buildingMenu.getCurrentMenuItem() == 6) {
-            try{
-                world.removeObject(world.pixelToTile((int)(screenPos.x * world.getCamera().scale), (int)(screenPos.y * world.getCamera().scale)));
-            } catch(IllegalStateException ignored) {}
+      // Try to place a building in the world
+      Vector3 screenPos = world.getViewport().getCamera().unproject(
+          new Vector3(x, y, 0),
+          world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+          world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight());
+      if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
+        world.addObject(
+            buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()],
+            world.pixelToTile(
+                (int) (screenPos.x * world.getCamera().scale),
+                (int) (screenPos.y * world.getCamera().scale)),
+            buildingMenu.getFlipped());
+        buildingMenu.setCurrentMenuItem(-1);
+      } else if (buildingMenu.getCurrentMenuItem() == 6) {
+        try {
+          world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),
+              (int) (screenPos.y * world.getCamera().scale)));
+        } catch (IllegalStateException ignored) {
         }
+      }
     }
     dragging = true;
     return false;
@@ -81,12 +79,11 @@ public class WorldInputProcessor implements InputProcessor {
     world.setCursorScreenPos(world.getViewport().getCamera().unproject(
         new Vector3(x, y, 0),
         world.getViewport().getScreenX(), world.getViewport().getScreenY(),
-        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
-    ));
+        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()));
     if (clickedOnMap) {
       if (Math.max(Math.abs(cursorX - clickX),
           Math.abs(cursorY - clickY)) > 5) {
-        dragging= true;
+        dragging = true;
       }
       world.getCamera().pan(cursorX - x, cursorY - y);
       cursorX = x;
@@ -96,22 +93,21 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
+  public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+    return false;
+  }
 
-    public boolean mouseMoved(int x, int y) {
-        world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
-        world.setCursorScreenPos(world.getViewport().getCamera().unproject(
-            new Vector3(x, y, 0),
-            world.getViewport().getScreenX(), world.getViewport().getScreenY(),
-            world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()
-        ));
-        return true;
-    }
+  public boolean mouseMoved(int x, int y) {
+    world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
+    world.setCursorScreenPos(world.getViewport().getCamera().unproject(
+        new Vector3(x, y, 0),
+        world.getViewport().getScreenX(), world.getViewport().getScreenY(),
+        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()));
+    return true;
+  }
 
-    public boolean scrolled (float amountX, float amountY) {
-        world.getCamera().vZoom += 0.001f * amountY;
-        return true;
-    }
+  public boolean scrolled(float amountX, float amountY) {
+    world.getCamera().vZoom += 0.001f * amountY;
+    return true;
+  }
 }

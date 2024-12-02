@@ -209,6 +209,9 @@ public class World {
         game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
 
+        // Render buildings
+        buildings.forEach(this::renderBuilding);
+
         // Add building placement hologram
         if (!gameState.isPaused() && selectedBuilding != null) {
             // Set hologram colour
@@ -227,9 +230,6 @@ public class World {
                 game.spritebatch.setColor(NORMAL);
             }
         }
-
-        // Render buildings
-        buildings.forEach(this::renderBuilding);
 
         game.spritebatch.end();
 

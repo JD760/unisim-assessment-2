@@ -100,7 +100,6 @@ public class BuildingMenu {
             unselectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_UNSELECTED_TAB));
             selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
             final int tab = i;
-            tabTable.add(unselectedTabImages[i]);
             unselectedTabImages[tab].addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent e, float x, float y) {
@@ -108,6 +107,7 @@ public class BuildingMenu {
                     updateTab(tab);
                 }
             });
+            tabTable.add(i == 0 ? selectedTabImages[0] : unselectedTabImages[i]);
         }
 
         buildingTable = new Table();

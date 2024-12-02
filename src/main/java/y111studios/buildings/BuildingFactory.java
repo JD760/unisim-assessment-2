@@ -31,9 +31,9 @@ public final class BuildingFactory {
 
   // Prevent instantiation of the factory class.
 
-  private BuildingFactory() throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("BuildingFactory should not be instantiated");
-  }
+//  private BuildingFactory() throws UnsupportedOperationException {
+//    throw new UnsupportedOperationException("BuildingFactory should not be instantiated");
+//  }
 
   /**
    * A map of the constructors for each building class. The key is the class of

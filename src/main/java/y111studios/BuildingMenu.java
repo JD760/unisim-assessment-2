@@ -143,6 +143,7 @@ public class BuildingMenu {
    * Renders the background of the menu.
    */
   public void render() {
+    game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     game.spritebatch.begin();
 
@@ -150,8 +151,8 @@ public class BuildingMenu {
     float menuHeight = viewport.getScreenHeight() * 0.15f;
     game.spritebatch.draw(menuBackground,
         0, 0,
-        640,
-        menuHeight * 480f / viewport.getScreenHeight(),
+        viewport.getScreenWidth(),
+        menuHeight,
         0,
         0,
         1,

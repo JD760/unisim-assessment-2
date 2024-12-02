@@ -168,10 +168,10 @@ public class World {
         Texture texture = game.getAsset(building.getTexturePath());
         float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (float)pixelCoords[0] / camera.scale * 640 / width,
-            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height,
-            2f * texture.getWidth() / camera.scale * 640 / width,
-            2f * texture.getHeight() / camera.scale * 480 / height,
+            (float)pixelCoords[0] / camera.scale,
+            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+            2f * texture.getWidth() / camera.scale,
+            2f * texture.getHeight() / camera.scale,
             0, 0, texture.getWidth(), texture.getHeight(),
             building.getFlipped(), false
         );
@@ -188,6 +188,7 @@ public class World {
      * @param delta The time since the previous tick.
      */
     public void render(float delta) {
+        game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
         viewport.apply();
         ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
@@ -201,13 +202,13 @@ public class World {
             game.spritebatch.setColor(NORMAL);
         }
         // Draw the game map
-        game.spritebatch.draw(gameMap[0], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y + 1,
+        game.spritebatch.draw(gameMap[0], 0, 0, width, height, (int)camera.x + 1, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[1], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
+        game.spritebatch.draw(gameMap[1], 0, 0, width, height, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[2], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[2], 0, 0, width, height, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[3], 0, 0, width, height, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
 
         // Add building placement hologram

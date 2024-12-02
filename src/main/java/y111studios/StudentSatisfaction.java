@@ -78,8 +78,13 @@ class StudentSatisfaction {
 
       // Punish distances to other buildings
       if (building.getVariant() instanceof AccommodationVariant) {
-        satisfaction /= 1 + Math.pow(teachingDistance, 0.25) * 0.2;
-        satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.2;
+        int numAccomodationBuildings = buildingManager.getCounter().getBuildingMap().get(
+          BuildingType.ACCOMMODATION
+        );
+        satisfaction /= 1 + Math.pow(teachingDistance, 0.25) * 0.02 / numAccomodationBuildings;
+        satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.02 / numAccomodationBuildings;
+        satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.02 / numAccomodationBuildings;
+        satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.06 / numAccomodationBuildings;
       }
     }
 

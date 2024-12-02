@@ -83,6 +83,7 @@ public class MapScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+    game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
       VariantProperties variant = buildingMenu.getBuildingVariants().get(
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];

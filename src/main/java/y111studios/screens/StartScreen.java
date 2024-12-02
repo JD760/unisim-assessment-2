@@ -7,9 +7,12 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
@@ -26,9 +29,12 @@ public class StartScreen extends ScreenAdapter {
 
   OrthographicCamera camera;
   ScreenViewport viewport;
+  int width = 640;
+  int height = 480;
   Stage stage;
-  Table backgroundImageTable;
+  Table table;
   Cell<Image> startScreenCell;
+  Skin skin = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
 
   /**
    * Sets up the camera and loads the background.
@@ -39,14 +45,47 @@ public class StartScreen extends ScreenAdapter {
     this.game = game;
     viewport = new ScreenViewport();
     camera = (OrthographicCamera) viewport.getCamera();
-    camera.setToOrtho(false, 640, 480);
+    camera.setToOrtho(false, width, height);
     startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
-
+    
     stage = new Stage(viewport);
-    backgroundImageTable = new Table();
-    backgroundImageTable.setDebug(true);
-    startScreenCell = backgroundImageTable.add(new Image(startScreen)).center().fill();
-    //stage.addActor(backgroundImageTable);
+    createMenu();
+  }
+
+  private void createMenu() {
+    table = new Table();
+    table.setFillParent(true);
+    //table.setDebug(true);
+    Image logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
+    final Button playButton = new TextButton("New Game", skin);
+    final Button leaderboardButton = new TextButton("Leaderboard", skin);
+    final Button settingsButton = new TextButton("Settings", skin);
+    final Button creditsButton = new TextButton("Credits", skin);
+    table.add(logo).colspan(2).padLeft(width * 0.05f);
+    table.row();
+    table.add(playButton)
+        .width(width * 0.4f)
+        .height(height * 0.1f)
+        .pad(height * 0.02f)
+        .colspan(2)
+        .center();
+    table.row().height(height * 0.25f);
+    table.add(leaderboardButton)
+        .width((int) (width * 0.15))
+        .height((int) (height * 0.1))
+        .pad(0f);
+    table.add(settingsButton)
+        .width((int) (width * 0.15))
+        .height((int) (height * 0.1))
+        .pad(0f);
+    table.row();
+    table.add(creditsButton)
+        .width((int) (width * 0.085))
+        .height((int) (height * 0.05))
+        .center()
+        .colspan(2)
+        .padTop(height * 0.02f);
+    stage.addActor(table);
   }
 
   @Override
@@ -68,6 +107,7 @@ public class StartScreen extends ScreenAdapter {
     game.spritebatch.setProjectionMatrix(camera.combined);
 
     game.spritebatch.begin();
+    //game.spritebatch.setColor(new Color(0.0f, 0.0f, 0.0f, 0.1f));
     game.spritebatch.draw(
         startScreen,
         0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
@@ -82,8 +122,10 @@ public class StartScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
+    this.width = width;
+    this.height = height;
     viewport.update(width, height, true);
-    backgroundImageTable.setSize(width, height);
+    table.setSize(width, height);
   }
 
   @Override

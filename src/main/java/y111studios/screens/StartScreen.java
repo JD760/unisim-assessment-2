@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -49,6 +51,7 @@ public class StartScreen extends ScreenAdapter {
     startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
     
     stage = new Stage(viewport);
+    Gdx.input.setInputProcessor(stage);
     createMenu();
   }
 
@@ -56,11 +59,40 @@ public class StartScreen extends ScreenAdapter {
     table = new Table();
     table.setFillParent(true);
     //table.setDebug(true);
-    Image logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
+    final Image logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
+    playButton.addListener(new InputListener() {
+        @Override
+        public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+          Gdx.app.log("#INFO", "Play button clicked");
+          game.setScreen(new MapScreen(game));
+          return false;
+        }
+      });
     final Button leaderboardButton = new TextButton("Leaderboard", skin);
+    leaderboardButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new LeaderboardScreen());
+        return false;
+      }
+    });
     final Button settingsButton = new TextButton("Settings", skin);
+    settingsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new SettingsScreen());
+        return false;
+      }
+    });
     final Button creditsButton = new TextButton("Credits", skin);
+    creditsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new CreditsScreen());
+        return false;
+      }
+    });
     table.add(logo).colspan(2).padLeft(width * 0.05f);
     table.row();
     table.add(playButton)

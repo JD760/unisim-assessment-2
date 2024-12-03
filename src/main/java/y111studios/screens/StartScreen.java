@@ -47,9 +47,8 @@ public class StartScreen extends ScreenAdapter {
     this.game = game;
     viewport = new ScreenViewport();
     camera = (OrthographicCamera) viewport.getCamera();
-    camera.setToOrtho(false, width, height);
     startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
-    
+
     stage = new Stage(viewport);
     Gdx.input.setInputProcessor(stage);
     createMenu();
@@ -140,10 +139,13 @@ public class StartScreen extends ScreenAdapter {
 
     game.spritebatch.begin();
     //game.spritebatch.setColor(new Color(0.0f, 0.0f, 0.0f, 0.1f));
+    float backgroundWidth = (float)viewport.getScreenWidth() / viewport.getScreenHeight()
+      * startScreen.getHeight();
     game.spritebatch.draw(
         startScreen,
         0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
-        0, 0, startScreen.getWidth(), startScreen.getHeight(),
+        (int)(startScreen.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
+        (int)backgroundWidth, startScreen.getHeight(),
         false, false);
     game.spritebatch.end();
 

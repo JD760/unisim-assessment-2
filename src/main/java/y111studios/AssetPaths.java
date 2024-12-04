@@ -29,15 +29,15 @@ public enum AssetPaths {
   CATERING_MENU("assets/Catering.png"),
   TEACHING_MENU("assets/Teaching.png"),
   PAUSE("assets/Pause.png"),
-  ACC1("assets/Acc1.png"),
+  ACC1("assets/Accommodation_1.png"),
   ACC2("assets/Acc2.png"),
   ACC3("assets/Acc3.png"),
   ACC4("assets/Acc4.png"),
   ACC5("assets/Acc5.png"),
-  CATER1("assets/Cater1.png"),
-  CATER2("assets/Cater2.png"),
-  CATER3("assets/Cater3.png"),
-  CATER4("assets/Cater4.png"),
+  CATER1("assets/CATER_1.png"),
+  CATER2("assets/CATER_2.png"),
+  CATER3("assets/CATER_3.png"),
+  CATER4("assets/CATER_4.png"),
   CATER5("assets/Cater5.png"),
   REC1("assets/Rec1.png"),
   REC2("assets/Rec2.png"),
@@ -46,8 +46,8 @@ public enum AssetPaths {
   TREE3("assets/tree8.png"),
   TEACH1("assets/Teach1.png"),
   TEACH2("assets/Teach2.png"),
-  TEACH3("assets/Teach3.png"),
-  TEACH4("assets/Teach4.png"),
+  TEACH3("assets/TEACH_3.png"),
+  TEACH4("assets/TEACH_4.png"),
   TEACH5("assets/Teach5.png"),
   BIKE_SHED("assets/bike-storage.png"),
   STRAIGHT_ROAD("assets/road1.png"),
@@ -56,7 +56,8 @@ public enum AssetPaths {
   ROAD_BEND2("assets/road7.png"),
   GAME_OVER("assets/GameOver.png"),
   TRASH("assets/Trash.png"),
-  ROTATE("assets/axis-z-rotate-clockwise.png");
+  ROTATE("assets/axis-z-rotate-clockwise.png"),
+  UNISIM_LOGO("assets/UnisimLogo.png");
 
   private final String path;
 

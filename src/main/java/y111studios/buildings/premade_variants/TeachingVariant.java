@@ -14,9 +14,9 @@ import y111studios.AssetPaths;
 public enum TeachingVariant implements VariantProperties {
   SMALL_CLASSROOM(3, 3, AssetPaths.TEACH1),
   MEDIUM_CLASSROOM(3, 3, AssetPaths.TEACH2),
-  SUBJECT_HUB(3, 3, AssetPaths.TEACH3),
+  SUBJECT_HUB(3, 2, AssetPaths.TEACH3),
   DEPARTMENT(6, 6, AssetPaths.TEACH4),
-  LAB(4, 4, AssetPaths.TEACH5),;
+  LAB(3, 4, AssetPaths.TEACH5),;
 
   private final int width;
   private final int height;

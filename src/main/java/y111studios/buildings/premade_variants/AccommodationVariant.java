@@ -15,8 +15,8 @@ public enum AccommodationVariant implements VariantProperties {
   SMALL_HOUSE(5, 5, AssetPaths.ACC1),
   MEDIUM_HOUSE(3, 3, AssetPaths.ACC2),
   MODERN_FLAT(2, 2, AssetPaths.ACC3),
-  LUXURY_FLAT(4, 4, AssetPaths.ACC4),
-  PRIVATE_HOUSE(4, 4, AssetPaths.ACC5);
+  LUXURY_FLAT(3, 3, AssetPaths.ACC4),
+  PRIVATE_HOUSE(3, 3, AssetPaths.ACC5);
 
   private final int width;
   private final int height;

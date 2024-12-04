@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -106,10 +105,8 @@ public class MapScreen extends ScreenAdapter {
         "%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart()
     );
 
-    GlyphLayout layout = new GlyphLayout(game.font, timeString);
-    float textWidth = layout.width;
-    float textX = (viewport.getWorldWidth() - textWidth) / 2;
-    float textY = viewport.getWorldHeight() - 20;
+    float textX = world.getViewport().getWorldWidth() / 2;
+    float textY = world.getViewport().getWorldHeight() - 20;
     game.font.draw(game.spritebatch, timeString, textX, textY);
 
     // Render the total count of buildings placed

@@ -53,10 +53,10 @@ class StudentSatisfaction {
         continue;
       buildingRotationTotal += building.getFlipped() ? 1 : -1;
       double accomodationDistance, cateringDistance, teachingDistance, recreationDistance,
-        roadDistance, roadFlow;
+        roadDistance, roadFlow, natureBonus;
       accomodationDistance = cateringDistance = teachingDistance = recreationDistance =
         roadDistance = Integer.MAX_VALUE;
-      roadFlow = 0.0;
+      roadFlow = natureBonus = 0.0;
       boolean isRoad = false;
 
       for (Building otherBuilding : buildingManager.getBuildings()) {
@@ -92,31 +92,47 @@ class StudentSatisfaction {
                 roadFlow += 0.06;
             }
           }
+        } else if (otherBuilding.getVariant() == MiscellaneousVariant.TREE1
+            || otherBuilding.getVariant() == MiscellaneousVariant.TREE2
+            || otherBuilding.getVariant() == MiscellaneousVariant.TREE3) {
+          natureBonus += 0.3 / distance;
         }
       }
 
-      // Punish distances to other buildings
+      natureBonus = Math.min(natureBonus, 0.2);
+
       if (building.getVariant() instanceof AccommodationVariant) {
         int numAccomodationBuildings = buildingManager.getCounter().getBuildingMap().get(
           BuildingType.ACCOMMODATION
         );
+        // Punish distances to other buildings
         satisfaction /= 1 + Math.pow(teachingDistance, 0.25) * 0.01 / numAccomodationBuildings;
         satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.01 / numAccomodationBuildings;
         satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numAccomodationBuildings;
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numAccomodationBuildings;
+        // Reward being near nature
+        System.out.println(natureBonus);
+        natureBonus /= numAccomodationBuildings;
+        satisfaction = satisfaction * (1.0 - natureBonus) + 100.0 * natureBonus;
       }
       if (building.getVariant() instanceof TeachingVariant) {
         int numTeachingBuildings = buildingManager.getCounter().getBuildingMap().get(
           BuildingType.TEACHING
         );
+        // Punish distances to other buildings
         satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.005 / numTeachingBuildings;
         satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numTeachingBuildings;
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numTeachingBuildings;
+        // Reward being near nature
+        System.out.println(natureBonus);
+        natureBonus /= numTeachingBuildings;
+        satisfaction = satisfaction * (1.0 - natureBonus) + 100.0 * natureBonus;
       }
       if (building.getVariant() instanceof RecreationVariant) {
         int numRecreationBuildlings = buildingManager.getCounter().getBuildingMap().get(
           BuildingType.RECREATION
         );
+        // Punish distances to other buildings
         satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.005 / numRecreationBuildlings;
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numRecreationBuildlings;
       }
@@ -124,6 +140,7 @@ class StudentSatisfaction {
         int numCateringBuidlings = buildingManager.getCounter().getBuildingMap().get(
           BuildingType.CATERING
         );
+        // Punish distances to other buildings
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numCateringBuidlings;
       }
 
@@ -135,9 +152,6 @@ class StudentSatisfaction {
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
     // Apply reward for road flow
     double averageRoadFlow = Math.min(totalRoadFlow / Math.max(numRoads, 1), 0.12);
-    System.out.println(numRoads);
-    System.out.println(totalRoadFlow);
-    System.out.println(averageRoadFlow);
     satisfaction = satisfaction * (1.0 - averageRoadFlow) + 100.0 * averageRoadFlow;
 
     return satisfaction;

@@ -1,30 +1,20 @@
 package y111studios;
 
-import java.time.Duration;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import y111studios.position.GridPosition;
-import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.buildings.premade_variants.*;
 
@@ -45,7 +35,7 @@ public class World {
 
     private final Main game;
     private @Getter GameState gameState;
-    private Texture[] gameMap = new Texture[4];
+    private final Texture[] gameMap = new Texture[4];
     private @Setter Vector3 cursorScreenPos;
     private @Getter Camera camera;
     private @Setter Building selectedBuilding;
@@ -102,7 +92,6 @@ public class World {
      * Removes an object from the game.
      *
      * @param coords The tile coordinates of the object to remove.
-     * @return Whether an object was removed.
      */
     public boolean removeObject(GridPosition coords) {
         if (!gameState.removePosition(coords)) {
@@ -167,8 +156,8 @@ public class World {
         Texture texture = game.getAsset(building.getTexturePath());
         float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (float)pixelCoords[0] / camera.scale,
-            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+            pixelCoords[0] / camera.scale,
+            (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
             2f * texture.getWidth() / camera.scale,
             2f * texture.getHeight() / camera.scale,
             0, 0, texture.getWidth(), texture.getHeight(),

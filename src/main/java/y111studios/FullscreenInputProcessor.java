@@ -27,7 +27,7 @@ public class FullscreenInputProcessor implements InputProcessor {
   }
 
   /**
-   * Called when a key is pressed and handles logic related to keypresses
+   * Called when a key is pressed and handles logic related to key presses
    * within UI components.
 
    * @param keycode - The unique identifier for the Key pressed.
@@ -35,22 +35,19 @@ public class FullscreenInputProcessor implements InputProcessor {
    * @return whether the event has been handled and needs to be further processed.
    */
   public boolean keyDown(int keycode) {
-    switch (keycode) {
       // Toggle fullscreen
-      case Keys.F11:
-        Monitor currentMonitor = Gdx.graphics.getMonitor();
-        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
-        fullscreen = !fullscreen;
-        if (fullscreen) {
-          Gdx.graphics.setFullscreenMode(displayMode);
-        } else {
-          Gdx.graphics.setWindowedMode(windowSize[0], windowSize[1]);
-        }
-        return true;
-
-      default:
-        return false;
-    }
+      if (keycode == Keys.F11) {
+          Monitor currentMonitor = Gdx.graphics.getMonitor();
+          DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
+          fullscreen = !fullscreen;
+          if (fullscreen) {
+              Gdx.graphics.setFullscreenMode(displayMode);
+          } else {
+              Gdx.graphics.setWindowedMode(windowSize[0], windowSize[1]);
+          }
+          return true;
+      }
+      return false;
   }
 
   public boolean keyUp(int keycode) {

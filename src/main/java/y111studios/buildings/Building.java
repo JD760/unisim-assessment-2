@@ -1,7 +1,6 @@
 package y111studios.buildings;
 
 import lombok.Getter;
-import y111studios.AssetPaths;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.position.GridArea;
 import y111studios.position.GridPosition;
@@ -11,8 +10,9 @@ import y111studios.position.GridPosition;
 
  * @see MapObject
  */
+@Getter
 public abstract class Building extends MapObject {
-  private @Getter VariantProperties variant;
+  private final VariantProperties variant;
 
   /**
    * Constructor for a building that starts at a position and is of a specified

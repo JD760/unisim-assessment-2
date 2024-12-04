@@ -34,9 +34,9 @@ public class MapScreen extends ScreenAdapter {
   // Proportional height of the display.
   static int height = 480;
   // Width of map in tiles.
-  public static final int TILE_WIDTH = 75;
+  public static final int TILE_WIDTH = 76;
   // Height of map in tiles.
-  public static final int TILE_HEIGHT = 75;
+  public static final int TILE_HEIGHT = 76;
 
   final Main game;
   GameState gameState;

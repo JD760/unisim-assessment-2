@@ -22,7 +22,12 @@ public abstract class Building extends MapObject {
    * @param variant  the variant information of the building
    */
   protected Building(GridPosition position, VariantProperties variant, boolean flipped) {
-    super(new GridArea(position, variant.getWidth(), variant.getHeight()), variant.getTexturePath(), flipped);
+    super(
+      new GridArea(
+        position, flipped ? variant.getHeight() : variant.getWidth(),
+        flipped ? variant.getWidth() : variant.getHeight()
+      ), variant.getTexturePath(), flipped
+    );
     this.variant = variant;
   }
 }

@@ -7,8 +7,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 /**
- * Runs before any other input processors and handles keypresses that do things that should happen
- * on all screens such as fullscreening the window
+ * Runs before any other input processors and handles key presses that do things that should happen
+ * on all screens such as full-screening the window
  */
 @SuppressWarnings("OuterTypeFilename")
 public class UniversalInputProcessor implements InputProcessor {
@@ -24,22 +24,19 @@ public class UniversalInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keycode) {
-    switch (keycode) {
       // Toggle fullscreen
-      case Keys.F11:
-        Monitor currentMonitor = Gdx.graphics.getMonitor();
-        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
-        fullscreen = !fullscreen;
-        if (fullscreen) {
-          Gdx.graphics.setFullscreenMode(displayMode);
-        } else {
-          Gdx.graphics.setWindowedMode(windowWidth, windowHeight);
-        }
-        return true;
-
-      default:
-        return false;
-    }
+      if (keycode == Keys.F11) {
+          Monitor currentMonitor = Gdx.graphics.getMonitor();
+          DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
+          fullscreen = !fullscreen;
+          if (fullscreen) {
+              Gdx.graphics.setFullscreenMode(displayMode);
+          } else {
+              Gdx.graphics.setWindowedMode(windowWidth, windowHeight);
+          }
+          return true;
+      }
+      return false;
   }
 
   public boolean keyUp(int keycode) {

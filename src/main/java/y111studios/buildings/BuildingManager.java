@@ -14,11 +14,12 @@ import y111studios.position.GridPosition;
  * placed is
  * {@link #MAX_BUILDINGS MAX_BUILDINGS} ({@value #MAX_BUILDINGS}). This is a
  * fixed size array of
- * buildings, helped by a the building counter.
+ * buildings, helped by the building counter.
  * </p>
  * @see BuildingCounter
  * @see BuildingController
  */
+@Getter
 public class BuildingManager implements BuildingController {
 
   /**
@@ -42,11 +43,11 @@ public class BuildingManager implements BuildingController {
    * this array is unordered and the order of buildings is not guaranteed.
    * </p>
    */
-  private @Getter Building[] buildings;
+  private final Building[] buildings;
   /**
    * The building counter to keep track of the number of buildings placed.
    */
-  public @Getter BuildingCounter counter;
+  public BuildingCounter counter;
 
   /**
    * Initializes the building manager with a null-initialized array of buildings

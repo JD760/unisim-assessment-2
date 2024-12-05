@@ -8,6 +8,7 @@ import y111studios.utils.IntRange;
  *
  * @see GridPosition
  */
+
 public class GridArea {
 
   /**
@@ -25,12 +26,12 @@ public class GridArea {
 
   /**
    * The continuous range of x-coordinates that are within this GridArea. This
-   * field is lazily-initialised with the first call to {@link #getrangeX()}.
+   * field is lazily-initialised with the first call to {@link #getRangeX()}.
    */
   private IntRange rangeX = null;
   /**
    * The continuous range of y-coordinates that are within this GridArea. This
-   * field is lazily-initialised with the first call to {@link #getrangeY()}.
+   * field is lazily-initialised with the first call to {@link #getRangeY()}.
    */
   private IntRange rangeY = null;
 
@@ -113,7 +114,7 @@ public class GridArea {
     if (other == null) {
       return false;
     }
-    return getrangeX().contains(other.getX()) && getRangeY().contains(other.getY());
+    return getRangeX().contains(other.getX()) && getRangeY().contains(other.getY());
   }
 
   /**
@@ -133,7 +134,7 @@ public class GridArea {
     if (other == null) {
       return false;
     }
-    return getrangeX().contains(other.getrangeX()) && getRangeY().contains(other.getRangeY());
+    return getRangeX().contains(other.getRangeX()) && getRangeY().contains(other.getRangeY());
   }
 
   /**
@@ -141,7 +142,7 @@ public class GridArea {
    *
    * @return the range of x-coordinates
    */
-  public IntRange getrangeX() {
+  public IntRange getRangeX() {
     if (rangeX == null) {
       rangeX = calculateRangeX();
     }

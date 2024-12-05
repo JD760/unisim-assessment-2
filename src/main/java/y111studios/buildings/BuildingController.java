@@ -32,7 +32,7 @@ public interface BuildingController {
    */
   boolean removePosition(GridPosition position);
 
-  public int getCount();
+  int getCount();
 
   boolean isFull();
 

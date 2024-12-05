@@ -55,7 +55,7 @@ public class WorldInputProcessor implements InputProcessor {
             world.pixelToTile(
                 (int) (screenPos.x * world.getCamera().scale),
                 (int) (screenPos.y * world.getCamera().scale)),
-            buildingMenu.getFlipped());
+            buildingMenu.isFlipped());
         buildingMenu.setCurrentMenuItem(-1);
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
         try {

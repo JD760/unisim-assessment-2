@@ -78,6 +78,12 @@ public class Camera {
     x += width * scale / 2;
     y += height * scale / 2;
     scale *= factor;
+    if (scale < 0.5f) {
+      scale = 0.5f;
+    }
+    if (scale > 15f) {
+      scale = 15f;
+    }
     x -= width * scale / 2;
     y -= height * scale / 2;
   }

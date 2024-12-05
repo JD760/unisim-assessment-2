@@ -38,7 +38,7 @@ public class BuildingMenu {
   private @Getter Texture[] buildingTextures;
   private @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
   private @Getter Viewport viewport;
-  private boolean flipped;
+  private @Getter boolean flipped;
   private VariantProperties currentVariant;
   private InputMultiplexer inputMultiplexer;
   private final UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -282,7 +282,7 @@ public class BuildingMenu {
     updateBuildingRotations();
   }
 
-  public boolean getFlipped() {
-    return flipped;
-  }
+//  public boolean getFlipped() {
+//    return flipped;
+//  }
 }

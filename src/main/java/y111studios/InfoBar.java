@@ -19,7 +19,7 @@ public class InfoBar {
         this.game = game;
         this.stage = stage;
         this.world = world;
-        infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
+        this.infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
     }
 
     public void create(){
@@ -28,7 +28,7 @@ public class InfoBar {
 
     public void render() {
         game.spritebatch.begin();
-        float menuHeight = stage.getViewport().getScreenHeight() * 0.05f;
+        float menuHeight = stage.getViewport().getScreenHeight() * 0.10f;
         game.spritebatch.draw(infoBarBackground,
                 0, stage.getViewport().getScreenHeight()-menuHeight,
                 stage.getViewport().getScreenWidth(),
@@ -47,8 +47,9 @@ public class InfoBar {
 
         GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
         float textWidth = timeStringLayout.width;
+        float textHeight = timeStringLayout.height;
         float textX = (world.getViewport().getWorldWidth() - textWidth) / 2;
-        float textY = world.getViewport().getWorldHeight() - 20;
+        float textY = world.getViewport().getWorldHeight() - ((menuHeight-textHeight)/2) ;
         game.font.draw(game.spritebatch, timeString, textX, textY);
 
         game.spritebatch.end();

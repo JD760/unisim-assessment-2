@@ -1,6 +1,8 @@
 package y111studios;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Getter;
 import y111studios.buildings.Building;
@@ -11,14 +13,17 @@ import y111studios.buildings.premade_variants.CateringVariant;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
+import y111studios.buildings.premade_variants.VariantProperties;
 
 class StudentSatisfaction {
   private BuildingManager buildingManager;
   private @Getter double satisfaction;
+  private int[][] natureAreas;
 
-  StudentSatisfaction(BuildingManager buildingManager) {
+  StudentSatisfaction(BuildingManager buildingManager, int[][] natureAreas) {
     this.buildingManager = buildingManager;
     satisfaction = 0;
+    this.natureAreas = natureAreas;
   }
 
   public double calculate() {
@@ -48,9 +53,11 @@ class StudentSatisfaction {
     int buildingRotationTotal, numRoads;
     buildingRotationTotal = numRoads = 0;
     double totalRoadFlow = 0.0;
+    Set<AssetPaths> buildingVariants = new HashSet<>();
     for (Building building : buildingManager.getBuildings()) {
       if (building == null)
         continue;
+      buildingVariants.add(building.getTexturePath());
       buildingRotationTotal += building.getFlipped() ? 1 : -1;
       double accomodationDistance, cateringDistance, teachingDistance, recreationDistance,
         roadDistance, roadFlow, natureBonus;
@@ -99,6 +106,25 @@ class StudentSatisfaction {
         }
       }
 
+      boolean inNatureRegion = false;
+      for (int i = 0; i < natureAreas.length; i++) {
+        // Calculate intersectionusing the seperating axis theorem
+        final int border = 4;
+        boolean buildingIntersectsArea =
+          !(building.getArea().getOrigin().getX() > natureAreas[i][0] + natureAreas[i][2] + border
+            || building.getArea().getOrigin().getX() + building.getArea().getWidth() <
+              natureAreas[i][0] - border)
+          && !(building.getArea().getOrigin().getY() > natureAreas[i][1] + natureAreas[i][3] +
+            border || building.getArea().getOrigin().getY() + building.getArea().getHeight() <
+              natureAreas[i][1] - border);
+        if (buildingIntersectsArea) {
+          inNatureRegion = true;
+          break;
+        }
+      }
+
+      if (inNatureRegion)
+        natureBonus += 0.1;
       natureBonus = Math.min(natureBonus, 0.2);
 
       if (building.getVariant() instanceof AccommodationVariant) {
@@ -111,7 +137,6 @@ class StudentSatisfaction {
         satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numAccomodationBuildings;
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numAccomodationBuildings;
         // Reward being near nature
-        System.out.println(natureBonus);
         natureBonus /= numAccomodationBuildings;
         satisfaction = satisfaction * (1.0 - natureBonus) + 100.0 * natureBonus;
       }
@@ -124,7 +149,6 @@ class StudentSatisfaction {
         satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numTeachingBuildings;
         satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numTeachingBuildings;
         // Reward being near nature
-        System.out.println(natureBonus);
         natureBonus /= numTeachingBuildings;
         satisfaction = satisfaction * (1.0 - natureBonus) + 100.0 * natureBonus;
       }
@@ -148,6 +172,12 @@ class StudentSatisfaction {
       totalRoadFlow += Math.min(roadFlow, 0.12);
     }
 
+    // Punish poor building variety
+    System.out.println(buildingVariants.size());
+    System.out.println("Before " + satisfaction);
+    satisfaction /= 1 + 0.3 * buildingVariants.size()
+      / (double)Math.min(buildingManager.getCounter().getCount(), 34);
+    System.out.println("After " + satisfaction);
     // Punish building rotations being all the same
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
     // Apply reward for road flow

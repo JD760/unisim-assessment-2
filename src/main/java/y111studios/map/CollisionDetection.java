@@ -50,8 +50,7 @@ public class CollisionDetection {
     for (int i = 0; i < staticObjects.length; i++) {
       fillArea(new GridArea(
           staticObjects[i][0], staticObjects[i][1], staticObjects[i][2], staticObjects[i][3]
-      ),
-          true);
+      ), true);
     }
   }
 

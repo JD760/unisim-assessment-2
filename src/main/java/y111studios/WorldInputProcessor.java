@@ -1,13 +1,8 @@
 package y111studios;
 
-import java.util.Map;
-
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
-
-import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.MenuTab;
 
 public class WorldInputProcessor implements InputProcessor {
   private World world;
@@ -25,6 +20,28 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keyCode) {
+    switch(keyCode) {
+      case Keys.NUM_1:
+        buildingMenu.setCurrentMenuItem(0);
+        break;
+      case Keys.NUM_2:
+        buildingMenu.setCurrentMenuItem(1);
+        break;
+      case Keys.NUM_3:
+        buildingMenu.setCurrentMenuItem(2);
+        break;
+      case Keys.NUM_4:
+        buildingMenu.setCurrentMenuItem(3);
+        break;
+      case Keys.NUM_5:
+        buildingMenu.setCurrentMenuItem(4);
+        break;
+      case Keys.NUM_6:
+        buildingMenu.flipBuildings();
+        break;
+      case Keys.NUM_7:
+        buildingMenu.setCurrentMenuItem(6);
+    }
     return false;
   }
 

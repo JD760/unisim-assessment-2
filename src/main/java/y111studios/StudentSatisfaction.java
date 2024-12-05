@@ -173,10 +173,9 @@ class StudentSatisfaction {
     }
 
     // Punish poor building variety
-    System.out.println(buildingVariants.size());
     System.out.println("Before " + satisfaction);
-    satisfaction /= 1 + 0.3 * buildingVariants.size()
-      / (double)Math.min(buildingManager.getCounter().getCount(), 34);
+    satisfaction *= buildingVariants.size()
+      / (double)Math.min(buildingManager.getCounter().getCount() - numRoads, 34);
     System.out.println("After " + satisfaction);
     // Punish building rotations being all the same
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;

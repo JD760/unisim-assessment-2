@@ -275,7 +275,7 @@ public class BuildingMenu {
       buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
     }
   }
-
+                                                    
   public void flipBuildings() {
     flipped = !flipped;
     updateBuildingRotations();

@@ -4,12 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import java.time.Duration;
 import java.util.Map;
 
 import y111studios.*;
@@ -62,7 +60,7 @@ public class MapScreen extends ScreenAdapter {
 
     world = new World(game, gameState);
     buildingMenu = new BuildingMenu(game, stage);
-    infoBar = new InfoBar(world, gameState, game, stage);
+    infoBar = new InfoBar(gameState, game, stage);
 
     uiInputProcessor = new UIInputProcessor(
         buildingMenu, world, gameState, showDebugInfo);
@@ -99,18 +97,6 @@ public class MapScreen extends ScreenAdapter {
     viewport.apply();
     game.spritebatch.begin();
 
-    // Render the time remaining at the top of the screen
-//    Duration timeRemaining = gameState.timeRemaining();
-//    String timeString = String.format(
-//        "%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart()
-//    );
-//
-//    GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
-//    float textWidth = timeStringLayout.width;
-//    float textX = (world.getViewport().getWorldWidth() - textWidth) / 2;
-//    float textY = world.getViewport().getWorldHeight() - 20;
-//    game.font.draw(game.spritebatch, timeString, textX, textY);
-
     // Render the total count of buildings placed
     if (showDebugInfo[0]) {
       int buildingCount = gameState.getCount();
@@ -138,7 +124,6 @@ public class MapScreen extends ScreenAdapter {
     }
 
     // Draw the pause menu if paused
-    GlyphLayout layout = new GlyphLayout();
     if (gameState.isPaused()) {
       game.spritebatch.setColor(1, 1, 1, 1);
       if (gameState.isTimeUp()) {

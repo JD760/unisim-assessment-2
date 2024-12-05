@@ -84,6 +84,14 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
+    final Button achievementsButton = new TextButton("Achievements", skin);
+    achievementsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new AchievementsScreen(game));
+        return false;
+      }
+    });
     final Button settingsButton = new TextButton("Settings", skin);
     settingsButton.addListener(new InputListener() {
       @Override
@@ -113,6 +121,10 @@ public class StartScreen extends ScreenAdapter {
         .width((int) (width * 0.15))
         .height((int) (height * 0.1))
         .pad(0f);
+    table.add(achievementsButton)
+        .width((int) (width * 0.15))
+        .height((int) (height * 0.1))
+        .pad(0);
     table.add(settingsButton)
         .width((int) (width * 0.15))
         .height((int) (height * 0.1))

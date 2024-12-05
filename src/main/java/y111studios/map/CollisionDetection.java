@@ -20,11 +20,11 @@ public class CollisionDetection {
    * grid where true
    * values represent occupied cells, and false values represent empty cells.
    */
-  private boolean[][] buildingGrid;
+  private final boolean[][] buildingGrid;
   /**
    * The total area of the map. This is used to determine the bounds of the map.
    */
-  private GridArea mapArea;
+  private final GridArea mapArea;
 
   /**
    * Constructs a new collision detection object with the specified width and

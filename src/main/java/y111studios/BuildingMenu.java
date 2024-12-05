@@ -29,10 +29,10 @@ import y111studios.utils.UnreachableException;
  */
 public class BuildingMenu {
   private final Main game;
-  private Texture menuBackground;
-  private Texture accommodationMenu;
-  private Texture cateringMenu;
-  private Texture teachingMenu;
+  private final Texture menuBackground;
+  private final Texture accommodationMenu;
+  private final Texture cateringMenu;
+  private final Texture teachingMenu;
   private @Getter MenuTab currentMenuTab;
   private @Getter int currentMenuItem;
   private @Getter Texture[] buildingTextures;
@@ -41,12 +41,12 @@ public class BuildingMenu {
   private boolean flipped;
   private VariantProperties currentVariant;
   private InputMultiplexer inputMultiplexer;
-  private UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
-  private Table buildingTable;
-  private Table tabTable;
-  private Image[] unselectedTabImages = new Image[5];
-  private Image[] selectedTabImages = new Image[5];
-  private Image[] buildingImages = new Image[35];
+  private final UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
+  private final Table buildingTable;
+  private final Table tabTable;
+  private final Image[] unselectedTabImages = new Image[5];
+  private final Image[] selectedTabImages = new Image[5];
+  private final Image[] buildingImages = new Image[35];
 
   /**
    * Sets up the camera and loads the background
@@ -121,7 +121,7 @@ public class BuildingMenu {
       buildingImages[i].addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
-          if (buildingIndex == currentMenuItem || buildingIndex > 6 || buildingIndex == 5) {
+          if (buildingIndex == currentMenuItem || buildingIndex == 5) {
             setCurrentMenuItem(-1);
             if (buildingIndex == 5)
               flipBuildings();

@@ -13,19 +13,12 @@ public enum MenuTab {
    * @return the tab's order in the list
    */
   public int toInt() {
-    switch (this) {
-      case ACCOMMODATION:
-        return 0;
-      case CATERING:
-        return 1;
-      case TEACHING:
-        return 2;
-      case RECREATION:
-        return 3;
-      case MISCELLANEOUS:
-        return 4;
-      default:
-        throw new UnreachableException("MenuTab variant not defined");
-    }
+      return switch (this) {
+          case ACCOMMODATION -> 0;
+          case CATERING -> 1;
+          case TEACHING -> 2;
+          case RECREATION -> 3;
+          case MISCELLANEOUS -> 4;
+      };
   }
 }

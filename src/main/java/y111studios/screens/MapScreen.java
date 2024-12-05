@@ -156,6 +156,9 @@ public class MapScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
+    if (width == 0 || height == 0) {
+      return;
+    }
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);

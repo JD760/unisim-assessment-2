@@ -16,7 +16,7 @@ import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 
 class StudentSatisfaction {
-  private BuildingManager buildingManager;
+  private final BuildingManager buildingManager;
   private @Getter double satisfaction;
   private int[][] natureAreas;
 
@@ -29,7 +29,7 @@ class StudentSatisfaction {
   public double calculate() {
     Map<BuildingType, Integer> buildingCounts = buildingManager.getCounter().getBuildingMap();
 
-    // Punish not having at least one accomodation building and catering building
+    // Punish not having at least one accommodation building and catering building
     if (
         buildingCounts.get(BuildingType.ACCOMMODATION) == 0
         || buildingCounts.get(BuildingType.CATERING) == 0
@@ -59,9 +59,9 @@ class StudentSatisfaction {
         continue;
       buildingVariants.add(building.getTexturePath());
       buildingRotationTotal += building.getFlipped() ? 1 : -1;
-      double accomodationDistance, cateringDistance, teachingDistance, recreationDistance,
+      double accommodationDistance, cateringDistance, teachingDistance, recreationDistance,
         roadDistance, roadFlow, natureBonus;
-      accomodationDistance = cateringDistance = teachingDistance = recreationDistance =
+      accommodationDistance = cateringDistance = teachingDistance = recreationDistance =
         roadDistance = Integer.MAX_VALUE;
       roadFlow = natureBonus = 0.0;
       boolean isRoad = false;
@@ -72,7 +72,7 @@ class StudentSatisfaction {
         // Only calculate the distance squared for now as it saves a costly square root
         double distance = getSquaredDistance(building, otherBuilding);
         if (otherBuilding.getVariant() instanceof AccommodationVariant) {
-          accomodationDistance = Math.min(accomodationDistance, distance);
+          accommodationDistance = Math.min(accommodationDistance, distance);
         } else if (otherBuilding.getVariant() instanceof CateringVariant) {
           cateringDistance = Math.min(cateringDistance, distance);
         } else if (otherBuilding.getVariant() instanceof TeachingVariant) {
@@ -128,16 +128,16 @@ class StudentSatisfaction {
       natureBonus = Math.min(natureBonus, 0.2);
 
       if (building.getVariant() instanceof AccommodationVariant) {
-        int numAccomodationBuildings = buildingManager.getCounter().getBuildingMap().get(
+        int numAccommodationBuildings = buildingManager.getCounter().getBuildingMap().get(
           BuildingType.ACCOMMODATION
         );
         // Punish distances to other buildings
-        satisfaction /= 1 + Math.pow(teachingDistance, 0.25) * 0.01 / numAccomodationBuildings;
-        satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.01 / numAccomodationBuildings;
-        satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numAccomodationBuildings;
-        satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numAccomodationBuildings;
+        satisfaction /= 1 + Math.pow(teachingDistance, 0.25) * 0.01 / numAccommodationBuildings;
+        satisfaction /= 1 + Math.pow(cateringDistance, 0.25) * 0.01 / numAccommodationBuildings;
+        satisfaction /= 1 + Math.pow(recreationDistance, 0.25) * 0.01 / numAccommodationBuildings;
+        satisfaction /= 1 + Math.pow(roadDistance, 0.25) * 0.03 / numAccommodationBuildings;
         // Reward being near nature
-        natureBonus /= numAccomodationBuildings;
+        natureBonus /= numAccommodationBuildings;
         satisfaction = satisfaction * (1.0 - natureBonus) + 100.0 * natureBonus;
       }
       if (building.getVariant() instanceof TeachingVariant) {

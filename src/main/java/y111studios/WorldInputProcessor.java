@@ -1,17 +1,12 @@
 package y111studios;
 
-import java.util.Map;
-
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 
-import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.MenuTab;
-
 public class WorldInputProcessor implements InputProcessor {
-  private World world;
-  private BuildingMenu buildingMenu;
+  private final World world;
+  private final BuildingMenu buildingMenu;
   private int cursorX;
   private int cursorY;
   private int clickX;
@@ -25,6 +20,8 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keyCode) {
+    if (keyCode == Input.Keys.SPACE)
+      System.out.println(world.getGameState().getStudentSatisfaction().calculate());
     return false;
   }
 

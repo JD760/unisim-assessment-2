@@ -19,9 +19,10 @@ public class Camera {
   float scale;
 
   private float time;
-  private float timeStepSize = 1/1000f;
+  // class variable in case of usage in future animations
+  private final float timeStepSize = 1/1000f;
 
-  /**
+    /**
    * Initializes the camera at the given coordinates.
    */
   public Camera(int x, int y, int width, int height) {

@@ -1,6 +1,8 @@
 package y111studios;
 
 import java.time.Duration;
+
+import lombok.Getter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
@@ -12,20 +14,19 @@ import y111studios.position.GridPosition;
 
 /**
  * A class representing the sum state of the game. This class contains the
- * clock, building manager
- * and collision detection. This class is used to manage the state of the game
- * by exposing the
- * necessary methods to alter the state of the game in a controlled manner.
+ * clock, building manager and collision detection. This class is used to
+ * manage the state of the game by exposing the necessary methods to alter
+ * the state of the game in a controlled manner.
  *
  * @see Clock
  * @see BuildingManager
  * @see CollisionDetection
  */
 public class GameState implements GameTimer, BuildingController {
-
   private GameTimer timer;
   public BuildingManager buildingManager;
   CollisionDetection collisionDetection;
+  private @Getter StudentSatisfaction studentSatisfaction;
 
   /**
    * Constructor for the GameState class.
@@ -46,6 +47,7 @@ public class GameState implements GameTimer, BuildingController {
         { 55, 49, 8, 12 },  // Small cliff thing
         { 32, 43, 1, 3 } };  // Bridge
     collisionDetection = new CollisionDetection(width, height, staticObjects);
+    studentSatisfaction = new StudentSatisfaction(buildingManager);
   }
 
   // BuildingController methods
@@ -148,5 +150,4 @@ public class GameState implements GameTimer, BuildingController {
   public boolean canPlaceBuilding(Building building) {
     return collisionDetection.canPlaceBuilding(building.getArea());
   }
-
 }

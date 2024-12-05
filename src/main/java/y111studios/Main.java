@@ -44,9 +44,4 @@ public class Main extends Game {
     font.dispose();
     assetLib.manager.dispose();
   }
-
-  @Override
-  public void render() {
-    super.render();
-  }
 }

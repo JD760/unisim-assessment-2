@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -34,8 +35,19 @@ public class StartScreen extends ScreenAdapter {
   int height = 480;
   Stage stage;
   Table table;
-  Cell<Image> startScreenCell;
   Skin skin = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
+  Image logo;
+  Cell<Image> logoCell;
+  Button playButton;
+  Cell<Button> playButtonCell;
+  Button leaderboardButton;
+  Cell<Button> leaderboardButtonCell;
+  Button achievementsButton;
+  Cell<Button> acheivementsButtonCell;
+  Button settingsButton;
+  Cell<Button> settingsButtonCell;
+  Button creditsButton;
+  Cell<Button> creditsButtonCell;
 
   /**
    * Sets up the camera and loads the background.
@@ -65,8 +77,8 @@ public class StartScreen extends ScreenAdapter {
   private void createMenu() {
     table = new Table();
     table.setFillParent(true);
-    //table.setDebug(true);
-    final Image logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
+    table.setDebug(true);
+    logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
         @Override
@@ -76,7 +88,7 @@ public class StartScreen extends ScreenAdapter {
           return false;
         }
       });
-    final Button leaderboardButton = new TextButton("Leaderboard", skin);
+    leaderboardButton = new TextButton("Leaderboard", skin);
     leaderboardButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -84,7 +96,7 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    final Button achievementsButton = new TextButton("Achievements", skin);
+    achievementsButton = new TextButton("Achievements", skin);
     achievementsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -92,7 +104,7 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    final Button settingsButton = new TextButton("Settings", skin);
+    settingsButton = new TextButton("Settings", skin);
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -100,7 +112,7 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    final Button creditsButton = new TextButton("Credits", skin);
+    creditsButton = new TextButton("Credits", skin);
     creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -108,33 +120,19 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    table.add(logo).colspan(2).padLeft(width * 0.05f);
+    logoCell = table.add(logo).colspan(2).padLeft(width * 0.05f);
     table.row();
-    table.add(playButton)
-        .width(width * 0.4f)
-        .height(height * 0.1f)
-        .pad(height * 0.02f)
-        .colspan(2)
-        .center();
+    playButtonCell = table.add(playButton)
+        .pad(height * 0.02f);
     table.row().height(height * 0.25f);
-    table.add(leaderboardButton)
-        .width((int) (width * 0.15))
-        .height((int) (height * 0.1))
+    leaderboardButtonCell = table.add(leaderboardButton)
         .pad(0f);
-    table.add(achievementsButton)
-        .width((int) (width * 0.15))
-        .height((int) (height * 0.1))
-        .pad(0);
-    table.add(settingsButton)
-        .width((int) (width * 0.15))
-        .height((int) (height * 0.1))
+    acheivementsButtonCell = table.add(achievementsButton)
+        .pad(0f);
+    settingsButtonCell = table.add(settingsButton)
         .pad(0f);
     table.row();
-    table.add(creditsButton)
-        .width((int) (width * 0.085))
-        .height((int) (height * 0.05))
-        .center()
-        .colspan(2)
+    creditsButtonCell = table.add(creditsButton)
         .padTop(height * 0.02f);
     stage.addActor(table);
   }
@@ -170,6 +168,11 @@ public class StartScreen extends ScreenAdapter {
     this.height = height;
     viewport.update(width, height, true);
     table.setSize(width, height);
+    logoCell.width(height * 0.8f).height(height * 0.25f);
+    playButtonCell.width(height * 0.5f).height(height * 0.06f);
+    leaderboardButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
+    acheivementsButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
+    settingsButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
   }
 
   @Override

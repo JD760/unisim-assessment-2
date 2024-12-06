@@ -81,13 +81,13 @@ public class StartScreen extends ScreenAdapter {
     logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
-        @Override
-        public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-          Gdx.app.log("#INFO", "Play button clicked");
-          game.setScreen(new MapScreen(game));
-          return false;
-        }
-      });
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        Gdx.app.log("#INFO", "Play button clicked");
+        game.setScreen(new MapScreen(game));
+        return false;
+      }
+    });
     leaderboardButton = new TextButton("Leaderboard", skin);
     leaderboardButton.addListener(new InputListener() {
       @Override
@@ -120,20 +120,20 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    logoCell = table.add(logo).colspan(2).padLeft(width * 0.05f);
+    logoCell = table.add(logo).colspan(3).padLeft(width * 0.05f);
     table.row();
-    playButtonCell = table.add(playButton)
+    playButtonCell = table.add(playButton).colspan(3)
         .pad(height * 0.02f);
     table.row().height(height * 0.25f);
     leaderboardButtonCell = table.add(leaderboardButton)
-        .pad(0f);
+        .pad(height * 0.02f);
     acheivementsButtonCell = table.add(achievementsButton)
-        .pad(0f);
+        .pad(height * 0.02f);
     settingsButtonCell = table.add(settingsButton)
-        .pad(0f);
+        .pad(height * 0.02f);
     table.row();
-    creditsButtonCell = table.add(creditsButton)
-        .padTop(height * 0.02f);
+    creditsButtonCell = table.add(creditsButton).colspan(3)
+        .pad(height * 0.02f);
     stage.addActor(table);
   }
 
@@ -164,15 +164,17 @@ public class StartScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
+    final float guiScale = height * 0.75f;
     this.width = width;
     this.height = height;
     viewport.update(width, height, true);
     table.setSize(width, height);
     logoCell.width(height * 0.8f).height(height * 0.25f);
-    playButtonCell.width(height * 0.5f).height(height * 0.06f);
-    leaderboardButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
-    acheivementsButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
-    settingsButtonCell.width(height * 0.5f / 3).height(height * 0.06f);
+    playButtonCell.width(guiScale).height(height * 0.06f);
+    leaderboardButtonCell.width(guiScale / 3).height(height * 0.06f);
+    acheivementsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    settingsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
   }
 
   @Override

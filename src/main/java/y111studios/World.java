@@ -3,6 +3,7 @@ package y111studios;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -49,7 +50,7 @@ public class World {
      * @param game Reference to game manager
      */
     public World(final Main game, GameState gameState) {
-        viewport = new ScreenViewport();
+    viewport = new ScreenViewport();
         this.game = game;
         this.gameState = gameState;
         buildings = new LinkedList<>();

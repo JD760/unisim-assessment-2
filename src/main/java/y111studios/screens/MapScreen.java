@@ -4,26 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import java.time.Duration;
 import java.util.Map;
-import y111studios.AssetPaths;
-import y111studios.BuildingMenu;
-import y111studios.GameState;
-import y111studios.Main;
-import y111studios.UIInputProcessor;
-import y111studios.UniversalInputProcessor;
-import y111studios.World;
-import y111studios.WorldInputProcessor;
+
+import y111studios.*;
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.VariantProperties;
+
+import static y111studios.AssetPaths.GAME_OVER;
 
 /**
  * A class to interact with LibGDX to render the game window.
@@ -39,6 +33,7 @@ public class MapScreen extends ScreenAdapter {
   public static final int TILE_HEIGHT = 75;
 
   final Main game;
+  private final InfoBar infoBar;
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
@@ -65,6 +60,7 @@ public class MapScreen extends ScreenAdapter {
 
     world = new World(game, gameState);
     buildingMenu = new BuildingMenu(game, stage);
+    infoBar = new InfoBar(gameState, game, stage);
 
     uiInputProcessor = new UIInputProcessor(
         buildingMenu, world, gameState, showDebugInfo);
@@ -88,29 +84,18 @@ public class MapScreen extends ScreenAdapter {
       VariantProperties variant = buildingMenu.getBuildingVariants().get(
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
       world.setSelectedBuilding(BuildingFactory.createBuilding(
-          variant, world.currentGridPosition(), buildingMenu.getFlipped()));
+          variant, world.currentGridPosition(), buildingMenu.isFlipped()));
     } else {
       world.setSelectedBuilding(null);
     }
     world.render(delta);
     buildingMenu.render();
+    infoBar.render();
     stage.act(delta);
     stage.draw();
 
     viewport.apply();
     game.spritebatch.begin();
-
-    // Render the time remaining at the top of the screen
-    Duration timeRemaining = gameState.timeRemaining();
-    String timeString = String.format(
-        "%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart()
-    );
-
-    GlyphLayout layout = new GlyphLayout(game.font, timeString);
-    float textWidth = layout.width;
-    float textX = (viewport.getWorldWidth() - textWidth) / 2;
-    float textY = viewport.getWorldHeight() - 20;
-    game.font.draw(game.spritebatch, timeString, textX, textY);
 
     // Render the total count of buildings placed
     if (showDebugInfo[0]) {
@@ -143,9 +128,9 @@ public class MapScreen extends ScreenAdapter {
       game.spritebatch.setColor(1, 1, 1, 1);
       if (gameState.isTimeUp()) {
         // Covers case where the game is locked paused due to time running out
-        game.spritebatch.draw(game.getAsset(AssetPaths.GAME_OVER), 220, 204);
+        game.spritebatch.draw(game.getAsset(GAME_OVER), world.getViewport().getWorldWidth()/2f, world.getViewport().getWorldHeight()/2);
       } else {
-        game.spritebatch.draw(pauseMenu, 220, 204);
+        game.spritebatch.draw(pauseMenu, world.getViewport().getWorldWidth()/2f , world.getViewport().getWorldHeight()/2);
       }
     }
 

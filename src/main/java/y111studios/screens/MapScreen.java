@@ -8,13 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import java.util.Map;
 
 import y111studios.*;
-import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.VariantProperties;
 
 import static y111studios.AssetPaths.GAME_OVER;

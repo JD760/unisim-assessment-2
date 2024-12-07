@@ -1,13 +1,12 @@
 package y111studios;
 // project imports
-import com.badlogic.gdx.Gdx;
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
+import y111studios.buildings.BuildingType;
 // gdx imports
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import y111studios.buildings.BuildingType;
 // java imports
 import java.time.Duration;
 import java.util.Map;
@@ -60,18 +59,16 @@ public class InfoBar {
                 0, screenHeight - ((infoBarHeight - buildingStringHeight)/2));
 
         // Render individual building counts
-//        BuildingCounter counter = gameState.buildingManager.getCounter();
-//        Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
-//        for (BuildingType type : BuildingType.values()) {
-//            int count = buildingCounts.get(type);
-//            String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
-//            buildingY += 20;
-//            game.font.draw(game.spritebatch, countString, buildingX, buildingY);
-//        }
-//
-//        game.font.draw(game.spritebatch, String.valueOf(
-//                Gdx.graphics.getFramesPerSecond()), 15, (buildingY + 20)
-//        );
+        BuildingCounter counter = gameState.buildingManager.getCounter();
+        Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
+        float drawHeight = screenHeight - infoBarHeight;
+        for (BuildingType type : BuildingType.values()) {
+            int count = buildingCounts.get(type);
+            String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
+            game.font.draw(game.spritebatch, countString, 0, drawHeight);
+            drawHeight -= 20;
+
+        }
 
         // Render the time remaining at the top centre of the infoBar
         Duration timeRemaining = gameState.timeRemaining();

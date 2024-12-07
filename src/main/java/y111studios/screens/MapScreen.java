@@ -98,9 +98,9 @@ public class MapScreen extends ScreenAdapter {
       game.spritebatch.setColor(1, 1, 1, 1);
       if (gameState.isTimeUp()) {
         // Covers case where the game is locked paused due to time running out
-        game.spritebatch.draw(game.getAsset(GAME_OVER), world.getViewport().getWorldWidth()/2f, world.getViewport().getWorldHeight()/2);
+        game.spritebatch.draw(game.getAsset(GAME_OVER), (world.getViewport().getWorldWidth()-game.getAsset(GAME_OVER).getWidth())/2f, world.getViewport().getWorldHeight()/2);
       } else {
-        game.spritebatch.draw(pauseMenu, world.getViewport().getWorldWidth()/2f , world.getViewport().getWorldHeight()/2);
+        game.spritebatch.draw(pauseMenu, (world.getViewport().getWorldWidth()- pauseMenu.getWidth())/2f , world.getViewport().getWorldHeight()/2);
       }
     }
 

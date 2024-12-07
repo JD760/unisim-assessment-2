@@ -84,6 +84,7 @@ public class MapScreen extends ScreenAdapter {
     } else {
       world.setSelectedBuilding(null);
     }
+
     world.render(delta);
     buildingMenu.render();
     infoBar.render();
@@ -123,6 +124,7 @@ public class MapScreen extends ScreenAdapter {
     uiInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
+    infoBar.resize(width, height);
   }
 
   @Override

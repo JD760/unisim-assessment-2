@@ -7,6 +7,10 @@ import y111studios.buildings.BuildingType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 // java imports
 import java.time.Duration;
 import java.util.Map;
@@ -19,6 +23,18 @@ public class InfoBar {
     private final GameState gameState;
     private final Main game;
     private final Stage stage;
+    private final Texture muteTexture;
+    private final Texture unmuteTexture;
+    private Image muteImage;
+    private Image unmuteImage;
+    private final Texture pauseTexture;
+    private final Texture playTexture;
+    private Image pauseImage;
+    private Image playImage;
+    private Table table;
+    private Cell muteButtonCell;
+    private Cell playButtonCell;
+    private float infoBarHeight;
 
     /**
      * The InfoBar handles rendering of game information such as BuildingCounter, Clock and StudentSatisfaction
@@ -31,7 +47,35 @@ public class InfoBar {
         this.gameState = gameState;
         this.game = game;
         this.stage = stage;
-        this.infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
+        infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
+        muteTexture = game.getAsset(AssetPaths.MUTE_BUTTON);
+        unmuteTexture = game.getAsset(AssetPaths.UNMUTE_BUTTON);
+        muteImage = new Image(muteTexture);
+        unmuteImage = new Image(unmuteTexture);
+        pauseTexture = game.getAsset(AssetPaths.PAUSE_BUTTON);
+        playTexture = game.getAsset(AssetPaths.PLAY_BUTTON);
+        pauseImage = new Image(pauseTexture);
+        playImage = new Image(playTexture);
+
+        muteImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.backgroundMusic.setVolume(0.3f);
+                muteButtonCell.setActor(unmuteImage);
+            }
+        });
+        unmuteImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                game.backgroundMusic.setVolume(0f);
+                muteButtonCell.setActor(muteImage);
+            }
+        });
+
+        this.table = new Table();
+        muteButtonCell = table.add(unmuteImage);
+        playButtonCell = table.add(playImage);
+        stage.addActor(table);
     }
 
     /**
@@ -39,7 +83,6 @@ public class InfoBar {
      */
     public void render() {
         game.spritebatch.begin();
-        float infoBarHeight = stage.getViewport().getScreenHeight() * 0.08f;
 
         float screenWidth = stage.getViewport().getScreenWidth();
         float screenHeight = stage.getViewport().getScreenHeight();
@@ -100,4 +143,12 @@ public class InfoBar {
         game.spritebatch.end();
     }
 
+    public void resize(int width, int height) {
+        infoBarHeight = height * 0.08f;
+        table.setBounds(0, height - infoBarHeight, width, infoBarHeight);
+        muteButtonCell.width(infoBarHeight * 0.7f).height(infoBarHeight * 0.7f)
+            .padLeft(width * 0.3f);
+        playButtonCell.width(infoBarHeight * 0.7f).height(infoBarHeight * 0.7f)
+            .padLeft(height * 0.02f).padRight(width * 0.7f);
+    }
 }

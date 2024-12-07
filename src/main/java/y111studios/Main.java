@@ -17,7 +17,7 @@ public class Main extends Game {
   public AssetLibrary assetLib;
   public SpriteBatch spritebatch;
   public BitmapFont font;
-  Music backgroundMusic;
+  public Music backgroundMusic;
 
   @Override
   public void create() {

@@ -58,7 +58,11 @@ public enum AssetPaths {
   TRASH("assets/Trash.png"),
   ROTATE("assets/axis-z-rotate-clockwise.png"),
   UNISIM_LOGO("assets/UnisimLogo.png"),
-  INFO_BAR_BACKGROUND("assets/InfoBarBackground.png");
+  INFO_BAR_BACKGROUND("assets/InfoBarBackground.png"),
+  MUTE_BUTTON("assets/volume-mute-filled.png"),
+  UNMUTE_BUTTON("assets/volume-up-filled.png"),
+  PAUSE_BUTTON("assets/pause-filled.png"),
+  PLAY_BUTTON("assets/play-filled-alt.png");
 
   private final String path;
 

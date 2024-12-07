@@ -39,7 +39,13 @@ public class InfoBar {
      */
     public void render() {
         game.spritebatch.begin();
-        float infoBarHeight = stage.getViewport().getScreenHeight() * 0.10f;
+        float infoBarHeight;
+        if (stage.getViewport().getScreenHeight()*0.10f<137){
+            infoBarHeight = 137;
+        }else{
+            infoBarHeight = stage.getViewport().getScreenHeight() * 0.10f;
+        }
+
         float screenWidth = stage.getViewport().getScreenWidth();
         float screenHeight = stage.getViewport().getScreenHeight();
 
@@ -52,22 +58,20 @@ public class InfoBar {
         // Render buildingCount onto InfoBar
         int buildingCount = gameState.getCount();
         String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
-        GlyphLayout buildingStringLayout = new GlyphLayout(game.font, buildingString);
-        float buildingStringHeight = buildingStringLayout.height;
 
         game.font.draw(game.spritebatch, buildingString,
-                0, screenHeight - ((infoBarHeight - buildingStringHeight)/2));
+                10, screenHeight-10);
 
-        // Render individual building counts
+        // Render individual building counts onto infoBar
         BuildingCounter counter = gameState.buildingManager.getCounter();
         Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
-        float drawHeight = screenHeight - infoBarHeight;
+        float drawHeight = screenHeight - 30;
+
         for (BuildingType type : BuildingType.values()) {
             int count = buildingCounts.get(type);
             String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
-            game.font.draw(game.spritebatch, countString, 0, drawHeight);
+            game.font.draw(game.spritebatch, countString, 10, drawHeight);
             drawHeight -= 20;
-
         }
 
         // Render the time remaining at the top centre of the infoBar
@@ -90,7 +94,7 @@ public class InfoBar {
 
         game.font.draw(game.spritebatch,
                 satisfactionString,
-                screenWidth - satisfactionStringWidth,
+                screenWidth - satisfactionStringWidth - 10,
                 screenHeight - ((infoBarHeight -textHeight)/2));
 
         game.spritebatch.end();

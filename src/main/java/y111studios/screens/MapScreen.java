@@ -97,32 +97,6 @@ public class MapScreen extends ScreenAdapter {
     viewport.apply();
     game.spritebatch.begin();
 
-    // Render the total count of buildings placed
-    if (showDebugInfo[0]) {
-      int buildingCount = gameState.getCount();
-      String buildingString = String.format(
-          "Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS
-        );
-
-      float buildingX = 15;
-      float buildingY = 120;
-      game.font.draw(game.spritebatch, buildingString, buildingX, buildingY);
-
-      // Render individual building counts
-      BuildingCounter counter = gameState.buildingManager.getCounter();
-      Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
-      for (BuildingType type : BuildingType.values()) {
-        int count = buildingCounts.get(type);
-        String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
-        buildingY += 20;
-        game.font.draw(game.spritebatch, countString, buildingX, buildingY);
-      }
-
-      game.font.draw(game.spritebatch, String.valueOf(
-          Gdx.graphics.getFramesPerSecond()), 15, (buildingY + 20)
-      );
-    }
-
     // Draw the pause menu if paused
     if (gameState.isPaused()) {
       game.spritebatch.setColor(1, 1, 1, 1);

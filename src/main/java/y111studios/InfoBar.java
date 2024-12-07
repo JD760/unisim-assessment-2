@@ -1,12 +1,15 @@
 package y111studios;
 // project imports
+import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
+import y111studios.buildings.BuildingType;
 // gdx imports
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 // java imports
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Class which handles the creation and rendering of the info bar
@@ -36,7 +39,8 @@ public class InfoBar {
      */
     public void render() {
         game.spritebatch.begin();
-        float infoBarHeight = stage.getViewport().getScreenHeight() * 0.10f;
+        float infoBarHeight = stage.getViewport().getScreenHeight() * 0.08f;
+
         float screenWidth = stage.getViewport().getScreenWidth();
         float screenHeight = stage.getViewport().getScreenHeight();
 
@@ -49,11 +53,26 @@ public class InfoBar {
         // Render buildingCount onto InfoBar
         int buildingCount = gameState.getCount();
         String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
-        GlyphLayout buildingStringLayout = new GlyphLayout(game.font, buildingString);
-        float buildingStringHeight = buildingStringLayout.height;
+        GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
 
         game.font.draw(game.spritebatch, buildingString,
-                0, screenHeight - ((infoBarHeight - buildingStringHeight)/2));
+                screenHeight * 0.01f, screenHeight * 0.99f);
+
+        // Render individual building counts onto infoBar
+        BuildingCounter counter = gameState.buildingManager.getCounter();
+        Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
+        float drawIndent = screenHeight * 0.01f ;
+
+        for (BuildingType type : BuildingType.values()) {
+            int count = buildingCounts.get(type);
+            String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
+            GlyphLayout countLayout = new GlyphLayout(game.font, countString);
+            game.font.draw(
+                game.spritebatch, countString, drawIndent,
+                screenHeight * 1.01f - infoBarHeight + countLayout.height
+            );
+            drawIndent += countLayout.width + screenHeight * 0.01f;
+        }
 
         // Render the time remaining at the top centre of the infoBar
         Duration timeRemaining = gameState.timeRemaining();
@@ -75,7 +94,7 @@ public class InfoBar {
 
         game.font.draw(game.spritebatch,
                 satisfactionString,
-                screenWidth - satisfactionStringWidth,
+                screenWidth - satisfactionStringWidth - 10,
                 screenHeight - ((infoBarHeight -textHeight)/2));
 
         game.spritebatch.end();

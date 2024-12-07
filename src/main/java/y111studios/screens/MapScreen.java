@@ -8,13 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import java.util.Map;
 
 import y111studios.*;
-import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 import y111studios.buildings.premade_variants.VariantProperties;
 
 import static y111studios.AssetPaths.GAME_OVER;
@@ -97,40 +93,14 @@ public class MapScreen extends ScreenAdapter {
     viewport.apply();
     game.spritebatch.begin();
 
-    // Render the total count of buildings placed
-    if (showDebugInfo[0]) {
-      int buildingCount = gameState.getCount();
-      String buildingString = String.format(
-          "Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS
-        );
-
-      float buildingX = 15;
-      float buildingY = 120;
-      game.font.draw(game.spritebatch, buildingString, buildingX, buildingY);
-
-      // Render individual building counts
-      BuildingCounter counter = gameState.buildingManager.getCounter();
-      Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
-      for (BuildingType type : BuildingType.values()) {
-        int count = buildingCounts.get(type);
-        String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
-        buildingY += 20;
-        game.font.draw(game.spritebatch, countString, buildingX, buildingY);
-      }
-
-      game.font.draw(game.spritebatch, String.valueOf(
-          Gdx.graphics.getFramesPerSecond()), 15, (buildingY + 20)
-      );
-    }
-
     // Draw the pause menu if paused
     if (gameState.isPaused()) {
       game.spritebatch.setColor(1, 1, 1, 1);
       if (gameState.isTimeUp()) {
         // Covers case where the game is locked paused due to time running out
-        game.spritebatch.draw(game.getAsset(GAME_OVER), world.getViewport().getWorldWidth()/2f, world.getViewport().getWorldHeight()/2);
+        game.spritebatch.draw(game.getAsset(GAME_OVER), (world.getViewport().getWorldWidth()-game.getAsset(GAME_OVER).getWidth())/2f, world.getViewport().getWorldHeight()/2);
       } else {
-        game.spritebatch.draw(pauseMenu, world.getViewport().getWorldWidth()/2f , world.getViewport().getWorldHeight()/2);
+        game.spritebatch.draw(pauseMenu, (world.getViewport().getWorldWidth()- pauseMenu.getWidth())/2f , world.getViewport().getWorldHeight()/2);
       }
     }
 

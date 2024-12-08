@@ -33,7 +33,7 @@ public class InfoBar {
     private Image playImage;
     private Table table;
     private Cell muteButtonCell;
-    private Cell playButtonCell;
+    private Cell pauseButtonCell;
     private float infoBarHeight;
 
     /**
@@ -71,10 +71,24 @@ public class InfoBar {
                 muteButtonCell.setActor(muteImage);
             }
         });
+        playImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                gameState.resume();
+                pauseButtonCell.setActor(pauseImage);
+            }
+        });
+        pauseImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                gameState.pause();
+                pauseButtonCell.setActor(playImage);
+            }
+        });
 
         this.table = new Table();
         muteButtonCell = table.add(unmuteImage);
-        playButtonCell = table.add(playImage);
+        pauseButtonCell = table.add(playImage);
         stage.addActor(table);
     }
 
@@ -146,9 +160,9 @@ public class InfoBar {
     public void resize(int width, int height) {
         infoBarHeight = height * 0.08f;
         table.setBounds(0, height - infoBarHeight, width, infoBarHeight);
-        muteButtonCell.width(infoBarHeight * 0.7f).height(infoBarHeight * 0.7f)
-            .padLeft(width * 0.3f);
-        playButtonCell.width(infoBarHeight * 0.7f).height(infoBarHeight * 0.7f)
-            .padLeft(height * 0.02f).padRight(width * 0.7f);
+        muteButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
+            .padLeft(height * 0.385f);
+        pauseButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
+            .padLeft(height * 0.02f).padRight(width * 0.615f);
     }
 }

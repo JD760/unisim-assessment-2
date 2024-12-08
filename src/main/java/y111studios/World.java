@@ -31,7 +31,6 @@ public class World {
 
     private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
     private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
-    private final static Color PAUSED_DULLING = new Color(0.5f, 0.5f, 0.5f, 1f);
     private final static Color NORMAL = new Color(1, 1, 1, 1);
 
     private final Main game;
@@ -164,11 +163,7 @@ public class World {
             0, 0, texture.getWidth(), texture.getHeight(),
             building.getFlipped(), false
         );
-        if (gameState.isPaused()) {
-            game.spritebatch.setColor(PAUSED_DULLING);
-        } else {
-            game.spritebatch.setColor(NORMAL);
-        }
+        game.spritebatch.setColor(NORMAL);
     }
 
     /**
@@ -184,12 +179,7 @@ public class World {
         camera.updateZoom(delta);
 
         game.spritebatch.begin();
-        // Change colour based to dull the screen if paused
-        if(gameState.isPaused()) {
-            game.spritebatch.setColor(PAUSED_DULLING);
-        } else {
-            game.spritebatch.setColor(NORMAL);
-        }
+        game.spritebatch.setColor(NORMAL);
         // Draw the game map
         game.spritebatch.draw(gameMap[0], 0, 0, width, height, (int)camera.x + 1, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
@@ -204,7 +194,7 @@ public class World {
         buildings.forEach(this::renderBuilding);
 
         // Add building placement hologram
-        if (!gameState.isPaused() && selectedBuilding != null) {
+        if (selectedBuilding != null) {
             // Set hologram colour
             if (!gameState.canPlaceBuilding(selectedBuilding)) {
                 game.spritebatch.setColor(INVALID_PREVIEW);
@@ -213,13 +203,7 @@ public class World {
             }
 
             renderBuilding(selectedBuilding); // Render hologram
-
-            // Reset colour to previous one
-            if(gameState.isPaused()) {
-                game.spritebatch.setColor(PAUSED_DULLING);
-            } else {
-                game.spritebatch.setColor(NORMAL);
-            }
+            game.spritebatch.setColor(NORMAL);
         }
 
         game.spritebatch.end();

@@ -38,7 +38,6 @@ public class MapScreen extends ScreenAdapter {
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
   UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
-  UIInputProcessor uiInputProcessor;
   Stage stage = new Stage(new ScreenViewport());
 
   /**
@@ -58,13 +57,9 @@ public class MapScreen extends ScreenAdapter {
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
 
-    uiInputProcessor = new UIInputProcessor(
-        buildingMenu, world, gameState, showDebugInfo);
-
     inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
-    inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
   }
 
@@ -85,32 +80,16 @@ public class MapScreen extends ScreenAdapter {
       world.setSelectedBuilding(null);
     }
 
+    // Check for game over
+    if (gameState.isTimeUp()) {
+      gameState.pause(); // Lock pause
+    }
+
     world.render(delta);
     buildingMenu.render();
     infoBar.render();
     stage.act(delta);
     stage.draw();
-
-    viewport.apply();
-    game.spritebatch.begin();
-
-    // Draw the pause menu if paused
-    if (gameState.isPaused()) {
-      game.spritebatch.setColor(1, 1, 1, 1);
-      if (gameState.isTimeUp()) {
-        // Covers case where the game is locked paused due to time running out
-        game.spritebatch.draw(game.getAsset(GAME_OVER), (world.getViewport().getWorldWidth()-game.getAsset(GAME_OVER).getWidth())/2f, world.getViewport().getWorldHeight()/2);
-      } else {
-        game.spritebatch.draw(pauseMenu, (world.getViewport().getWorldWidth()- pauseMenu.getWidth())/2f , world.getViewport().getWorldHeight()/2);
-      }
-    }
-
-    game.spritebatch.end();
-
-    // Check for game over
-    if (gameState.isTimeUp()) {
-      gameState.pause(); // Lock pause
-    }
   }
 
   @Override
@@ -121,7 +100,6 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     world.resize(width, height);
     universalInputProcessor.resize(width, height);
-    uiInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);

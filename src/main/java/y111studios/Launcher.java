@@ -16,7 +16,7 @@ public abstract class Launcher {
    *
    * @param args the command line arguments
    */
-  public static void main(String[] args) {
+   public static void main(String[] args) {
     try {
       // Get the path to the java home directory
       String javaHome = System.getProperty("java.home");

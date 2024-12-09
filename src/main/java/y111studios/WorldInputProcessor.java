@@ -41,6 +41,8 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.NUM_7:
         buildingMenu.setCurrentMenuItem(6);
+      case Keys.F:
+        buildingMenu.flipBuildings();
     }
     return false;
   }

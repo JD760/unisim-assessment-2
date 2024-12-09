@@ -20,7 +20,7 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keyCode) {
-    switch(keyCode) {
+    switch (keyCode) {
       case Keys.NUM_1:
         buildingMenu.setCurrentMenuItem(0);
         break;
@@ -41,8 +41,12 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.NUM_7:
         buildingMenu.setCurrentMenuItem(6);
+        break;
       case Keys.F:
         buildingMenu.flipBuildings();
+        break;
+      default:
+        break;
     }
     return false;
   }

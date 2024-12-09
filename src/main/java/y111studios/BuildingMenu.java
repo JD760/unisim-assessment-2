@@ -1,6 +1,5 @@
 package y111studios;
 
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -38,10 +37,7 @@ public class BuildingMenu {
   private @Getter Texture[] buildingTextures;
   private @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
   private @Getter Viewport viewport;
-  private boolean flipped;
-  private VariantProperties currentVariant;
-  private InputMultiplexer inputMultiplexer;
-  private final UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
+  private @Getter boolean flipped;
   private final Table buildingTable;
   private final Table tabTable;
   private final Image[] unselectedTabImages = new Image[5];
@@ -233,18 +229,16 @@ public class BuildingMenu {
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       cell.width(
-          viewport.getScreenHeight() * 0.1f
-              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
-          .height(
-              viewport.getScreenHeight() * 0.1f
-                  * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
-          .pad(viewport.getScreenHeight() * 0.01f);
+                      viewport.getScreenHeight() * 0.1f
+                              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+              .height(
+                      viewport.getScreenHeight() * 0.1f
+                              * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
+              .pad(viewport.getScreenHeight() * 0.01f);
     }
     for (Cell<Actor> cell : tabTable.getCells()) {
-      Image tabImage = (Image) (cell.getActor());
-      Vector2 textureSize = new Vector2(tabImage.getWidth(), tabImage.getHeight());
       cell.width(
-          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+              viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
     }
   }
 
@@ -281,7 +275,7 @@ public class BuildingMenu {
     updateBuildingRotations();
   }
 
-  public boolean getFlipped() {
-    return flipped;
-  }
+//  public boolean getFlipped() {
+//    return flipped;
+//  }
 }

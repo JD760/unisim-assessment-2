@@ -66,9 +66,6 @@ public class GameState implements GameTimer, BuildingController {
 
   @Override
   public boolean push(Building building) {
-    if (isPaused()) {
-      return false;
-    }
     if (building == null) {
       return true;
     }
@@ -87,9 +84,6 @@ public class GameState implements GameTimer, BuildingController {
 
   @Override
   public boolean removePosition(GridPosition position) {
-    if (isPaused()) {
-      return false;
-    }
     if (position == null) {
       return false;
     }

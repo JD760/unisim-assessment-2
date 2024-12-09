@@ -1,6 +1,7 @@
 package y111studios.screens;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import y111studios.utils.Score;
 
@@ -13,7 +14,8 @@ public class Leaderboard {
 
   /**
    * Add a new score to the leaderboard. Ensures the size stays below the maximum
-   * by removing old scores as more are added
+   * by removing old scores as more are added. Performs an insertion sort to keep
+   * the leaderboard properly ordered.
    *
    * @param score - The score to insert to the leaderboard
    * @return - false if the name or score are invalid.
@@ -23,12 +25,14 @@ public class Leaderboard {
       return false;
     }
 
-    // account for adding an element increasing the size by 1
-    if (scores.size() >= MAX_SIZE - 1) {
+    // make space by removing the lowest score if a new score is added.
+    // only add a new score if it is higher than the current lowest score
+    if (scores.size() >= MAX_SIZE - 1 && score.getScore() > scores.get(MAX_SIZE - 1).getScore()) {
       removeLowestScore();
     }
 
     scores.add(score);
+    scores.sort(new SortByScore());
     return true;
   }
 
@@ -62,5 +66,10 @@ public class Leaderboard {
     return scores.get(index);
   }
 
-
+  class SortByScore implements Comparator<Score> {
+    public int compare(Score a, Score b) {
+      // sort scores from highest to lowest.
+      return b.getScore() - a.getScore();
+    }
+  }
 }

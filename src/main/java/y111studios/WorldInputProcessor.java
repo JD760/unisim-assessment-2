@@ -1,9 +1,10 @@
 package y111studios;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
+
+import y111studios.screens.StartScreen;
 
 public class WorldInputProcessor implements InputProcessor {
   private final World world;
@@ -23,35 +24,47 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean keyDown(int keyCode) {
     switch (keyCode) {
       case Keys.NUM_1:
-        buildingMenu.setCurrentMenuItem(0);
+        buildingMenu.setCurrentMenuItem(setItem(0));
         break;
       case Keys.NUM_2:
-        buildingMenu.setCurrentMenuItem(1);
+        buildingMenu.setCurrentMenuItem(setItem(1));
         break;
       case Keys.NUM_3:
-        buildingMenu.setCurrentMenuItem(2);
+        buildingMenu.setCurrentMenuItem(setItem(2));
         break;
       case Keys.NUM_4:
-        buildingMenu.setCurrentMenuItem(3);
+        buildingMenu.setCurrentMenuItem(setItem(3));
         break;
       case Keys.NUM_5:
-        buildingMenu.setCurrentMenuItem(4);
+        buildingMenu.setCurrentMenuItem(setItem(4));
         break;
       case Keys.NUM_6:
         buildingMenu.flipBuildings();
         break;
       case Keys.NUM_7:
-        buildingMenu.setCurrentMenuItem(6);
+        buildingMenu.setCurrentMenuItem(setItem(6));
         break;
       case Keys.F:
         buildingMenu.flipBuildings();
         break;
       case Keys.SPACE:
         System.out.println(world.getGameState().getStudentSatisfaction().calculate());
+        break;
+      case Keys.ESCAPE:
+        world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));
+        break;
       default:
         break;
     }
     return false;
+  }
+
+  private int setItem(int item) {
+    if (buildingMenu.getCurrentMenuItem() == item) {
+      // selecting the same item twice clears the cursor
+      return -1;
+    }
+    return item;
   }
 
   public boolean keyUp(int keyCode) {

@@ -4,6 +4,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
 
+import y111studios.screens.StartScreen;
+
 public class WorldInputProcessor implements InputProcessor {
   private final World world;
   private final BuildingMenu buildingMenu;
@@ -47,6 +49,10 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.SPACE:
         System.out.println(world.getGameState().getStudentSatisfaction().calculate());
+        break;
+      case Keys.ESCAPE:
+        world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));
+        break;
       default:
         break;
     }

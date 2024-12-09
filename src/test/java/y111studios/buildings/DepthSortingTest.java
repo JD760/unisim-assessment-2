@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import y111studios.GameState;
+import y111studios.Main;
 import y111studios.World;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.position.GridPosition;
@@ -11,7 +12,7 @@ import y111studios.position.GridPosition;
 public class DepthSortingTest {
   @Test
   public void insertingBehind() {
-    GameState gameState = new GameState(75, 75);
+    GameState gameState = new GameState(75, 75, new Main());
     gameState.resume();
     World world = new World(null, gameState);
 
@@ -24,7 +25,7 @@ public class DepthSortingTest {
 
   @Test
   public void insertingInFront() {
-    GameState gameState = new GameState(75, 75);
+    GameState gameState = new GameState(75, 75, new Main());
     gameState.resume();
     World world = new World(null, gameState);
 

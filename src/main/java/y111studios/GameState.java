@@ -153,4 +153,8 @@ public class GameState implements GameTimer, BuildingController {
   public void setScreen(Screen screen) {
     game.setScreen(screen);
   }
+
+  public Main getGame() {
+    return game;
+  }
 }

@@ -47,7 +47,7 @@ public class MapScreen extends ScreenAdapter {
    */
   public MapScreen(final Main game) {
     this.game = game;
-    this.gameState = new GameState(TILE_WIDTH, TILE_HEIGHT);
+    this.gameState = new GameState(TILE_WIDTH, TILE_HEIGHT, game);
     viewport = new FitViewport(width, height);
     viewport.getCamera().position.set(width / 2f, height / 2f, 0);
     viewport.getCamera().update();

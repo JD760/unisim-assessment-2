@@ -1,30 +1,21 @@
 package y111studios;
 
-import java.time.Duration;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import y111studios.position.GridPosition;
-import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.buildings.premade_variants.*;
 
@@ -40,12 +31,11 @@ public class World {
 
     private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
     private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
-    private final static Color PAUSED_DULLING = new Color(0.5f, 0.5f, 0.5f, 1f);
     private final static Color NORMAL = new Color(1, 1, 1, 1);
 
     private final Main game;
-    private GameState gameState;
-    private Texture[] gameMap = new Texture[4];
+    private @Getter GameState gameState;
+    private final Texture[] gameMap = new Texture[4];
     private @Setter Vector3 cursorScreenPos;
     private @Getter Camera camera;
     private @Setter Building selectedBuilding;
@@ -59,7 +49,7 @@ public class World {
      * @param game Reference to game manager
      */
     public World(final Main game, GameState gameState) {
-        viewport = new ScreenViewport();
+    viewport = new ScreenViewport();
         this.game = game;
         this.gameState = gameState;
         buildings = new LinkedList<>();
@@ -82,7 +72,6 @@ public class World {
      * @return Whether the object was added.
      */
     public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
-        System.out.println(Integer.toString(coords.getX()) + ", " + Integer.toString(coords.getY()));
         Building building = BuildingFactory.createBuilding(variant, coords, flipped);
         if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
             return false;
@@ -103,7 +92,6 @@ public class World {
      * Removes an object from the game.
      *
      * @param coords The tile coordinates of the object to remove.
-     * @return Whether an object was removed.
      */
     public boolean removeObject(GridPosition coords) {
         if (!gameState.removePosition(coords)) {
@@ -168,18 +156,14 @@ public class World {
         Texture texture = game.getAsset(building.getTexturePath());
         float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
         game.spritebatch.draw(texture,
-            (float)pixelCoords[0] / camera.scale * 640 / width,
-            ((float)pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale * 480 / height,
-            2f * texture.getWidth() / camera.scale * 640 / width,
-            2f * texture.getHeight() / camera.scale * 480 / height,
+            pixelCoords[0] / camera.scale,
+            (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+            2f * texture.getWidth() / camera.scale,
+            2f * texture.getHeight() / camera.scale,
             0, 0, texture.getWidth(), texture.getHeight(),
             building.getFlipped(), false
         );
-        if (gameState.isPaused()) {
-            game.spritebatch.setColor(PAUSED_DULLING);
-        } else {
-            game.spritebatch.setColor(NORMAL);
-        }
+        game.spritebatch.setColor(NORMAL);
     }
 
     /**
@@ -188,30 +172,29 @@ public class World {
      * @param delta The time since the previous tick.
      */
     public void render(float delta) {
+        game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
         viewport.apply();
         ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
         camera.updateZoom(delta);
 
         game.spritebatch.begin();
-        // Change colour based to dull the screen if paused
-        if(gameState.isPaused()) {
-            game.spritebatch.setColor(PAUSED_DULLING);
-        } else {
-            game.spritebatch.setColor(NORMAL);
-        }
+        game.spritebatch.setColor(NORMAL);
         // Draw the game map
-        game.spritebatch.draw(gameMap[0], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y + 1,
+        game.spritebatch.draw(gameMap[0], 0, 0, width, height, (int)camera.x + 1, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[1], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
+        game.spritebatch.draw(gameMap[1], 0, 0, width, height, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y + 1,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[2], 0, 0, 640, 480, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[2], 0, 0, width, height, (int)camera.x + 1, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
-        game.spritebatch.draw(gameMap[3], 0, 0, 640, 480, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
+        game.spritebatch.draw(gameMap[3], 0, 0, width, height, (int)camera.x - gameMap[0].getWidth() + 3, (int)camera.y - gameMap[0].getHeight() + 3,
             (int)(width * camera.scale), (int)(height * camera.scale), false, false);
 
+        // Render buildings
+        buildings.forEach(this::renderBuilding);
+
         // Add building placement hologram
-        if (!gameState.isPaused() && selectedBuilding != null) {
+        if (selectedBuilding != null) {
             // Set hologram colour
             if (!gameState.canPlaceBuilding(selectedBuilding)) {
                 game.spritebatch.setColor(INVALID_PREVIEW);
@@ -220,17 +203,8 @@ public class World {
             }
 
             renderBuilding(selectedBuilding); // Render hologram
-
-            // Reset colour to previous one
-            if(gameState.isPaused()) {
-                game.spritebatch.setColor(PAUSED_DULLING);
-            } else {
-                game.spritebatch.setColor(NORMAL);
-            }
+            game.spritebatch.setColor(NORMAL);
         }
-
-        // Render buildings
-        buildings.forEach(this::renderBuilding);
 
         game.spritebatch.end();
 

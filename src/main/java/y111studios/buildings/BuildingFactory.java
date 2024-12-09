@@ -31,11 +31,7 @@ public final class BuildingFactory {
 
   // Prevent instantiation of the factory class.
 
-  private BuildingFactory() throws UnsupportedOperationException {
-    throw new UnsupportedOperationException("BuildingFactory should not be instantiated");
-  }
-
-  /**
+    /**
    * A map of the constructors for each building class. The key is the class of
    * the building and the value is the constructor of the building.
    *
@@ -58,7 +54,7 @@ public final class BuildingFactory {
       tryRegisterConstructor(ObstacleVariant.class, ObstacleBuilding.class);
     } catch (UnreachableException e) {
       // This should not happen, as the constructors should be defined in the classes
-      e.printStackTrace();
+      // e.printStackTrace();
       System.exit(1);
     }
   }
@@ -121,7 +117,7 @@ public final class BuildingFactory {
       return constructor.newInstance(position, variant, flipped);
     } catch (Exception e) {
       // This should not happen, as the constructor should be defined in the class
-      e.printStackTrace();
+      // e.printStackTrace();
       throw new UnreachableException("Constructors defined at startup should be correct");
     }
   }

@@ -1,6 +1,5 @@
 package y111studios;
 
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -29,24 +28,21 @@ import y111studios.utils.UnreachableException;
  */
 public class BuildingMenu {
   private final Main game;
-  private Texture menuBackground;
-  private Texture accommodationMenu;
-  private Texture cateringMenu;
-  private Texture teachingMenu;
+  private final Texture menuBackground;
+  private final Texture accommodationMenu;
+  private final Texture cateringMenu;
+  private final Texture teachingMenu;
   private @Getter MenuTab currentMenuTab;
   private @Getter int currentMenuItem;
   private @Getter Texture[] buildingTextures;
   private @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
   private @Getter Viewport viewport;
-  private boolean flipped;
-  private VariantProperties currentVariant;
-  private InputMultiplexer inputMultiplexer;
-  private UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
-  private Table buildingTable;
-  private Table tabTable;
-  private Image[] unselectedTabImages = new Image[5];
-  private Image[] selectedTabImages = new Image[5];
-  private Image[] buildingImages = new Image[35];
+  private @Getter boolean flipped;
+  private final Table buildingTable;
+  private final Table tabTable;
+  private final Image[] unselectedTabImages = new Image[5];
+  private final Image[] selectedTabImages = new Image[5];
+  private final Image[] buildingImages = new Image[35];
 
   /**
    * Sets up the camera and loads the background
@@ -104,7 +100,7 @@ public class BuildingMenu {
       unselectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_UNSELECTED_TAB));
       selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
       final int tab = i;
-      tabTable.add(unselectedTabImages[i]);
+      tabTable.add(i == 0 ? selectedTabImages[0] : unselectedTabImages[i]);
       unselectedTabImages[tab].addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
@@ -121,7 +117,7 @@ public class BuildingMenu {
       buildingImages[i].addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
-          if (buildingIndex == currentMenuItem || buildingIndex > 6 || buildingIndex == 5) {
+          if (buildingIndex == currentMenuItem || buildingIndex == 5) {
             setCurrentMenuItem(-1);
             if (buildingIndex == 5)
               flipBuildings();
@@ -143,6 +139,7 @@ public class BuildingMenu {
    * Renders the background of the menu.
    */
   public void render() {
+    game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     game.spritebatch.begin();
 
@@ -150,8 +147,8 @@ public class BuildingMenu {
     float menuHeight = viewport.getScreenHeight() * 0.15f;
     game.spritebatch.draw(menuBackground,
         0, 0,
-        640,
-        menuHeight * 480f / viewport.getScreenHeight(),
+        viewport.getScreenWidth(),
+        menuHeight,
         0,
         0,
         1,
@@ -233,18 +230,16 @@ public class BuildingMenu {
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       cell.width(
-          viewport.getScreenHeight() * 0.1f
-              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
-          .height(
-              viewport.getScreenHeight() * 0.1f
-                  * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
-          .pad(viewport.getScreenHeight() * 0.01f);
+                      viewport.getScreenHeight() * 0.1f
+                              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+              .height(
+                      viewport.getScreenHeight() * 0.1f
+                              * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
+              .pad(viewport.getScreenHeight() * 0.01f);
     }
     for (Cell<Actor> cell : tabTable.getCells()) {
-      Image tabImage = (Image) (cell.getActor());
-      Vector2 textureSize = new Vector2(tabImage.getWidth(), tabImage.getHeight());
       cell.width(
-          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+              viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
     }
   }
 
@@ -281,7 +276,7 @@ public class BuildingMenu {
     updateBuildingRotations();
   }
 
-  public boolean getFlipped() {
-    return flipped;
-  }
+//  public boolean getFlipped() {
+//    return flipped;
+//  }
 }

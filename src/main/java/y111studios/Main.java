@@ -1,5 +1,7 @@
 package y111studios;
 
+import com.badlogic.gdx.Audio;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +17,7 @@ public class Main extends Game {
   public AssetLibrary assetLib;
   public SpriteBatch spritebatch;
   public BitmapFont font;
+  public Music backgroundMusic;
 
   @Override
   public void create() {
@@ -23,9 +26,14 @@ public class Main extends Game {
     spritebatch = new SpriteBatch();
     font = new BitmapFont();
     font.setColor(Color.BLACK);
-    font.getData().setScale(1.3f);
     Gdx.graphics.setWindowedMode(1280, 720);
     this.setScreen(new StartScreen(this));
+
+    Audio audio = Gdx.audio;
+    backgroundMusic = audio.newMusic(Gdx.files.internal("assets/retro-8bit-happy-videogame-music-243998.mp3"));
+    backgroundMusic.setVolume(0.3f);
+    backgroundMusic.setLooping(true);
+    backgroundMusic.play();
   }
 
   /**
@@ -39,14 +47,16 @@ public class Main extends Game {
   }
 
   @Override
+  public void resize(int width, int height) {
+    font.getData().setScale(height * 0.002f);
+    super.resize(width, height);
+  }
+
+  @Override
   public void dispose() {
     spritebatch.dispose();
     font.dispose();
     assetLib.manager.dispose();
-  }
-
-  @Override
-  public void render() {
-    super.render();
+    backgroundMusic.dispose();
   }
 }

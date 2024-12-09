@@ -1,12 +1,13 @@
 package y111studios;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
 
 public class WorldInputProcessor implements InputProcessor {
-  private World world;
-  private BuildingMenu buildingMenu;
+  private final World world;
+  private final BuildingMenu buildingMenu;
   private int cursorX;
   private int cursorY;
   private int clickX;
@@ -45,6 +46,8 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.F:
         buildingMenu.flipBuildings();
         break;
+      case Keys.SPACE:
+        System.out.println(world.getGameState().getStudentSatisfaction().calculate());
       default:
         break;
     }
@@ -81,7 +84,7 @@ public class WorldInputProcessor implements InputProcessor {
             world.pixelToTile(
                 (int) (screenPos.x * world.getCamera().scale),
                 (int) (screenPos.y * world.getCamera().scale)),
-            buildingMenu.getFlipped());
+            buildingMenu.isFlipped());
         buildingMenu.setCurrentMenuItem(-1);
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
         try {

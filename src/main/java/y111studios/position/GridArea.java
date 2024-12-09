@@ -8,6 +8,7 @@ import y111studios.utils.IntRange;
  *
  * @see GridPosition
  */
+
 public class GridArea {
 
   /**
@@ -25,14 +26,12 @@ public class GridArea {
 
   /**
    * The continuous range of x-coordinates that are within this GridArea. This
-   * field is
-   * lazily-initialised with the first call to {@link #getrangeX()}.
+   * field is lazily-initialised with the first call to {@link #getRangeX()}.
    */
   private IntRange rangeX = null;
   /**
    * The continuous range of y-coordinates that are within this GridArea. This
-   * field is
-   * lazily-initialised with the first call to {@link #getrangeY()}.
+   * field is lazily-initialised with the first call to {@link #getRangeY()}.
    */
   private IntRange rangeY = null;
 
@@ -103,10 +102,9 @@ public class GridArea {
    * 
    * <p>
    * This method returns true if the x-coordinate of the other position is within
-   * the range
-   * [origin.x, origin.x + width) and the y-coordinate is within the range
-   * [origin.y, origin.y +
-   * height). If other is {@code null}, this method returns false.
+   * the range [origin.x, origin.x + width) and the y-coordinate is within the range
+   * [origin.y, origin.y + height). If other is {@code null}, this method returns
+   * false.
    * </p>
    *
    * @param other the GridPosition to check
@@ -116,7 +114,7 @@ public class GridArea {
     if (other == null) {
       return false;
     }
-    return getrangeX().contains(other.getX()) && getRangeY().contains(other.getY());
+    return getRangeX().contains(other.getX()) && getRangeY().contains(other.getY());
   }
 
   /**
@@ -125,8 +123,8 @@ public class GridArea {
    * 
    * <p>
    * This method returns true if the other area is completely encompassed by this
-   * area. This
-   * includes if the other area has the same origin and dimensions as this area.
+   * area. This includes if the other area has the same origin and dimensions as
+   * this area.
    * </p>
    *
    * @param other - A grid area to check containment with.
@@ -136,7 +134,7 @@ public class GridArea {
     if (other == null) {
       return false;
     }
-    return getrangeX().contains(other.getrangeX()) && getRangeY().contains(other.getRangeY());
+    return getRangeX().contains(other.getRangeX()) && getRangeY().contains(other.getRangeY());
   }
 
   /**
@@ -144,7 +142,7 @@ public class GridArea {
    *
    * @return the range of x-coordinates
    */
-  public IntRange getrangeX() {
+  public IntRange getRangeX() {
     if (rangeX == null) {
       rangeX = calculateRangeX();
     }

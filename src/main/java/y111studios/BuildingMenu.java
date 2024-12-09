@@ -252,7 +252,7 @@ public class BuildingMenu {
     int i = 0;
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
-      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.5f : 1f);
+      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.2f : 1f);
       i++;
     }
   }
@@ -270,8 +270,8 @@ public class BuildingMenu {
       buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
     }
   }
-
-  private void flipBuildings() {
+                                                    
+  public void flipBuildings() {
     flipped = !flipped;
     updateBuildingRotations();
   }

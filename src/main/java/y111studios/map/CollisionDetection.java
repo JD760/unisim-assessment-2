@@ -47,12 +47,11 @@ public class CollisionDetection {
    */
   public CollisionDetection(int width, int height, int[][] staticObjects) {
     this(width, height);
-      for (int[] staticObject : staticObjects) {
-          fillArea(new GridArea(
-                          staticObject[0], staticObject[1], staticObject[2], staticObject[3]
-                  ),
-                  true);
-      }
+    for (int i = 0; i < staticObjects.length; i++) {
+      fillArea(new GridArea(
+          staticObjects[i][0], staticObjects[i][1], staticObjects[i][2], staticObjects[i][3]
+      ), true);
+    }
   }
 
   /**

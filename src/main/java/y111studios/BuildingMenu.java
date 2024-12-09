@@ -51,7 +51,7 @@ public class BuildingMenu {
    */
   public BuildingMenu(final Main game, Stage stage) {
     this.game = game;
-    viewport = new ScreenViewport();
+    viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
     accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
     cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
@@ -165,7 +165,6 @@ public class BuildingMenu {
    * @param height The new height of the window.
    */
   public void resize(int width, int height) {
-    viewport.update(width, height, true);
     buildingTable.setBounds(0, height * 0.01f, width, height * 0.11f);
     tabTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
     updateCellSizes();

@@ -2,6 +2,8 @@ package y111studios;
 
 import java.time.Duration;
 
+import com.badlogic.gdx.Screen;
+
 import lombok.Getter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
@@ -24,6 +26,7 @@ import y111studios.position.GridPosition;
  */
 public class GameState implements GameTimer, BuildingController {
   private GameTimer timer;
+  private Main game;
   public BuildingManager buildingManager;
   CollisionDetection collisionDetection;
   private @Getter StudentSatisfaction studentSatisfaction;
@@ -34,7 +37,8 @@ public class GameState implements GameTimer, BuildingController {
    * @param width  width of the game map
    * @param height height of the game map
    */
-  public GameState(int width, int height) {
+  public GameState(int width, int height, Main game) {
+    this.game = game;
     timer = new Clock();
     buildingManager = new BuildingManager();
     int[][] staticObjects = new int[][] {
@@ -143,5 +147,9 @@ public class GameState implements GameTimer, BuildingController {
    */
   public boolean canPlaceBuilding(Building building) {
     return collisionDetection.canPlaceBuilding(building.getArea());
+  }
+
+  public void setScreen(Screen screen) {
+    game.setScreen(screen);
   }
 }

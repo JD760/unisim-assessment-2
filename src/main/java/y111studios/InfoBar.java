@@ -144,7 +144,7 @@ public class InfoBar {
         game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
 
         // Render the student satisfaction percentage in top right of infoBar
-        double satisfaction = gameState.getStudentSatisfaction().calculate();
+        double satisfaction = gameState.getStudentSatisfaction().getSatisfaction();
         String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
         GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
         float satisfactionStringWidth = satisfactionStringLayout.width;

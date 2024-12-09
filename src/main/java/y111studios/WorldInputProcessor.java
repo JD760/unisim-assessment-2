@@ -48,7 +48,7 @@ public class WorldInputProcessor implements InputProcessor {
         buildingMenu.flipBuildings();
         break;
       case Keys.SPACE:
-        System.out.println(world.getGameState().getStudentSatisfaction().calculate());
+        world.getGameState().pause();
         break;
       case Keys.ESCAPE:
         world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));

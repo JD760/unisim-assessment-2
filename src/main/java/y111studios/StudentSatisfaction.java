@@ -26,7 +26,14 @@ class StudentSatisfaction {
     this.natureAreas = natureAreas;
   }
 
-  public double calculate() {
+  // Updates the student satisfaction. This should be called 60 times per
+  // second when the timer is running.
+  public void tick() {
+    double satisfactionLimit = calculate();
+    satisfaction = satisfaction * 0.997 + satisfactionLimit * 0.003;
+  }
+
+  private double calculate() {
     Map<BuildingType, Integer> buildingCounts = buildingManager.getCounter().getBuildingMap();
 
     // Punish not having at least one accommodation building and catering building
@@ -34,10 +41,9 @@ class StudentSatisfaction {
         buildingCounts.get(BuildingType.ACCOMMODATION) == 0
         || buildingCounts.get(BuildingType.CATERING) == 0
     ) {
-      satisfaction = 0.0;
       return 0.0;
     }
-    satisfaction = 100.0;
+    double satisfaction = 100.0;
 
     // Punish building ratios
     double teachingRatio = (double)buildingCounts.get(BuildingType.TEACHING)

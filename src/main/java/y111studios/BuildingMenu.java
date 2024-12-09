@@ -51,7 +51,7 @@ public class BuildingMenu {
    */
   public BuildingMenu(final Main game, Stage stage) {
     this.game = game;
-    viewport = new ScreenViewport();
+    viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
     accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
     cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
@@ -165,7 +165,6 @@ public class BuildingMenu {
    * @param height The new height of the window.
    */
   public void resize(int width, int height) {
-    viewport.update(width, height, true);
     buildingTable.setBounds(0, height * 0.01f, width, height * 0.11f);
     tabTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
     updateCellSizes();
@@ -252,7 +251,7 @@ public class BuildingMenu {
     int i = 0;
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
-      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.5f : 1f);
+      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.2f : 1f);
       i++;
     }
   }
@@ -270,8 +269,8 @@ public class BuildingMenu {
       buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
     }
   }
-
-  private void flipBuildings() {
+                                                    
+  public void flipBuildings() {
     flipped = !flipped;
     updateBuildingRotations();
   }

@@ -49,9 +49,10 @@ public class GameState implements GameTimer, BuildingController {
         { 15, 15, 7, 8 }, { 18, 23, 3, 1 }, { 14, 17, 1, 5 }, { 17, 14, 6, 7 },  // Small rock
         { 11, 35, 10, 14 }, { 21, 35, 2, 8 },  // Big cliff thing
         { 55, 49, 8, 12 },  // Small cliff thing
-        { 32, 43, 1, 3 } };  // Bridge
+        { 32, 43, 1, 3 }  // Bridge
+    };
     collisionDetection = new CollisionDetection(width, height, staticObjects);
-    studentSatisfaction = new StudentSatisfaction(buildingManager);
+    studentSatisfaction = new StudentSatisfaction(buildingManager, staticObjects);
   }
 
   // BuildingController methods

@@ -1,8 +1,7 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +26,7 @@ public class StartScreen extends ScreenAdapter {
 
   final Main game;
 
-  Texture startScreen;
+  Texture background;
 
   OrthographicCamera camera;
   ScreenViewport viewport;
@@ -47,9 +46,18 @@ public class StartScreen extends ScreenAdapter {
     this.game = game;
     viewport = new ScreenViewport();
     camera = (OrthographicCamera) viewport.getCamera();
-    startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
+    background = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
 
     stage = new Stage(viewport);
+    stage.addListener(new InputListener() {
+      @Override
+      public boolean keyDown(InputEvent event, int keycode) {
+        if (keycode == Keys.SPACE) {
+          game.setScreen(new MapScreen(game));
+        }
+        return false;
+      }
+    });
     Gdx.input.setInputProcessor(stage);
     createMenu();
   }
@@ -72,7 +80,15 @@ public class StartScreen extends ScreenAdapter {
     leaderboardButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new LeaderboardScreen());
+        game.setScreen(new LeaderboardScreen(game));
+        return false;
+      }
+    });
+    final Button achievementsButton = new TextButton("Achievements", skin);
+    achievementsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new AchievementsScreen(game));
         return false;
       }
     });
@@ -80,7 +96,7 @@ public class StartScreen extends ScreenAdapter {
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new SettingsScreen());
+        game.setScreen(new SettingsScreen(game));
         return false;
       }
     });
@@ -105,6 +121,10 @@ public class StartScreen extends ScreenAdapter {
         .width((int) (width * 0.15))
         .height((int) (height * 0.1))
         .pad(0f);
+    table.add(achievementsButton)
+        .width((int) (width * 0.15))
+        .height((int) (height * 0.1))
+        .pad(0);
     table.add(settingsButton)
         .width((int) (width * 0.15))
         .height((int) (height * 0.1))
@@ -121,15 +141,6 @@ public class StartScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    Gdx.input.setInputProcessor(new InputAdapter() {
-      @Override
-      public boolean keyDown(int keyCode) {
-        if (keyCode == Input.Keys.SPACE) {
-          game.setScreen(new MapScreen(game));
-        }
-        return true;
-      }
-    });
   }
 
   @Override
@@ -138,14 +149,13 @@ public class StartScreen extends ScreenAdapter {
     game.spritebatch.setProjectionMatrix(camera.combined);
 
     game.spritebatch.begin();
-    //game.spritebatch.setColor(new Color(0.0f, 0.0f, 0.0f, 0.1f));
-    float backgroundWidth = (float)viewport.getScreenWidth() / viewport.getScreenHeight()
-      * startScreen.getHeight();
+    float backgroundWidth = (float) viewport.getScreenWidth() / viewport.getScreenHeight()
+        * background.getHeight();
     game.spritebatch.draw(
-        startScreen,
+        background,
         0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
-        (int)(startScreen.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
-        (int)backgroundWidth, startScreen.getHeight(),
+        (int) (background.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
+        (int) backgroundWidth, background.getHeight(),
         false, false);
     game.spritebatch.end();
 

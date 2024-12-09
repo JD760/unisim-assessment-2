@@ -24,9 +24,9 @@ public class MapScreen extends ScreenAdapter {
   // Proportional height of the display.
   static int height = 480;
   // Width of map in tiles.
-  public static final int TILE_WIDTH = 75;
+  public static final int TILE_WIDTH = 76;
   // Height of map in tiles.
-  public static final int TILE_HEIGHT = 75;
+  public static final int TILE_HEIGHT = 76;
 
   final Main game;
   private final InfoBar infoBar;
@@ -98,6 +98,7 @@ public class MapScreen extends ScreenAdapter {
       return;
     }
     viewport.update(width, height, true);
+    stage.getViewport().update(width, height, true);
     world.resize(width, height);
     universalInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);

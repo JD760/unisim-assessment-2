@@ -172,11 +172,9 @@ class StudentSatisfaction {
       totalRoadFlow += Math.min(roadFlow, 0.12);
     }
 
-    // Punish poor building variety
-    System.out.println("Before " + satisfaction);
-    satisfaction *= buildingVariants.size()
-      / (double)Math.min(buildingManager.getCounter().getCount() - numRoads, 34);
-    System.out.println("After " + satisfaction);
+    // Reward good building variety
+    satisfaction = satisfaction * (1.0 - buildingVariants.size() / 250.0)
+      + 100.0 * buildingVariants.size() / 250.0;
     // Punish building rotations being all the same
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
     // Apply reward for road flow

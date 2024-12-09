@@ -17,7 +17,7 @@ public class BuildingCounter {
   private @Getter final Map<BuildingType, Integer> buildingMap;
 
   // counts the total number of buildings placed
-  private int count;
+  private @Getter int count;
 
   /**
    * Creates a new building counter starting with 0 buildings placed.

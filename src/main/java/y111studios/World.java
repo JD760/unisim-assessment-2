@@ -24,10 +24,6 @@ public class World {
     private int width = 640;
     // Proportional height of the display.
     private int height = 480;
-    // Width of map in tiles.
-    public static final int TILE_WIDTH = 75;
-    // Height of map in tiles.
-    public static final int TILE_HEIGHT = 75;
 
     private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
     private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);

@@ -5,12 +5,14 @@ import java.time.Duration;
 import com.badlogic.gdx.Screen;
 
 import lombok.Getter;
+import lombok.Setter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
+import y111studios.events.Event;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
 
@@ -30,6 +32,7 @@ public class GameState implements GameTimer, BuildingController {
   public BuildingManager buildingManager;
   CollisionDetection collisionDetection;
   private @Getter StudentSatisfaction studentSatisfaction;
+  private @Setter @Getter Event currentEvent;
 
   /**
    * Constructor for the GameState class.
@@ -53,6 +56,7 @@ public class GameState implements GameTimer, BuildingController {
     };
     collisionDetection = new CollisionDetection(width, height, staticObjects);
     studentSatisfaction = new StudentSatisfaction(buildingManager, staticObjects);
+    currentEvent = null;
   }
 
   // BuildingController methods

@@ -62,7 +62,8 @@ public enum AssetPaths {
   MUTE_BUTTON("assets/volume-mute-filled.png"),
   UNMUTE_BUTTON("assets/volume-up-filled.png"),
   PAUSE_BUTTON("assets/pause-filled.png"),
-  PLAY_BUTTON("assets/play-filled-alt.png");
+  PLAY_BUTTON("assets/play-filled-alt.png"),
+  SNOWFLAKE("assets/snowflake.png");
 
   private final String path;
 

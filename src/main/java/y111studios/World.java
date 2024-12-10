@@ -19,12 +19,13 @@ import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.buildings.premade_variants.*;
+import y111studios.events.SnowEvent;
 
 public class World {
   // Proportional width of the display.
-  private int width = 640;
+  private int width = 1;
   // Proportional height of the display.
-  private int height = 480;
+  private int height = 1;
   // Width of map in tiles.
   public static final int TILE_WIDTH = 75;
   // Height of map in tiles.
@@ -64,6 +65,7 @@ public class World {
         addObject(variant, variant.getPosition(), false);
       }
     }
+    gameState.setCurrentEvent(new SnowEvent(game, gameState, this));
   }
 
   /**
@@ -209,6 +211,9 @@ public class World {
       renderBuilding(selectedBuilding); // Render hologram
       game.spritebatch.setColor(NORMAL);
     }
+
+    if (gameState.getCurrentEvent() != null)
+      gameState.getCurrentEvent().render();
 
     game.spritebatch.end();
 

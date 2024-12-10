@@ -161,17 +161,22 @@ public class GameState implements GameTimer, BuildingController {
   }
 
   public void tick() {
+    // Only tick the game if the timer is unpaused
     if (!timer.isPaused()) {
+      // If the timer has just been unpaused, also don't tick the game
       if (lastTickTime == 0) {
         lastTickTime = System.currentTimeMillis();
         return;
       }
+      // Calculate the number of ticks that should be simulated
       long currentTimeRemaining = System.currentTimeMillis();
       long numTicks = (currentTimeRemaining - lastTickTime) / (1000 / 60);
       long remainder = (currentTimeRemaining - lastTickTime) % (1000 / 60);
       lastTickTime = currentTimeRemaining - remainder;
+      // Simulate ticks
       while (numTicks-- > 0) {
         studentSatisfaction.tick();
+        buildingManager.tick();
       }
       if (timer.isTimeUp()) {
         timer.pause();

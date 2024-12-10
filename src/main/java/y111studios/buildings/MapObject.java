@@ -14,6 +14,7 @@ public abstract class MapObject {
 
   protected @Getter GridArea area;
   protected @Getter AssetPaths texturePath;
+  protected @Getter int age;  // The number of game ticks since the object was placed
   protected boolean flipped;
 
   /**
@@ -33,6 +34,7 @@ public abstract class MapObject {
     this.area = area;
     this.texturePath = texturePath;
     this.flipped = flipped;
+    this.age = 0;
   }
 
   /**
@@ -49,5 +51,9 @@ public abstract class MapObject {
 
   public boolean getFlipped() {
     return flipped;
+  }
+
+  public void tick() {
+    age++;
   }
 }

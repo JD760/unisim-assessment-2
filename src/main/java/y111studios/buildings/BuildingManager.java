@@ -249,4 +249,11 @@ public class BuildingManager implements BuildingController {
     return getCount() >= MAX_BUILDINGS;
   }
 
+  public void tick() {
+    for (Building building : buildings) {
+      if (building != null) {
+        building.tick();
+      }
+    }
+  }
 }

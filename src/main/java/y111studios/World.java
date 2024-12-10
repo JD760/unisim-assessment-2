@@ -155,6 +155,7 @@ public class World {
         && !(building instanceof ObstacleBuilding)) {
       game.spritebatch.setColor(INVALID_PREVIEW);
     }
+    System.out.println(building.getAge());
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     game.spritebatch.draw(texture,

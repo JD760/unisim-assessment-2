@@ -41,12 +41,14 @@ public class FloodEvent implements Event {
     int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
     int numSnowflakes = (int)(getIntensity() * 50000);
     for (int i = 0; i < numSnowflakes; i++) {
-      snowflakes[i].y -= snowflakes[i].z * delta * 500;
-      snowflakes[i].z *= (float)Math.pow(0.6f, delta);
-      if (snowflakes[i].z < 1f) {
-        snowflakes[i].x = minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x);
-        snowflakes[i].y = minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y);
-        snowflakes[i].z = minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z);
+      if (!gameState.isPaused()) {
+        snowflakes[i].y -= snowflakes[i].z * delta * 500;
+        snowflakes[i].z *= (float)Math.pow(0.6f, delta);
+        if (snowflakes[i].z < 1f) {
+          snowflakes[i].x = minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x);
+          snowflakes[i].y = minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y);
+          snowflakes[i].z = minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z);
+        }
       }
 
       game.spritebatch.draw(

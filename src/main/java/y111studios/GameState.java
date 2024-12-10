@@ -1,6 +1,7 @@
 package y111studios;
 
 import java.time.Duration;
+import java.util.Random;
 
 import com.badlogic.gdx.Screen;
 
@@ -187,11 +188,18 @@ public class GameState implements GameTimer, BuildingController {
         studentSatisfaction.tick();
         buildingManager.tick();
 
-        if (numTicks % (60 * 62) == 0 && numTicks> -1) {
+        if (numTicks % (60 * 62) == 0 && numTicks > 0) {
           if (numTicks >= 60 * 62 * 4)
             currentEvent = null;
           else {
-            currentEvent = new FloodEvent(game, this, camera);
+            int eventNum = new Random().nextInt(2);
+            switch (eventNum) {
+              case 0:
+                currentEvent = new FloodEvent(game, this, camera);
+                break;
+              case 1:
+                currentEvent = new SnowEvent(game, this, camera);
+            }
           }
         }
 

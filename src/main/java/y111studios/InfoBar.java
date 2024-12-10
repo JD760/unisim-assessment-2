@@ -3,6 +3,9 @@ package y111studios;
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
+import y111studios.events.FloodEvent;
+import y111studios.events.SnowEvent;
+
 // gdx imports
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -139,7 +142,7 @@ public class InfoBar {
         float textHeight = timeStringLayout.height;
 
         float timeStringX = (screenWidth - textWidth) / 2;
-        float timeStringY = screenHeight - ((infoBarHeight -textHeight)/2);
+        float timeStringY = screenHeight - ((infoBarHeight - textHeight)/2);
 
         game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
 
@@ -153,6 +156,23 @@ public class InfoBar {
                 satisfactionString,
                 screenWidth - satisfactionStringWidth - 10,
                 screenHeight - ((infoBarHeight -textHeight)/2));
+
+        // Render the current event to the right of the time remaining
+        String eventString;
+        if (gameState.getCurrentEvent() instanceof FloodEvent) {
+            eventString = "Event: Flood";
+        } else if (gameState.getCurrentEvent() instanceof SnowEvent) {
+            eventString = "Event: Snow";
+        } else {
+            eventString = "Event: None";
+        }
+        GlyphLayout eventStringLayout = new GlyphLayout(game.font, eventString);
+        textWidth = eventStringLayout.width;
+
+        float eventStringX = screenWidth - textWidth - satisfactionStringWidth * 1.3f;
+        float eventStringY = screenHeight - ((infoBarHeight - textHeight)/2);
+
+        game.font.draw(game.spritebatch, eventString, eventStringX, eventStringY);
 
         game.spritebatch.end();
     }

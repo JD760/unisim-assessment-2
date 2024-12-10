@@ -50,7 +50,7 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
-    font.getData().setScale(height * 0.002f);
+    font.getData().setScale(height * 0.0015f);
     super.resize(width, height);
   }
 

@@ -1,6 +1,7 @@
 package y111studios.buildings;
 
 import lombok.Getter;
+import lombok.Setter;
 import y111studios.AssetPaths;
 import y111studios.position.GridArea;
 import y111studios.position.GridPosition;
@@ -14,7 +15,7 @@ public abstract class MapObject {
 
   protected @Getter GridArea area;
   protected @Getter AssetPaths texturePath;
-  protected @Getter int age;  // The number of game ticks since the object was placed
+  protected @Setter @Getter int age;  // The number of game ticks since the object was placed
   protected boolean flipped;
 
   /**

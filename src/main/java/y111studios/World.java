@@ -32,6 +32,7 @@ public class World {
 
   private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
   private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
+  private final static Color NOT_BUILT = new Color(1f, 0.898f, 0f, 0.55f);
   private final static Color NORMAL = new Color(1, 1, 1, 1);
 
   private final Main game;
@@ -39,7 +40,7 @@ public class World {
   private final Texture[] gameMap = new Texture[4];
   private @Setter Vector3 cursorScreenPos;
   private @Getter Camera camera;
-  private @Setter Building selectedBuilding;
+  private Building selectedBuilding;
   private @Getter List<Building> buildings;
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
@@ -86,6 +87,10 @@ public class World {
       }
     }
     buildings.add(index, building);
+    // Prevent obstacle buildings from having the 'being built' animation
+    if (variant instanceof ObstacleVariant) {
+      building.setAge(10000);
+    }
     return true;
   }
 
@@ -154,8 +159,17 @@ public class World {
     if (deleteMode && building.getArea().contains(currentGridPosition())
         && !(building instanceof ObstacleBuilding)) {
       game.spritebatch.setColor(INVALID_PREVIEW);
+    } else if (building.getAge() < 1800) {
+      // If the building has not been built yet, tint the colour to show that
+      if (gameState.isPaused()) {
+        game.spritebatch.setColor(NOT_BUILT);
+      } else {
+        game.spritebatch.setColor(new Color(
+          NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
+          ((float)Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f
+        ));
+      }
     }
-    System.out.println(building.getAge());
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     game.spritebatch.draw(texture,
@@ -231,5 +245,11 @@ public class World {
     this.height = height;
     camera.resize(width, height);
     viewport.update(width, height, true);
+  }
+
+  public void setSelectedBuilding(Building building) {
+    selectedBuilding = building;
+    if (building != null)
+      selectedBuilding.setAge(10000);
   }
 }

@@ -40,6 +40,7 @@ public class World {
   private final Main game;
   private @Getter GameState gameState;
   private final Texture[] gameMap = new Texture[4];
+  private final Texture[] snowyMap = new Texture[4];
   private @Setter Vector3 cursorScreenPos;
   private @Getter Camera camera;
   private Building selectedBuilding;
@@ -63,6 +64,10 @@ public class World {
       gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
       gameMap[2] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_LEFT);
       gameMap[3] = game.getAsset(AssetPaths.MAP_BACKGROUND_BOTTOM_RIGHT);
+      snowyMap[0] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_TOP_LEFT);
+      snowyMap[1] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_TOP_RIGHT);
+      snowyMap[2] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_BOTTOM_LEFT);
+      snowyMap[3] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_BOTTOM_RIGHT);
       for (ObstacleVariant variant : ObstacleVariant.values()) {
         addObject(variant, variant.getPosition(), false);
       }
@@ -186,9 +191,9 @@ public class World {
   }
 
   /**
-   * Renders the world each tick.
+   * Renders the world each frame.
    *
-   * @param delta The time since the previous tick.
+   * @param delta The time since the previous frame.
    */
   public void render(float delta) {
     game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
@@ -211,6 +216,19 @@ public class World {
     game.spritebatch.draw(gameMap[3], 0, 0, width, height, (int) camera.x - gameMap[0].getWidth() + 3,
         (int) camera.y - gameMap[0].getHeight() + 3,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+    if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      game.spritebatch.draw(snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
+          (int) camera.y + 1,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(snowyMap[2], 0, 0, width, height, (int) camera.x + 1,
+          (int) camera.y - snowyMap[0].getHeight() + 3,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(snowyMap[3], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
+          (int) camera.y - snowyMap[0].getHeight() + 3,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+    }
 
     // Render buildings
     buildings.forEach(this::renderBuilding);
@@ -229,7 +247,7 @@ public class World {
     }
 
     if (gameState.getCurrentEvent() != null)
-      gameState.getCurrentEvent().render();
+      gameState.getCurrentEvent().render(delta);
 
     game.spritebatch.end();
 

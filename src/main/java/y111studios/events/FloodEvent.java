@@ -11,22 +11,22 @@ import y111studios.GameState;
 import y111studios.Main;
 import y111studios.World;
 
-public class SnowEvent implements Event {
+public class FloodEvent implements Event {
   private static final Vector3 minStartPoint = new Vector3(-3000f, -5000f, 1f);
-  private static final Vector3 maxStartPoint = new Vector3(7500f, 2000f, 30f);
+  private static final Vector3 maxStartPoint = new Vector3(7500f, 2000f, 9f);
   private Vector3[] snowflakes;
   private final Main game;
   private GameState gameState;
   private Camera camera;
-  private Texture snowflakeTexture;
+  private Texture raindropTexture;
   private Random random = new Random();
 
-  public SnowEvent(final Main game, GameState gameState, Camera camera) {
+  public FloodEvent(final Main game, GameState gameState, Camera camera) {
     this.game = game;
     this.gameState = gameState;
     this.camera = camera;
     snowflakes = new Vector3[50000];
-    snowflakeTexture = game.getAsset(AssetPaths.SNOWFLAKE);
+    raindropTexture = game.getAsset(AssetPaths.RAINDROP);
 
     for (int i = 0; i < 50000; i++) {
       snowflakes[i] = new Vector3(
@@ -41,8 +41,7 @@ public class SnowEvent implements Event {
     int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
     int numSnowflakes = (int)(getIntensity() * 50000);
     for (int i = 0; i < numSnowflakes; i++) {
-      snowflakes[i].x += Math.sin(snowflakes[i].z) * snowflakes[i].z * 0.08f;
-      snowflakes[i].y -= snowflakes[i].z * delta * 10;
+      snowflakes[i].y -= snowflakes[i].z * delta * 500;
       snowflakes[i].z *= (float)Math.pow(0.6f, delta);
       if (snowflakes[i].z < 1f) {
         snowflakes[i].x = minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x);
@@ -51,10 +50,10 @@ public class SnowEvent implements Event {
       }
 
       game.spritebatch.draw(
-        snowflakeTexture,
+        raindropTexture,
         (snowflakes[i].x - camera.x) / camera.scale,
         (snowflakes[i].y + camera.y + camera.height * camera.scale) / camera.scale,
-        snowflakes[i].z / camera.scale, snowflakes[i].z / camera.scale, 0f, 0f, 1f, 1f
+        snowflakes[i].z / camera.scale, snowflakes[i].z / camera.scale * 4, 0f, 0f, 1f, 1f
       );
     }
   }

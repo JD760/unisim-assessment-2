@@ -20,6 +20,7 @@ import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.buildings.premade_variants.*;
+import y111studios.events.FloodEvent;
 import y111studios.events.SnowEvent;
 
 public class World {
@@ -41,6 +42,7 @@ public class World {
   private @Getter GameState gameState;
   private final Texture[] gameMap = new Texture[4];
   private final Texture[] snowyMap = new Texture[4];
+  private final Texture[] floodedMap = new Texture[4];
   private @Setter Vector3 cursorScreenPos;
   private @Getter Camera camera;
   private Building selectedBuilding;
@@ -69,6 +71,10 @@ public class World {
       snowyMap[1] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_TOP_RIGHT);
       snowyMap[2] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_BOTTOM_LEFT);
       snowyMap[3] = game.getAsset(AssetPaths.SNOWY_MAP_BACKGROUD_BOTTOM_RIGHT);
+      floodedMap[0] = game.getAsset(AssetPaths.FLOODED_MAP_BACKGROUD_TOP_LEFT);
+      floodedMap[1] = game.getAsset(AssetPaths.FLOODED_MAP_BACKGROUD_TOP_RIGHT);
+      floodedMap[2] = game.getAsset(AssetPaths.FLOODED_MAP_BACKGROUD_BOTTOM_LEFT);
+      floodedMap[3] = game.getAsset(AssetPaths.FLOODED_MAP_BACKGROUD_BOTTOM_RIGHT);
       for (ObstacleVariant variant : ObstacleVariant.values()) {
         addObject(variant, variant.getPosition(), false);
       }
@@ -231,6 +237,22 @@ public class World {
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(snowyMap[3], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
           (int) camera.y - snowyMap[0].getHeight() + 3,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+    } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
+      game.spritebatch.setColor(new Color(
+        1f, 1f, 1f,
+        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
+      ));
+      game.spritebatch.draw(floodedMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(floodedMap[1], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
+          (int) camera.y + 1,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(floodedMap[2], 0, 0, width, height, (int) camera.x + 1,
+          (int) camera.y - floodedMap[0].getHeight() + 3,
+          (int) (width * camera.scale), (int) (height * camera.scale), false, false);
+      game.spritebatch.draw(floodedMap[3], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
+          (int) camera.y - floodedMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     }
 

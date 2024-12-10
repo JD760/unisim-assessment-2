@@ -13,6 +13,7 @@ import y111studios.buildings.ObstacleBuilding;
 import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.events.Event;
+import y111studios.events.FloodEvent;
 import y111studios.events.SnowEvent;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
@@ -190,7 +191,7 @@ public class GameState implements GameTimer, BuildingController {
           if (numTicks >= 60 * 62 * 4)
             currentEvent = null;
           else {
-            currentEvent = new SnowEvent(game, this, camera);
+            currentEvent = new FloodEvent(game, this, camera);
           }
         }
 

@@ -22,6 +22,10 @@ public enum AssetPaths {
   SNOWY_MAP_BACKGROUD_TOP_RIGHT("assets/UnisimMapTR_Snow_final.png"),
   SNOWY_MAP_BACKGROUD_BOTTOM_LEFT("assets/UnisimMapBL_Snow_final.png"),
   SNOWY_MAP_BACKGROUD_BOTTOM_RIGHT("assets/UnisimMapBR_Snow_final.png"),
+  FLOODED_MAP_BACKGROUD_TOP_LEFT("assets/UnisimMapTL_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_TOP_RIGHT("assets/UnisimMapTR_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_BOTTOM_LEFT("assets/UnisimMapBL_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_BOTTOM_RIGHT("assets/UnisimMapBR_flood_final.png"),
   OBSTACLE1("assets/obstacle1.png"),
   OBSTACLE2("assets/obstacle2.png"),
   OBSTACLE3("assets/obstacle3.png"),
@@ -67,7 +71,8 @@ public enum AssetPaths {
   UNMUTE_BUTTON("assets/volume-up-filled.png"),
   PAUSE_BUTTON("assets/pause-filled.png"),
   PLAY_BUTTON("assets/play-filled-alt.png"),
-  SNOWFLAKE("assets/snowflake.png");
+  SNOWFLAKE("assets/snowflake.png"),
+  RAINDROP("assets/raindrop.png");
 
   private final String path;
 

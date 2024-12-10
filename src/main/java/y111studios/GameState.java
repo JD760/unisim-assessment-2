@@ -33,6 +33,7 @@ public class GameState implements GameTimer, BuildingController {
   CollisionDetection collisionDetection;
   private @Getter StudentSatisfaction studentSatisfaction;
   private @Setter @Getter Event currentEvent;
+  private long lastTickTime;
 
   /**
    * Constructor for the GameState class.
@@ -43,6 +44,7 @@ public class GameState implements GameTimer, BuildingController {
   public GameState(int width, int height, Main game) {
     this.game = game;
     timer = new Clock();
+    lastTickTime = 0;
     buildingManager = new BuildingManager();
     int[][] staticObjects = new int[][] {
         { 42, 12, 16, 16 }, { 46, 10, 11, 2 }, { 52, 15, 4, 13 }, { 46, 28, 6, 1 },  // Big rock
@@ -160,5 +162,31 @@ public class GameState implements GameTimer, BuildingController {
 
   public Main getGame() {
     return game;
+  }
+
+  public void tick() {
+    // Only tick the game if the timer is unpaused
+    if (!timer.isPaused()) {
+      // If the timer has just been unpaused, also don't tick the game
+      if (lastTickTime == 0) {
+        lastTickTime = System.currentTimeMillis();
+        return;
+      }
+      // Calculate the number of ticks that should be simulated
+      long currentTimeRemaining = System.currentTimeMillis();
+      long numTicks = (currentTimeRemaining - lastTickTime) / (1000 / 60);
+      long remainder = (currentTimeRemaining - lastTickTime) % (1000 / 60);
+      lastTickTime = currentTimeRemaining - remainder;
+      // Simulate ticks
+      while (numTicks-- > 0) {
+        studentSatisfaction.tick();
+        buildingManager.tick();
+      }
+      if (timer.isTimeUp()) {
+        timer.pause();
+      }
+    } else {
+      lastTickTime = 0;
+    }
   }
 }

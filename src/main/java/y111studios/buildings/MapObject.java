@@ -1,6 +1,7 @@
 package y111studios.buildings;
 
 import lombok.Getter;
+import lombok.Setter;
 import y111studios.AssetPaths;
 import y111studios.position.GridArea;
 import y111studios.position.GridPosition;
@@ -14,7 +15,9 @@ public abstract class MapObject {
 
   protected @Getter GridArea area;
   protected @Getter AssetPaths texturePath;
+  protected @Setter @Getter int age;  // The number of game ticks since the object was placed
   protected boolean flipped;
+  public static final int BUILDING_TIME = 1800;
 
   /**
    * Constructs a new map object with the specified area.
@@ -33,6 +36,7 @@ public abstract class MapObject {
     this.area = area;
     this.texturePath = texturePath;
     this.flipped = flipped;
+    this.age = 0;
   }
 
   /**
@@ -49,5 +53,9 @@ public abstract class MapObject {
 
   public boolean getFlipped() {
     return flipped;
+  }
+
+  public void tick() {
+    age++;
   }
 }

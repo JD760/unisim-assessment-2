@@ -59,6 +59,7 @@ public class World {
     this.gameState = gameState;
     buildings = new LinkedList<>();
     camera = new Camera(2000, 1000, width, height);
+    gameState.setCamera(camera);
     if (game != null) {
       gameMap[0] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_LEFT);
       gameMap[1] = game.getAsset(AssetPaths.MAP_BACKGROUND_TOP_RIGHT);
@@ -72,7 +73,6 @@ public class World {
         addObject(variant, variant.getPosition(), false);
       }
     }
-    gameState.setCurrentEvent(new SnowEvent(game, gameState, this));
   }
 
   /**
@@ -217,6 +217,10 @@ public class World {
         (int) camera.y - gameMap[0].getHeight() + 3,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      game.spritebatch.setColor(new Color(
+        1f, 1f, 1f,
+        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
+      ));
       game.spritebatch.draw(snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,

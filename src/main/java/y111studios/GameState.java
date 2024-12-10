@@ -13,6 +13,7 @@ import y111studios.buildings.ObstacleBuilding;
 import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.events.Event;
+import y111studios.events.SnowEvent;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
 
@@ -34,6 +35,8 @@ public class GameState implements GameTimer, BuildingController {
   private @Getter StudentSatisfaction studentSatisfaction;
   private @Setter @Getter Event currentEvent;
   private long lastTickTime;
+  private @Setter Camera camera;
+  private @Getter int numTicks;
 
   /**
    * Constructor for the GameState class.
@@ -46,6 +49,7 @@ public class GameState implements GameTimer, BuildingController {
     timer = new Clock();
     lastTickTime = 0;
     buildingManager = new BuildingManager();
+    numTicks = 0;
     int[][] staticObjects = new int[][] {
         { 42, 12, 16, 16 }, { 46, 10, 11, 2 }, { 52, 15, 4, 13 }, { 46, 28, 6, 1 },  // Big rock
         { 48, 29, 2, 1 }, { 41, 13, 1, 11 }, { 40, 17, 1, 2 },  // Big rock
@@ -174,13 +178,23 @@ public class GameState implements GameTimer, BuildingController {
       }
       // Calculate the number of ticks that should be simulated
       long currentTimeRemaining = System.currentTimeMillis();
-      long numTicks = (currentTimeRemaining - lastTickTime) / (1000 / 60);
+      long numTicksToSimulate = (currentTimeRemaining - lastTickTime) / (1000 / 60);
       long remainder = (currentTimeRemaining - lastTickTime) % (1000 / 60);
       lastTickTime = currentTimeRemaining - remainder;
       // Simulate ticks
-      while (numTicks-- > 0) {
+      while (numTicksToSimulate-- > 0) {
         studentSatisfaction.tick();
         buildingManager.tick();
+
+        if (numTicks % (60 * 62) == 0 && numTicks> -1) {
+          if (numTicks >= 60 * 62 * 4)
+            currentEvent = null;
+          else {
+            currentEvent = new SnowEvent(game, this, camera);
+          }
+        }
+
+        numTicks++;
       }
       if (timer.isTimeUp()) {
         timer.pause();

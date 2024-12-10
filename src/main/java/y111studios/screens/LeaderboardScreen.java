@@ -4,12 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
-import y111studios.GameState;
 import y111studios.Main;
 
 
@@ -22,9 +19,10 @@ public class LeaderboardScreen extends ScreenWithBackground {
 
   public LeaderboardScreen(Main game) {
     super(game);
-    Gdx.input.setInputProcessor(stage);
     stage = new Stage(viewport);
     table = new Table(SKIN);
+    Gdx.input.setInputProcessor(stage);
+    
     table.setDebug(true);
     table.setFillParent(true);
     TextButton backButton = new TextButton("Return to Menu", SKIN);

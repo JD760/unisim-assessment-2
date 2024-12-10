@@ -26,9 +26,13 @@ public class Leaderboard {
     }
 
     // make space by removing the lowest score if a new score is added.
-    // only add a new score if it is higher than the current lowest score
-    if (scores.size() >= MAX_SIZE - 1 && score.getScore() > scores.get(MAX_SIZE - 1).getScore()) {
-      removeLowestScore();
+    if (scores.size() >= MAX_SIZE) {
+      // only add a new score if it is higher than the current lowest score
+      if (score.getScore() > scores.get(MAX_SIZE - 1).getScore()) {
+        scores.set(scores.size() - 1, null);
+      } else {
+        return false;
+      }
     }
 
     scores.add(score);
@@ -41,17 +45,6 @@ public class Leaderboard {
    */
   public void clearLeaderboard() {
     scores.clear();
-  }
-
-  /**
-   * Finds and removes the lowest score present in the leaderboard.
-   */
-  private void removeLowestScore() {
-    // if only one element is present, clear the leaderboard as it has become empty
-    if (scores.size() == 1) {
-      clearLeaderboard();
-    }
-    scores.set(scores.size() - 1, null);
   }
 
   public List<Score> getScores() {
@@ -68,6 +61,10 @@ public class Leaderboard {
 
   class SortByScore implements Comparator<Score> {
     public int compare(Score a, Score b) {
+      if (a == null || b == null) {
+        // any null item should be smaller than any non-null item so the leaderboard has no gaps
+        return -1;
+      }
       // sort scores from highest to lowest.
       return b.getScore() - a.getScore();
     }

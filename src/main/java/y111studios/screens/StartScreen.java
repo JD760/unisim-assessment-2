@@ -22,12 +22,9 @@ import y111studios.Main;
 /**
  * The initial screen when the game is started.
  */
-public class StartScreen extends ScreenAdapter {
-
+public class StartScreen extends ScreenWithBackground {
   final Main game;
-
   Texture background;
-
   OrthographicCamera camera;
   ScreenViewport viewport;
   int width = 640;
@@ -54,10 +51,9 @@ public class StartScreen extends ScreenAdapter {
    * @param game reference to game manager
    */
   public StartScreen(final Main game) {
+    super(game);
     this.game = game;
     viewport = new ScreenViewport();
-    camera = (OrthographicCamera) viewport.getCamera();
-    background = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
 
     stage = new Stage(viewport);
     stage.addListener(new InputListener() {

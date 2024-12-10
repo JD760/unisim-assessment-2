@@ -4,7 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
+import com.badlogic.gdx.utils.Array;
+
 import y111studios.utils.Score;
 
 /**
@@ -50,5 +56,33 @@ public class LeaderboardTest {
     assertEquals(0, leaderboard.getSize());
   }
 
+  @Test
+  public void testGetScores() {
+    Leaderboard leaderboard = new Leaderboard();
+    assertEquals(new ArrayList<Score>(), leaderboard.getScores());
+    Score testScore = new Score("test", 1200);
+    Score otherScore = new Score("other", 10_000);
 
+    leaderboard.insertScore(testScore);
+    leaderboard.insertScore(otherScore);
+
+    List<Score> scores = new ArrayList<Score>();
+    scores.add(otherScore);
+    scores.add(testScore);
+    assertTrue(scores.equals(leaderboard.getScores()));
+  }
+
+  @Test
+  public void testRemoveLowest() {
+    Leaderboard leaderboard = new Leaderboard();
+    leaderboard.insertScore(new Score("One", 100));
+    leaderboard.insertScore(new Score("Two", 200));
+    leaderboard.insertScore(new Score("Three", 300));
+    leaderboard.insertScore(new Score("Four", 400));
+    leaderboard.insertScore(new Score("Five", 500));
+    // test that a new score is not inserted if it would be the new lowest
+    assertFalse(leaderboard.insertScore(new Score("Tiny", 10)));
+    // test that a new larger score should be inserted
+    assertTrue(leaderboard.insertScore(new Score("Big", 10_000)));
+  }
 }

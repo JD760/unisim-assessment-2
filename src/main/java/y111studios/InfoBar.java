@@ -109,7 +109,7 @@ public class InfoBar {
 
         // Render buildingCount onto InfoBar
         int buildingCount = gameState.getCount();
-        String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
+        String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
         GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
 
         game.font.draw(game.spritebatch, buildingString,

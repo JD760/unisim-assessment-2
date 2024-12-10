@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -89,7 +90,7 @@ public class World {
     buildings.add(index, building);
     // Prevent obstacle buildings from having the 'being built' animation
     if (variant instanceof ObstacleVariant) {
-      building.setAge(10000);
+      building.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
     return true;
   }
@@ -159,7 +160,7 @@ public class World {
     if (deleteMode && building.getArea().contains(currentGridPosition())
         && !(building instanceof ObstacleBuilding)) {
       game.spritebatch.setColor(INVALID_PREVIEW);
-    } else if (building.getAge() < 1800) {
+    } else if (building.getAge() < y111studios.buildings.MapObject.BUILDING_TIME) {
       // If the building has not been built yet, tint the colour to show that
       if (gameState.isPaused()) {
         game.spritebatch.setColor(NOT_BUILT);
@@ -250,6 +251,6 @@ public class World {
   public void setSelectedBuilding(Building building) {
     selectedBuilding = building;
     if (building != null)
-      selectedBuilding.setAge(10000);
+      selectedBuilding.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
   }
 }

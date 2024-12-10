@@ -17,6 +17,7 @@ public abstract class MapObject {
   protected @Getter AssetPaths texturePath;
   protected @Setter @Getter int age;  // The number of game ticks since the object was placed
   protected boolean flipped;
+  public static final int BUILDING_TIME = 1800;
 
   /**
    * Constructs a new map object with the specified area.

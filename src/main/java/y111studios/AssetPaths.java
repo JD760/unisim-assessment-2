@@ -51,6 +51,7 @@ public enum AssetPaths {
   TEACH5("assets/Teach5.png"),
   BIKE_SHED("assets/bike-storage.png"),
   STRAIGHT_ROAD("assets/road1.png"),
+  STRAIGHT_ROAD2("assets/road2.png"),
   ROAD_CROSS("assets/road5.png"),
   ROAD_BEND1("assets/road4.png"),
   ROAD_BEND2("assets/road7.png"),

@@ -11,7 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import y111studios.buildings.premade_variants.AccommodationVariant;
@@ -20,9 +23,9 @@ import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
-
+import y111studios.utils.MenuTab;
+import static y111studios.utils.MenuTab.*;
 /**
  * A class to interact with LibGDX to render the game window.
  */
@@ -56,7 +59,7 @@ public class BuildingMenu {
     accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
     cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
     teachingMenu = game.getAsset(AssetPaths.TEACHING_MENU);
-    currentMenuTab = MenuTab.ACCOMMODATION;
+    currentMenuTab = ACCOMMODATION;
     currentMenuItem = -1;
     buildingTextures = new Texture[] {
         game.getAsset(AssetPaths.ACC1), game.getAsset(AssetPaths.ACC2),
@@ -81,18 +84,18 @@ public class BuildingMenu {
         game.getAsset(AssetPaths.TRASH)
     };
     buildingVariants = new HashMap<>();
-    buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
-    buildingVariants.put(MenuTab.CATERING, CateringVariant.values());
-    buildingVariants.put(MenuTab.TEACHING, TeachingVariant.values());
+    buildingVariants.put(ACCOMMODATION, AccommodationVariant.values());
+    buildingVariants.put(CATERING, CateringVariant.values());
+    buildingVariants.put(TEACHING, TeachingVariant.values());
 
     VariantProperties[] jointTabVariants = new VariantProperties[5];
     System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, 0, 2);
     System.arraycopy(MiscellaneousVariant.values(), 0, jointTabVariants, 2, 3);
-    buildingVariants.put(MenuTab.RECREATION, jointTabVariants);
+    buildingVariants.put(RECREATION, jointTabVariants);
 
     jointTabVariants = new VariantProperties[5];
     System.arraycopy(MiscellaneousVariant.values(), 3, jointTabVariants, 0, 5);
-    buildingVariants.put(MenuTab.MISCELLANEOUS, jointTabVariants);
+    buildingVariants.put(MISCELLANEOUS, jointTabVariants);
 
     tabTable = new Table();
     for (int i = 0; i < 5; i++) {
@@ -130,7 +133,6 @@ public class BuildingMenu {
     for (int i = 0; i < 7; i++) {
       buildingTable.add(buildingImages[i]);
     }
-
     stage.addActor(tabTable);
     stage.addActor(buildingTable);
   }
@@ -154,6 +156,8 @@ public class BuildingMenu {
         1,
         menuBackground.getHeight(),
         false, false);
+
+    game.font.draw(game.spritebatch, setCurrentMenuItem(currentMenuItem), 400,400);
 
     game.spritebatch.end();
   }
@@ -180,19 +184,19 @@ public class BuildingMenu {
     // Update currentMenuTab
     switch (tabNumber) {
       case 0:
-        currentMenuTab = MenuTab.ACCOMMODATION;
+        currentMenuTab = ACCOMMODATION;
         break;
       case 1:
-        currentMenuTab = MenuTab.CATERING;
+        currentMenuTab = CATERING;
         break;
       case 2:
-        currentMenuTab = MenuTab.TEACHING;
+        currentMenuTab = TEACHING;
         break;
       case 3:
-        currentMenuTab = MenuTab.RECREATION;
+        currentMenuTab = RECREATION;
         break;
       case 4:
-        currentMenuTab = MenuTab.MISCELLANEOUS;
+        currentMenuTab = MISCELLANEOUS;
         break;
       default:
         throw new UnreachableException("Unreachable state - menu tab not recognised");
@@ -257,17 +261,74 @@ public class BuildingMenu {
     }
   }
 
-  public void setCurrentMenuItem(int itemNum) {
+  /**
+   * updates highlighting of currently selected menu item, returns said menu item's name to be rendered
+   *
+   * @param itemNum reference to current menu item
+   * @return Returns the name of the currently selected menu item
+   */
+  public String setCurrentMenuItem(int itemNum) {
     currentMenuItem = itemNum;
     updateSelectedBuildingHighlight();
+
+    Map<MenuTab, List<Enum<?>>> menuVariants = new HashMap<>();
+
+    menuVariants.put(ACCOMMODATION, Arrays.asList(
+            AccommodationVariant.SMALL_HOUSE,
+            AccommodationVariant.MEDIUM_HOUSE,
+            AccommodationVariant.MODERN_FLAT,
+            AccommodationVariant.LUXURY_FLAT,
+            AccommodationVariant.PRIVATE_HOUSE));
+
+    menuVariants.put(CATERING, Arrays.asList(
+            CateringVariant.FAST_FOOD,
+            CateringVariant.RESTAURANT1,
+            CateringVariant.SUPERMARKET,
+            CateringVariant.RESTAURANT2,
+            CateringVariant.CORNER_SHOP));
+
+    menuVariants.put(TEACHING, Arrays.asList(
+            TeachingVariant.SMALL_CLASSROOM,
+            TeachingVariant.MEDIUM_CLASSROOM,
+            TeachingVariant.SUBJECT_HUB,
+            TeachingVariant.DEPARTMENT,
+            TeachingVariant.LAB));
+
+    menuVariants.put(RECREATION, Arrays.asList(
+            RecreationVariant.PARK,
+            RecreationVariant.GYM,
+            MiscellaneousVariant.TREE1,
+            MiscellaneousVariant.TREE2,
+            MiscellaneousVariant.TREE3));
+
+    menuVariants.put(MISCELLANEOUS, Arrays.asList(
+            MiscellaneousVariant.BIKE_SHED,
+            MiscellaneousVariant.STRAIGHT_ROAD,
+            MiscellaneousVariant.ROAD_CROSS,
+            MiscellaneousVariant.ROAD_BEND1,
+            MiscellaneousVariant.ROAD_BEND2));
+
+    List<Enum<?>> variants = menuVariants.get(currentMenuTab);
+    if (variants != null && itemNum >= 0 && itemNum < variants.size()) {
+      VariantProperties selectedVariant = (VariantProperties) variants.get(itemNum);
+      return selectedVariant.getName();
+    } else if (itemNum == 6) {
+      return "item delete";
+    } else{
+      return "None selected";
+    }
   }
 
   @SuppressWarnings("unchecked")
   private void updateBuildingRotations() {
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
-      buildingImage.setScaleX(flipped ? -1f : 1f);
-      buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
+      buildingImage.setOrigin(buildingImage.getWidth() / 2, buildingImage.getHeight() / 2);
+      buildingImage.setScaleX(flipped ? -1f : 1f); // Horizontal flip
+      if (buildingImage == buildingImages[32]) {
+        buildingImage.setScaleY(flipped ? -1f : 1f); // Vertical flip
+      }
+
     }
   }
 
@@ -275,8 +336,4 @@ public class BuildingMenu {
     flipped = !flipped;
     updateBuildingRotations();
   }
-
-//  public boolean getFlipped() {
-//    return flipped;
-//  }
 }

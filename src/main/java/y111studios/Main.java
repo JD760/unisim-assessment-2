@@ -48,8 +48,10 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
-    font.getData().setScale(height * 0.002f);
-    super.resize(width, height);
+    if (width > 0 && height > 0) {
+      font.getData().setScale(height * 0.002f);
+      super.resize(width, height);
+    }
   }
 
   @Override

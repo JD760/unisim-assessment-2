@@ -12,17 +12,19 @@ import y111studios.AssetPaths;
  * RecreationBuilding}.
  **/
 public enum RecreationVariant implements VariantProperties {
-  PARK(2, 3, AssetPaths.REC1),
-  GYM(3, 5, AssetPaths.REC2),;
+  PARK(2, 3, AssetPaths.REC1, "Park"),
+  GYM(3, 5, AssetPaths.REC2, "Gym"),;
 
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
+  private final String name;
 
-  RecreationVariant(int width, int height, AssetPaths texturePath) {
+  RecreationVariant(int width, int height, AssetPaths texturePath, String name) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
+    this.name = name;
   }
 
   @Override
@@ -43,6 +45,11 @@ public enum RecreationVariant implements VariantProperties {
   @Override
   public Class<? extends VariantProperties> getVariantClass() {
     return RecreationVariant.class;
+  }
+
+  @Override
+  public String getName(){
+    return name;
   }
 
 }

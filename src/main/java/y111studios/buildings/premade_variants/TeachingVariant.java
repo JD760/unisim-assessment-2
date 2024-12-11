@@ -12,20 +12,22 @@ import y111studios.AssetPaths;
  * TeachingBuilding}.
  */
 public enum TeachingVariant implements VariantProperties {
-  SMALL_CLASSROOM(3, 3, AssetPaths.TEACH1),
-  MEDIUM_CLASSROOM(3, 3, AssetPaths.TEACH2),
-  SUBJECT_HUB(3, 2, AssetPaths.TEACH3),
-  DEPARTMENT(6, 6, AssetPaths.TEACH4),
-  LAB(3, 4, AssetPaths.TEACH5),;
+  SMALL_CLASSROOM(3, 3, AssetPaths.TEACH1, "Small Classroom"),
+  MEDIUM_CLASSROOM(3, 3, AssetPaths.TEACH2, "Medium Classroom"),
+  SUBJECT_HUB(3, 2, AssetPaths.TEACH3, "Subject Hub"),
+  DEPARTMENT(6, 6, AssetPaths.TEACH4, "Department"),
+  LAB(3, 4, AssetPaths.TEACH5, "Lab"),;
 
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
+  private final String name;
 
-  TeachingVariant(int width, int height, AssetPaths texturePath) {
+  TeachingVariant(int width, int height, AssetPaths texturePath, String name) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
+    this.name = name;
   }
 
   @Override
@@ -39,6 +41,9 @@ public enum TeachingVariant implements VariantProperties {
   }
 
   @Override
+  public String getName(){ return name; }
+
+  @Override
   public AssetPaths getTexturePath() {
     return texturePath;
   }
@@ -47,5 +52,4 @@ public enum TeachingVariant implements VariantProperties {
   public Class<? extends VariantProperties> getVariantClass() {
     return TeachingVariant.class;
   }
-
 }

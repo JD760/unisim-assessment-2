@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
+import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.screens.InstructionsScreen;
 import y111studios.screens.MapScreen;
 import y111studios.screens.StartScreen;
@@ -42,14 +44,11 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.NUM_5:
         buildingMenu.setCurrentMenuItem(setItem(4));
         break;
-      case Keys.NUM_6:
+      case Keys.R:
         buildingMenu.flipBuildings();
         break;
-      case Keys.NUM_7:
+      case Keys.D:
         buildingMenu.setCurrentMenuItem(setItem(6));
-        break;
-      case Keys.F:
-        buildingMenu.flipBuildings();
         break;
       case Keys.SPACE:
         if (state.isPaused()) {
@@ -105,13 +104,24 @@ public class WorldInputProcessor implements InputProcessor {
           world.getViewport().getScreenX(), world.getViewport().getScreenY(),
           world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight());
       if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
-        world.addObject(
-            buildingMenu.getBuildingVariants().get(buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()],
+        VariantProperties variant = buildingMenu.getBuildingVariants().get(
+          buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
+        if (world.addObject(
+            variant,
             world.pixelToTile(
                 (int) (screenPos.x * world.getCamera().scale),
                 (int) (screenPos.y * world.getCamera().scale)),
-            buildingMenu.isFlipped());
-        buildingMenu.setCurrentMenuItem(-1);
+            buildingMenu.isFlipped()
+        )) {
+          if (
+              variant != MiscellaneousVariant.STRAIGHT_ROAD
+              && variant != MiscellaneousVariant.ROAD_CROSS
+              && variant != MiscellaneousVariant.ROAD_BEND1
+              && variant != MiscellaneousVariant.ROAD_BEND2
+          ) {
+            buildingMenu.setCurrentMenuItem(-1);
+          }
+        }
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
         try {
           world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),

@@ -18,7 +18,7 @@ public abstract class ScreenWithBackground extends ScreenAdapter {
   Main game;
   ScreenViewport viewport;
   Texture background;
-  
+
   /**
    * Create a new screen with the UI background image drawn behind all UI Components.
    *

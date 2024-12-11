@@ -22,6 +22,7 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyDown(int keyCode) {
+    GameState state = world.getGameState();
     switch (keyCode) {
       case Keys.NUM_1:
         buildingMenu.setCurrentMenuItem(setItem(0));
@@ -48,7 +49,11 @@ public class WorldInputProcessor implements InputProcessor {
         buildingMenu.flipBuildings();
         break;
       case Keys.SPACE:
-        System.out.println(world.getGameState().getStudentSatisfaction().calculate());
+        if (state.isPaused()) {
+          state.resume();
+        } else {
+          state.pause();
+        }
         break;
       case Keys.ESCAPE:
         world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));

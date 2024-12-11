@@ -1,4 +1,5 @@
 package y111studios;
+
 // project imports
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
@@ -19,150 +20,162 @@ import java.util.Map;
  * Class which handles the creation and rendering of the info bar
  */
 public class InfoBar {
-    private final Texture infoBarBackground;
-    private final GameState gameState;
-    private final Main game;
-    private final Stage stage;
-    private final Texture muteTexture;
-    private final Texture unmuteTexture;
-    private Image muteImage;
-    private Image unmuteImage;
-    private final Texture pauseTexture;
-    private final Texture playTexture;
-    private Image pauseImage;
-    private Image playImage;
-    private Table table;
-    private Cell muteButtonCell;
-    private Cell pauseButtonCell;
-    private float infoBarHeight;
+  private final Texture infoBarBackground;
+  private final GameState gameState;
+  private final Main game;
+  private final Stage stage;
+  private final Texture muteTexture;
+  private final Texture unmuteTexture;
+  private Image muteImage;
+  private Image unmuteImage;
+  private final Texture pauseTexture;
+  private final Texture playTexture;
+  private Image pauseImage;
+  private Image playImage;
+  private Table table;
+  private Cell muteButtonCell;
+  private Cell pauseButtonCell;
+  private float infoBarHeight;
 
-    /**
-     * The InfoBar handles rendering of game information such as BuildingCounter, Clock and StudentSatisfaction
-     *
-     * @param gameState gameState calculates values such as time remaining, building count and student satisfaction
-     * @param game reference to game manager giving access to spritebatch methods
-     * @param stage container for actors and spritebatches in libGDX
-     */
-    public InfoBar(GameState gameState, Main game, Stage stage) {
-        this.gameState = gameState;
-        this.game = game;
-        this.stage = stage;
-        infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
-        muteTexture = game.getAsset(AssetPaths.MUTE_BUTTON);
-        unmuteTexture = game.getAsset(AssetPaths.UNMUTE_BUTTON);
-        muteImage = new Image(muteTexture);
-        unmuteImage = new Image(unmuteTexture);
-        pauseTexture = game.getAsset(AssetPaths.PAUSE_BUTTON);
-        playTexture = game.getAsset(AssetPaths.PLAY_BUTTON);
-        pauseImage = new Image(pauseTexture);
-        playImage = new Image(playTexture);
+  /**
+   * The InfoBar handles rendering of game information such as BuildingCounter,
+   * Clock and StudentSatisfaction
+   *
+   * @param gameState gameState calculates values such as time remaining, building
+   *                  count and student satisfaction
+   * @param game      reference to game manager giving access to spritebatch
+   *                  methods
+   * @param stage     container for actors and spritebatches in libGDX
+   */
+  public InfoBar(GameState gameState, Main game, Stage stage) {
+    this.gameState = gameState;
+    this.game = game;
+    this.stage = stage;
+    infoBarBackground = game.getAsset(AssetPaths.INFO_BAR_BACKGROUND);
+    muteTexture = game.getAsset(AssetPaths.MUTE_BUTTON);
+    unmuteTexture = game.getAsset(AssetPaths.UNMUTE_BUTTON);
+    muteImage = new Image(muteTexture);
+    unmuteImage = new Image(unmuteTexture);
+    pauseTexture = game.getAsset(AssetPaths.PAUSE_BUTTON);
+    playTexture = game.getAsset(AssetPaths.PLAY_BUTTON);
+    pauseImage = new Image(pauseTexture);
+    playImage = new Image(playTexture);
 
-        muteImage.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.backgroundMusic.setVolume(0.3f);
-                muteButtonCell.setActor(unmuteImage);
-            }
-        });
-        unmuteImage.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.backgroundMusic.setVolume(0f);
-                muteButtonCell.setActor(muteImage);
-            }
-        });
-        playImage.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                gameState.resume();
-                pauseButtonCell.setActor(pauseImage);
-            }
-        });
-        pauseImage.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                gameState.pause();
-                pauseButtonCell.setActor(playImage);
-            }
-        });
+    muteImage.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        game.backgroundMusic.setVolume(0.3f);
+        muteButtonCell.setActor(unmuteImage);
+      }
+    });
+    unmuteImage.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        game.backgroundMusic.setVolume(0f);
+        muteButtonCell.setActor(muteImage);
+      }
+    });
+    playImage.addListener(new ClickListener() {
+      @SuppressWarnings("unchecked")
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        gameState.resume();
+        pauseButtonCell.setActor(pauseImage);
+      }
+    });
+    pauseImage.addListener(new ClickListener() {
+      @SuppressWarnings("unchecked")
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        gameState.pause();
+        pauseButtonCell.setActor(playImage);
+      }
+    });
 
-        this.table = new Table();
-        muteButtonCell = table.add(unmuteImage);
-        pauseButtonCell = table.add(playImage);
-        stage.addActor(table);
+    this.table = new Table();
+    muteButtonCell = table.add(unmuteImage);
+    pauseButtonCell = table.add(playImage);
+    stage.addActor(table);
+  }
+
+  /**
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public void render() {
+    game.spritebatch.begin();
+
+    float screenWidth = stage.getViewport().getScreenWidth();
+    float screenHeight = stage.getViewport().getScreenHeight();
+
+    // handle pausing from external sources (eg keypresses)
+    if (gameState.isPaused()) {
+      pauseButtonCell.setActor(pauseImage);
+    } else {
+      pauseButtonCell.setActor(playImage);
     }
 
-    /**
-     *
-     */
-    public void render() {
-        game.spritebatch.begin();
+    // Render the InfoBar background
+    game.spritebatch.draw(infoBarBackground,
+        0, screenHeight - infoBarHeight, screenWidth, infoBarHeight,
+        0, 0, 1, infoBarBackground.getHeight(),
+        false, false);
 
-        float screenWidth = stage.getViewport().getScreenWidth();
-        float screenHeight = stage.getViewport().getScreenHeight();
+    // Render buildingCount onto InfoBar
+    int buildingCount = gameState.getCount();
+    String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
+    GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
 
-        // Render the InfoBar background
-        game.spritebatch.draw(infoBarBackground,
-                0, screenHeight - infoBarHeight, screenWidth, infoBarHeight,
-                0, 0, 1, infoBarBackground.getHeight(),
-                false, false);
+    game.font.draw(game.spritebatch, buildingString,
+        screenHeight * 0.01f, screenHeight * 0.99f);
 
-        // Render buildingCount onto InfoBar
-        int buildingCount = gameState.getCount();
-        String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
-        GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
+    // Render individual building counts onto infoBar
+    BuildingCounter counter = gameState.buildingManager.getCounter();
+    Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
+    float drawIndent = screenHeight * 0.01f;
 
-        game.font.draw(game.spritebatch, buildingString,
-                screenHeight * 0.01f, screenHeight * 0.99f);
-
-        // Render individual building counts onto infoBar
-        BuildingCounter counter = gameState.buildingManager.getCounter();
-        Map<BuildingType, Integer> buildingCounts = counter.getBuildingMap();
-        float drawIndent = screenHeight * 0.01f ;
-
-        for (BuildingType type : BuildingType.values()) {
-            int count = buildingCounts.get(type);
-            String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
-            GlyphLayout countLayout = new GlyphLayout(game.font, countString);
-            game.font.draw(
-                game.spritebatch, countString, drawIndent,
-                screenHeight * 1.01f - infoBarHeight + countLayout.height
-            );
-            drawIndent += countLayout.width + screenHeight * 0.01f;
-        }
-
-        // Render the time remaining at the top centre of the infoBar
-        Duration timeRemaining = gameState.timeRemaining();
-        String timeString = String.format("%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
-        GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
-        float textWidth = timeStringLayout.width;
-        float textHeight = timeStringLayout.height;
-
-        float timeStringX = (screenWidth - textWidth) / 2;
-        float timeStringY = screenHeight - ((infoBarHeight -textHeight)/2);
-
-        game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
-
-        // Render the student satisfaction percentage in top right of infoBar
-        double satisfaction = gameState.getStudentSatisfaction().calculate();
-        String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
-        GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
-        float satisfactionStringWidth = satisfactionStringLayout.width;
-
-        game.font.draw(game.spritebatch,
-                satisfactionString,
-                screenWidth - satisfactionStringWidth - 10,
-                screenHeight - ((infoBarHeight -textHeight)/2));
-
-        game.spritebatch.end();
+    for (BuildingType type : BuildingType.values()) {
+      int count = buildingCounts.get(type);
+      String countString = String.format("%c: %d", type.toString().toCharArray()[0], count);
+      GlyphLayout countLayout = new GlyphLayout(game.font, countString);
+      game.font.draw(
+          game.spritebatch, countString, drawIndent,
+          screenHeight * 1.01f - infoBarHeight + countLayout.height);
+      drawIndent += countLayout.width + screenHeight * 0.01f;
     }
 
-    public void resize(int width, int height) {
-        infoBarHeight = height * 0.08f;
-        table.setBounds(0, height - infoBarHeight, width, infoBarHeight);
-        muteButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
-            .padLeft(height * 0.385f);
-        pauseButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
-            .padLeft(height * 0.02f).padRight(width * 0.615f);
-    }
+    // Render the time remaining at the top centre of the infoBar
+    Duration timeRemaining = gameState.timeRemaining();
+    String timeString = String.format("%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
+    GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
+    float textWidth = timeStringLayout.width;
+    float textHeight = timeStringLayout.height;
+
+    float timeStringX = (screenWidth - textWidth) / 2;
+    float timeStringY = screenHeight - ((infoBarHeight - textHeight) / 2);
+
+    game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
+
+    // Render the student satisfaction percentage in top right of infoBar
+    double satisfaction = gameState.getStudentSatisfaction().calculate();
+    String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
+    GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
+    float satisfactionStringWidth = satisfactionStringLayout.width;
+
+    game.font.draw(game.spritebatch,
+        satisfactionString,
+        screenWidth - satisfactionStringWidth - 10,
+        screenHeight - ((infoBarHeight - textHeight) / 2));
+
+    game.spritebatch.end();
+  }
+
+  public void resize(int width, int height) {
+    infoBarHeight = height * 0.08f;
+    table.setBounds(0, height - infoBarHeight, width, infoBarHeight);
+    muteButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
+        .padLeft(height * 0.385f);
+    pauseButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
+        .padLeft(height * 0.02f).padRight(width * 0.615f);
+  }
 }

@@ -42,14 +42,11 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.NUM_5:
         buildingMenu.setCurrentMenuItem(setItem(4));
         break;
-      case Keys.NUM_6:
+      case Keys.R:
         buildingMenu.flipBuildings();
         break;
-      case Keys.NUM_7:
+      case Keys.D:
         buildingMenu.setCurrentMenuItem(setItem(6));
-        break;
-      case Keys.F:
-        buildingMenu.flipBuildings();
         break;
       case Keys.SPACE:
         if (state.isPaused()) {

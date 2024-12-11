@@ -156,8 +156,8 @@ public class BuildingMenu {
         1,
         menuBackground.getHeight(),
         false, false);
-
-    game.font.draw(game.spritebatch, setCurrentMenuItem(currentMenuItem), 400,400);
+    game.font.draw(game.spritebatch, "Current Menu Item:\n" + setCurrentMenuItem(currentMenuItem),
+            0,menuHeight - game.font.getLineHeight());
 
     game.spritebatch.end();
   }

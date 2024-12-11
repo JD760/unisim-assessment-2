@@ -185,7 +185,7 @@ public class World {
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
-    new BitmapFont().draw(game.spritebatch, "Test!", Gdx.input.getX() + 10, height - Gdx.input.getY());
+    game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,

@@ -1,5 +1,6 @@
 package y111studios;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -36,16 +39,20 @@ public class BuildingMenu {
   private @Getter boolean flipped;
   private final Table buildingTable;
   private final Table tabTable;
+  private final Table tabLabelTable;
   private final Image[] unselectedTabImages = new Image[5];
   private final Image[] selectedTabImages = new Image[5];
   private final Image[] buildingImages = new Image[35];
+  public static final Skin SKIN = new Skin(
+      Gdx.files.internal("assets/skins/default/uiskin.json"));
 
   /**
    * Sets up the camera and loads the background.
    *
    * @param game Reference to game manager
    */
-  public BuildingMenu(final Main game, Stage stage) {
+  @SuppressWarnings("unchecked")
+public BuildingMenu(final Main game, Stage stage) {
     this.game = game;
     viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
@@ -94,13 +101,6 @@ public class BuildingMenu {
       selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
       final int tab = i;
       tabTable.add(i == 0 ? selectedTabImages[0] : unselectedTabImages[i]);
-      unselectedTabImages[tab].addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent e, float x, float y) {
-          setCurrentMenuItem(-1);
-          updateTab(tab);
-        }
-      });
     }
 
     buildingTable = new Table();
@@ -125,8 +125,30 @@ public class BuildingMenu {
       buildingTable.add(buildingImages[i]);
     }
 
+    tabLabelTable = new Table();
+    tabLabelTable.add(new Label("  Accommodation", SKIN));
+    tabLabelTable.add(new Label("  Catering", SKIN));
+    tabLabelTable.add(new Label("  Teaching", SKIN));
+    tabLabelTable.add(new Label("  Recreation & Trees", SKIN));
+    tabLabelTable.add(new Label("  Miscelaneous", SKIN));
+    int i = 0;
+    for (Cell<Actor> cell : tabLabelTable.getCells()) {
+      final int tab = i;
+      cell.getActor().addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent e, float x, float y) {
+          if (currentMenuTab.toInt() != tab) {
+            setCurrentMenuItem(-1);
+            updateTab(tab);
+          }
+        }
+      });
+      i++;
+    }
+
     stage.addActor(tabTable);
     stage.addActor(buildingTable);
+    stage.addActor(tabLabelTable);
   }
 
   /**
@@ -161,6 +183,7 @@ public class BuildingMenu {
   public void resize(int width, int height) {
     buildingTable.setBounds(0, height * 0.01f, width, height * 0.11f);
     tabTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
+    tabLabelTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
     updateCellSizes();
     updateBuildingRotations();
   }
@@ -234,6 +257,11 @@ public class BuildingMenu {
       cell.width(
           viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
     }
+    for (Cell<Actor> cell : tabLabelTable.getCells()) {
+      cell.width(
+          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+      ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.001f);
+    }
   }
 
   /**
@@ -268,8 +296,4 @@ public class BuildingMenu {
     flipped = !flipped;
     updateBuildingRotations();
   }
-
-  // public boolean getFlipped() {
-  // return flipped;
-  // }
 }

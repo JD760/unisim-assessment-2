@@ -1,5 +1,6 @@
 package y111studios;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
+import y111studios.buildings.MapObject;
 import y111studios.buildings.premade_variants.AccommodationVariant;
 import y111studios.buildings.premade_variants.CateringVariant;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
@@ -15,7 +17,7 @@ import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 
-class StudentSatisfaction {
+public class StudentSatisfaction {
   private final BuildingManager buildingManager;
   private @Getter double satisfaction;
   private int[][] natureAreas;
@@ -26,37 +28,46 @@ class StudentSatisfaction {
     this.natureAreas = natureAreas;
   }
 
-  public double calculate() {
-    Map<BuildingType, Integer> buildingCounts = buildingManager.getCounter().getBuildingMap();
+  // Updates the student satisfaction. This should be called 60 times per
+  // second when the timer is running.
+  public void tick() {
+    double satisfactionLimit = calculate();
+    satisfaction = satisfaction * 0.997 + satisfactionLimit * 0.003;
+  }
 
-    // Punish not having at least one accommodation building and catering building
-    if (
-        buildingCounts.get(BuildingType.ACCOMMODATION) == 0
-        || buildingCounts.get(BuildingType.CATERING) == 0
-    ) {
-      satisfaction = 0.0;
-      return 0.0;
-    }
-    satisfaction = 100.0;
+  private double calculate() {
+    // Set up counters for buildings that have actually been built
+    Map<BuildingType, Integer> buildingCounts = new HashMap<>();
+    buildingCounts.put(BuildingType.ACCOMMODATION, 0);
+    buildingCounts.put(BuildingType.CATERING, 0);
+    buildingCounts.put(BuildingType.TEACHING, 0);
+    buildingCounts.put(BuildingType.RECREATION, 0);
 
-    // Punish building ratios
-    double teachingRatio = (double)buildingCounts.get(BuildingType.TEACHING)
-        / buildingCounts.get(BuildingType.ACCOMMODATION);
-    double cateringRatio = (double)buildingCounts.get(BuildingType.CATERING)
-        / buildingCounts.get(BuildingType.ACCOMMODATION);
-    double recreationalRatio = (double)buildingCounts.get(BuildingType.RECREATION)
-        / buildingCounts.get(BuildingType.ACCOMMODATION);
-    satisfaction /= 1 + Math.abs(teachingRatio - 0.3);
-    satisfaction /= 1 + Math.max(0.2 - cateringRatio, 0.0);
-    satisfaction /= 1 + Math.max(0.2 - recreationalRatio, 0.0);
+    double satisfaction = 100.0;
 
     int buildingRotationTotal, numRoads;
     buildingRotationTotal = numRoads = 0;
     double totalRoadFlow = 0.0;
     Set<AssetPaths> buildingVariants = new HashSet<>();
     for (Building building : buildingManager.getBuildings()) {
-      if (building == null)
+      if (building == null || building.getAge() < MapObject.BUILDING_TIME)
         continue;
+
+      // Update building counter
+      if (building.getVariant() instanceof AccommodationVariant) {
+        buildingCounts.put(BuildingType.ACCOMMODATION,
+          buildingCounts.get(BuildingType.ACCOMMODATION).intValue() + 1);
+      } else if (building.getVariant() instanceof CateringVariant) {
+        buildingCounts.put(BuildingType.CATERING,
+          buildingCounts.get(BuildingType.CATERING).intValue() + 1);
+      } else if (building.getVariant() instanceof TeachingVariant) {
+        buildingCounts.put(BuildingType.TEACHING,
+          buildingCounts.get(BuildingType.TEACHING).intValue() + 1);
+      } else if (building.getVariant() instanceof RecreationVariant) {
+        buildingCounts.put(BuildingType.RECREATION,
+          buildingCounts.get(BuildingType.RECREATION).intValue() + 1);
+      }
+
       buildingVariants.add(building.getTexturePath());
       buildingRotationTotal += building.getFlipped() ? 1 : -1;
       double accommodationDistance, cateringDistance, teachingDistance, recreationDistance,
@@ -67,7 +78,8 @@ class StudentSatisfaction {
       boolean isRoad = false;
 
       for (Building otherBuilding : buildingManager.getBuildings()) {
-        if (otherBuilding == null || otherBuilding == building)
+        if (otherBuilding == null || otherBuilding == building
+            || otherBuilding.getAge() < MapObject.BUILDING_TIME)
           continue;
         // Only calculate the distance squared for now as it saves a costly square root
         double distance = getSquaredDistance(building, otherBuilding);
@@ -172,11 +184,27 @@ class StudentSatisfaction {
       totalRoadFlow += Math.min(roadFlow, 0.12);
     }
 
-    // Punish poor building variety
-    System.out.println("Before " + satisfaction);
-    satisfaction *= buildingVariants.size()
-      / (double)Math.min(buildingManager.getCounter().getCount() - numRoads, 34);
-    System.out.println("After " + satisfaction);
+    // Punish not having at least one accommodation building and catering building
+    if (
+        buildingCounts.get(BuildingType.ACCOMMODATION) == 0
+        || buildingCounts.get(BuildingType.CATERING) == 0
+    ) {
+      return 0.0;
+    }
+    // Punish building ratios
+    double teachingRatio = (double)buildingCounts.get(BuildingType.TEACHING)
+        / buildingCounts.get(BuildingType.ACCOMMODATION);
+    double cateringRatio = (double)buildingCounts.get(BuildingType.CATERING)
+        / buildingCounts.get(BuildingType.ACCOMMODATION);
+    double recreationalRatio = (double)buildingCounts.get(BuildingType.RECREATION)
+        / buildingCounts.get(BuildingType.ACCOMMODATION);
+    satisfaction /= 1 + Math.abs(teachingRatio - 0.3);
+    satisfaction /= 1 + Math.max(0.2 - cateringRatio, 0.0);
+    satisfaction /= 1 + Math.max(0.2 - recreationalRatio, 0.0);
+
+    // Reward good building variety
+    satisfaction = satisfaction * (1.0 - buildingVariants.size() / 250.0)
+      + 100.0 * buildingVariants.size() / 250.0;
     // Punish building rotations being all the same
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
     // Apply reward for road flow

@@ -1,19 +1,28 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import y111studios.*;
+import y111studios.AssetPaths;
+import y111studios.BuildingMenu;
+import y111studios.GameState;
+import y111studios.InfoBar;
+import y111studios.Main;
+import y111studios.UniversalInputProcessor;
+import y111studios.World;
+import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.VariantProperties;
-
-import static y111studios.AssetPaths.GAME_OVER;
+import y111studios.notification.Notification;
+import y111studios.notification.Notification.NotificationType;
 
 /**
  * A class to interact with LibGDX to render the game window.
@@ -35,6 +44,7 @@ public class MapScreen extends ScreenAdapter {
   Texture pauseMenu;
   boolean[] showDebugInfo = { false };
   World world;
+  Notification notification;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
   UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -53,6 +63,8 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
+    notification = new Notification(width, height, NotificationType.EVENT, game);
+
     world = new World(game, gameState);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
@@ -61,6 +73,20 @@ public class MapScreen extends ScreenAdapter {
     inputMultiplexer.addProcessor(universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
+
+    stage.addListener(new InputListener() {
+      @Override
+      public boolean keyDown(InputEvent e, int keycode) {
+        switch (keycode) {
+          case Keys.N:
+            stage.addActor(notification);
+            break;
+          default:
+            break;
+        }
+        return false;
+      }
+    });
   }
 
   @Override
@@ -80,10 +106,7 @@ public class MapScreen extends ScreenAdapter {
       world.setSelectedBuilding(null);
     }
 
-    // Check for game over
-    if (gameState.isTimeUp()) {
-      gameState.pause(); // Lock pause
-    }
+    gameState.tick();
 
     world.render(delta);
     buildingMenu.render();
@@ -100,6 +123,7 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
+    notification.setScreenSize(width, height);
     universalInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);

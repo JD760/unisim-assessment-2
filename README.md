@@ -54,8 +54,10 @@ This project uses the following dependencies:
 
 ## Licenses
 
-The assets included in the resources/assets directory are from Icograms. They are licensed under the [Icograms Basic License Agreement](https://education.icograms.com/license-agreement-basic).
+The assets used in the world, including the background image and all map objects are from Icograms. They are licensed under the [Icograms Basic License Agreement](https://education.icograms.com/license-agreement-basic).
 
-The assets included in the resources/iconduck_assets directory are part of the [Carbon Icons](https://iconduck.com/sets/carbon-icons) set from icon duck. They are licensed under the [Apache 2.0 License](https://iconduck.com/licenses/apache-2.0).
+The icon assets are part of the [Carbon Icons](https://iconduck.com/sets/carbon-icons) set from icon duck. They are licensed under the [Apache 2.0 License](https://iconduck.com/licenses/apache-2.0).
+
+The snowflake asset is from Freepik. It is licensed under the [Freepik Free license](https://www.freepik.com/legal/terms-of-use#nav-freepik-license).
 
 The background music is from Pixabay and is licenced under the [Pixabay Terms of Service](https://pixabay.com/service/terms).

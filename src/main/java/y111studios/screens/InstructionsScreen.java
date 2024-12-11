@@ -10,26 +10,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.Main;
 
 /**
- * Displays credits for both code authors and assets used in the project.
+ * Displays the settings available for the user to change.
  */
-public class CreditsScreen extends ScreenWithBackground {
+public class InstructionsScreen extends ScreenWithBackground {
+  public Main game;
   private Stage stage;
   private Table table;
-  private TextButton backButton;
   private static final Skin SKIN = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
 
-  /**
-   * Create a new credits screen.
-   *
-   * @param game - a reference to the Main class
-   */
-  public CreditsScreen(Main game) {
-    super(game);
-    stage = new Stage(viewport);
-    table = new Table();
-    table.setFillParent(true);
+  private TextButton backButton;
 
-    backButton = new TextButton("Return to menu", SKIN);
+  /**
+   * Create a new Settings Screen using an instance of the game.
+
+   * @param game - an instance of the Main class used to obtain the spritebatch.
+   */
+  public InstructionsScreen(Main game) {
+    super(game);
+    this.game = game;
+
+    backButton = new TextButton("Return to Menu", SKIN);
     backButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
@@ -37,16 +37,21 @@ public class CreditsScreen extends ScreenWithBackground {
         return false;
       }
     });
-    
+    stage = new Stage(viewport);
+    table = new Table();
+    table.setFillParent(true);
+    table.setDebug(true);
+
     table.add(backButton);
+
     stage.addActor(table);
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
-    Gdx.input.setInputProcessor(stage);
-    stage.draw();
     stage.act();
-  } 
+    stage.draw();
+    Gdx.input.setInputProcessor(stage);
+  }
 }

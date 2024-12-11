@@ -2,8 +2,6 @@ package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -14,22 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
 import y111studios.Main;
 
 /**
  * The initial screen when the game is started.
  */
-public class StartScreen extends ScreenAdapter {
-
+public class StartScreen extends ScreenWithBackground {
   final Main game;
-
   Texture background;
-
-  OrthographicCamera camera;
-  ScreenViewport viewport;
   int width = 640;
   int height = 480;
   Stage stage;
@@ -54,10 +45,8 @@ public class StartScreen extends ScreenAdapter {
    * @param game reference to game manager
    */
   public StartScreen(final Main game) {
+    super(game);
     this.game = game;
-    viewport = new ScreenViewport();
-    camera = (OrthographicCamera) viewport.getCamera();
-    background = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
 
     stage = new Stage(viewport);
     stage.addListener(new InputListener() {
@@ -76,13 +65,11 @@ public class StartScreen extends ScreenAdapter {
   private void createMenu() {
     table = new Table();
     table.setFillParent(true);
-    table.setDebug(true);
     logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        Gdx.app.log("#INFO", "Play button clicked");
         game.setScreen(new MapScreen(game));
         return false;
       }
@@ -103,11 +90,11 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    settingsButton = new TextButton("Settings", skin);
+    settingsButton = new TextButton("Instructions", skin);
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new SettingsScreen(game));
+        game.setScreen(new InstructionsScreen(game));
         return false;
       }
     });
@@ -115,7 +102,7 @@ public class StartScreen extends ScreenAdapter {
     creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new CreditsScreen());
+        game.setScreen(new CreditsScreen(game));
         return false;
       }
     });
@@ -142,23 +129,9 @@ public class StartScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    ScreenUtils.clear(0, 0, 0.2f, 0);
-    game.spritebatch.setProjectionMatrix(camera.combined);
-
-    game.spritebatch.begin();
-    float backgroundWidth = (float) viewport.getScreenWidth() / viewport.getScreenHeight()
-        * background.getHeight();
-    game.spritebatch.draw(
-        background,
-        0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
-        (int) (background.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
-        (int) backgroundWidth, background.getHeight(),
-        false, false);
-    game.spritebatch.end();
-
+    super.render(delta);
     stage.act();
     stage.draw();
-    camera.update();
   }
 
   @Override

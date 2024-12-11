@@ -2,6 +2,11 @@ package y111studios.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
 import y111studios.Main;
@@ -39,5 +44,17 @@ public abstract class ScreenWithBackground extends ScreenAdapter {
         (int) backgroundWidth, background.getHeight(),
         false, false);
     game.spritebatch.end();
+  }
+
+  public static TextButton backButton(Table table, Skin skin, Main game) {
+    TextButton backButton = new TextButton("Return to Menu", skin);
+    backButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new StartScreen(game));
+        return false;
+      }
+    });
+    return backButton;
   }
 }

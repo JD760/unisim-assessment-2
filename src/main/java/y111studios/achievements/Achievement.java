@@ -9,6 +9,8 @@ import lombok.Getter;
 public abstract class Achievement {
   private @Getter String name;
   private AchievementManager manager;
+  private @Getter String displayName;
+  private @Getter String description;
 
   /**
    * Create a new achievement.
@@ -16,9 +18,12 @@ public abstract class Achievement {
    * @param name - the unique name for the achievement
    * @param manager - the AchievementManager handling the achievement
    */
-  public Achievement(String name, AchievementManager manager) {
+  public Achievement(
+      String name, AchievementManager manager, String displayName, String description) {
     this.name = name;
     this.manager = manager;
+    this.displayName = displayName;
+    this.description = description;
 
     if (manager.getAchievements().containsKey(name)) {
       throw new IllegalArgumentException("Achievement names must be unique");

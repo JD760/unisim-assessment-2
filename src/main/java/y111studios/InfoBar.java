@@ -104,6 +104,9 @@ public class InfoBar {
     stage.addActor(table);
   }
 
+  /**
+   * Called every tick, draws the UI components.
+   */
   @SuppressWarnings("unchecked")
   public void render() {
     game.spritebatch.begin();
@@ -126,8 +129,8 @@ public class InfoBar {
 
     // Render buildingCount onto InfoBar
     int buildingCount = gameState.getCount();
-    String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
-    GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
+    String buildingString = String.format(
+        "Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
 
     game.font.draw(game.spritebatch, buildingString,
         screenHeight * 0.01f, screenHeight * 0.99f);
@@ -149,7 +152,8 @@ public class InfoBar {
 
     // Render the time remaining at the top centre of the infoBar
     Duration timeRemaining = gameState.timeRemaining();
-    String timeString = String.format("%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
+    String timeString = String.format(
+        "%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
     GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
     float textWidth = timeStringLayout.width;
     float textHeight = timeStringLayout.height;
@@ -190,6 +194,12 @@ public class InfoBar {
     game.spritebatch.end();
   }
 
+  /**
+   * Called whenever the window size changes.
+   *
+   * @param width - the new width of the window
+   * @param height - the new height of the window
+   */
   public void resize(int width, int height) {
     infoBarHeight = height * 0.08f;
     table.setBounds(0, height - infoBarHeight, width, infoBarHeight);

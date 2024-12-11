@@ -31,7 +31,7 @@ public final class BuildingFactory {
 
   // Prevent instantiation of the factory class.
 
-    /**
+  /**
    * A map of the constructors for each building class. The key is the class of
    * the building and the value is the constructor of the building.
    *

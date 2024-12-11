@@ -45,6 +45,7 @@ public class MapScreen extends ScreenAdapter {
   boolean[] showDebugInfo = { false };
   World world;
   Notification notification;
+  boolean notificationShown = false;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
   UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -64,10 +65,11 @@ public class MapScreen extends ScreenAdapter {
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
     notification = new Notification(width, height, NotificationType.EVENT, game);
-
+  
     world = new World(game, gameState);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
+    
 
     inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(universalInputProcessor);
@@ -79,7 +81,12 @@ public class MapScreen extends ScreenAdapter {
       public boolean keyDown(InputEvent e, int keycode) {
         switch (keycode) {
           case Keys.N:
-            stage.addActor(notification);
+            if (!notificationShown) {
+              stage.addActor(notification);
+            } else {
+              notification.remove();
+            }
+            notificationShown = !notificationShown;
             break;
           default:
             break;
@@ -123,7 +130,7 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    notification.setScreenSize(width, height);
+    notification.resize(width, height);
     universalInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
@@ -136,6 +143,7 @@ public class MapScreen extends ScreenAdapter {
 
   @Override
   public void dispose() {
+    notification.dispose();
     game.dispose();
   }
 }

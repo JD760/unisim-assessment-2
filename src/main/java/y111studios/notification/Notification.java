@@ -1,19 +1,24 @@
 package y111studios.notification;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import y111studios.AssetPaths;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import y111studios.Main;
 
 /**
  * Draw a notification onto the screen to inform the user of, for example,
  * a new event or achievement earned.
  */
-public class Notification extends Dialog {
-  private Image achievementNotification;
+public class Notification extends Table {
+  Pixmap bg;
+  TextureRegionDrawable bgDrawable;
+
   /**
    * Determine the style of notification to render.
    */
@@ -32,18 +37,32 @@ public class Notification extends Dialog {
    * @param type - the type of notification, a {@link NotificationType}
    * @param game - a reference to the Main class
    */
-  public Notification(int screenWidth, int screenHeight, NotificationType type, Main game) {
-    super(type == NotificationType.ACHIEVEMENT ? "Achievement!" : "New Event!", SKIN);
+  public Notification(int screenWidth, int screenHeight, NotificationType type, Main game) { 
+    super();
+    setDebug(true);
 
-    achievementNotification = new Image((Texture) game.assetLib.manager.get(
-      AssetPaths.ACHIEVEMENT_NOTIFICATION.getPath()));
+    bg = new Pixmap(20, 20, Pixmap.Format.RGB565);
+    bgDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(bg)));
+    bg.setColor(Color.RED);
+    bg.fill();
+    setBackground(bgDrawable);
     
-    //addActor(achievementNotification);
-    setScreenSize(screenWidth, screenHeight);
+    add(new Label("New Achievement!", SKIN)).top().left();
+    row();
+    add(new Label("Achievement description", SKIN)).center();
+    resize(screenWidth, screenHeight);
   }
 
-  public void setScreenSize(int screenWidth, int screenHeight) {
-    setSize(screenWidth * 0.1f, screenHeight * 0.1f);
-    setPosition(screenWidth - getWidth(), screenHeight * 0.9f - getHeight());
+  public void resize(int width, int height) {
+    setSize(width * 0.2f, height * 0.1f);
+    setPosition(width - getWidth(), height * 0.9f - getHeight());
   }
+
+  /**
+   * Free memory resources when they are no longer needed.
+   */
+  public void dispose() {
+    bg.dispose();
+  }
+  
 }

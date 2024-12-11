@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.Main;
 
 /**
@@ -31,15 +30,13 @@ public class AchievementsScreen extends ScreenWithBackground {
     table = new Table(SKIN);
     table.setDebug(true);
     table.setFillParent(true);
-
-    TextButton backButton = ScreenWithBackground.backButton(table, SKIN, game);
     completeTable.setFillParent(true);
     incompleteTable.setFillParent(true);
 
     table.add(completeTable);
     table.add(incompleteTable);
     table.row();
-    table.add(backButton);
+    table.add(ScreenWithBackground.backButton(SKIN, game));
     stage.addActor(table);
   }
 

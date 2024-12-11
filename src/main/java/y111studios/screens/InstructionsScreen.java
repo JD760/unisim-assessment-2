@@ -1,6 +1,7 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,15 +26,20 @@ public class InstructionsScreen extends ScreenWithBackground {
 
    * @param game - an instance of the Main class used to obtain the spritebatch.
    */
-  public InstructionsScreen(Main game) {
+  public InstructionsScreen(Main game, Screen screen) {
     super(game);
     this.game = game;
 
-    backButton = new TextButton("Return to Menu", SKIN);
+    backButton = new TextButton("Back", SKIN);
     backButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new StartScreen(game));
+        // preserve the game state when accessing the instructions in-game
+        if (screen == null) {
+          game.setScreen(new StartScreen(game));
+        } else {
+          game.setScreen(screen);
+        }
         return false;
       }
     });

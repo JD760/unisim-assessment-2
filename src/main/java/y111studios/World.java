@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -304,5 +305,9 @@ public class World {
     if (building != null) {
       selectedBuilding.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
+  }
+
+  public Main getGame() {
+    return game;
   }
 }

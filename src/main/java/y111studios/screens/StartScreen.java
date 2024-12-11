@@ -94,7 +94,7 @@ public class StartScreen extends ScreenWithBackground {
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new InstructionsScreen(game));
+        game.setScreen(new InstructionsScreen(game, null));
         return false;
       }
     });

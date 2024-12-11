@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 
+import y111studios.screens.InstructionsScreen;
+import y111studios.screens.MapScreen;
 import y111studios.screens.StartScreen;
 
 public class WorldInputProcessor implements InputProcessor {
@@ -58,6 +60,11 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.ESCAPE:
         world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));
+        break;
+      case Keys.I:
+        InstructionsScreen instructionsScreen = new InstructionsScreen(
+            world.getGame(), world.getGame().getScreen());
+        world.getGame().setScreen(instructionsScreen);
         break;
       default:
         break;

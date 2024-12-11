@@ -147,7 +147,7 @@ public BuildingMenu(final Main game, Stage stage) {
     }
 
     hotkeyTable = new Table();
-    for (i = 0; i < 5; i++) {
+    for (i = 1; i < 6; i++) {
       hotkeyTable.add(new Label("         " + Integer.toString(i), SKIN));
     }
     hotkeyTable.add(new Label("         R", SKIN));

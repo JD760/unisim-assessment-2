@@ -20,7 +20,7 @@ public class SatisfactionAchievement extends Achievement {
   public boolean condition() {
     GameState state = world.getGameState();
     StudentSatisfaction satisfaction = state.getStudentSatisfaction();
-    if (satisfaction.calculate() > 0) {
+    if (satisfaction.getSatisfaction() > 0) {
       return true;
     }
     return false;

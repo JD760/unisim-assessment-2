@@ -113,9 +113,9 @@ public class InfoBar {
 
     // handle pausing from external sources (eg keypresses)
     if (gameState.isPaused()) {
-      pauseButtonCell.setActor(pauseImage);
-    } else {
       pauseButtonCell.setActor(playImage);
+    } else {
+      pauseButtonCell.setActor(pauseImage);
     }
 
     // Render the InfoBar background
@@ -194,8 +194,8 @@ public class InfoBar {
     infoBarHeight = height * 0.08f;
     table.setBounds(0, height - infoBarHeight, width, infoBarHeight);
     muteButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
-        .padLeft(height * 0.385f);
+        .padLeft(height * 0.35f);
     pauseButtonCell.width(infoBarHeight * 0.6f).height(infoBarHeight * 0.6f)
-        .padLeft(height * 0.02f).padRight(width * 0.615f);
+        .padLeft(height * 0.02f).padRight(width * 0.65f);
   }
 }

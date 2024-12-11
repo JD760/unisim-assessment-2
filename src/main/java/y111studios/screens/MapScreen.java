@@ -1,9 +1,9 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -44,7 +44,7 @@ public class MapScreen extends ScreenAdapter {
   Texture pauseMenu;
   boolean[] showDebugInfo = { false };
   World world;
-  Notification notification = new Notification(width, height, NotificationType.EVENT);
+  Notification notification;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
   UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -62,6 +62,8 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().position.set(width / 2f, height / 2f, 0);
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
+
+    notification = new Notification(width, height, NotificationType.EVENT, game);
 
     world = new World(game, gameState);
     buildingMenu = new BuildingMenu(game, stage);

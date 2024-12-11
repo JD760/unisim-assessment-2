@@ -63,7 +63,8 @@ public enum AssetPaths {
   UNMUTE_BUTTON("assets/volume-up-filled.png"),
   PAUSE_BUTTON("assets/pause-filled.png"),
   PLAY_BUTTON("assets/play-filled-alt.png"),
-  LEADERBOARD_TITLE("assets/LeaderboardTitle.png");
+  LEADERBOARD_TITLE("assets/LeaderboardTitle.png"),
+  ACHIEVEMENT_NOTIFICATION("assets/AchievementNotification.png");
 
   private final String path;
 

@@ -65,7 +65,6 @@ public class StartScreen extends ScreenWithBackground {
   private void createMenu() {
     table = new Table();
     table.setFillParent(true);
-    table.setDebug(true);
     logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
@@ -91,11 +90,11 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    settingsButton = new TextButton("Settings", skin);
+    settingsButton = new TextButton("Instructions", skin);
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new SettingsScreen(game));
+        game.setScreen(new InstructionsScreen(game));
         return false;
       }
     });
@@ -103,7 +102,7 @@ public class StartScreen extends ScreenWithBackground {
     creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new CreditsScreen());
+        game.setScreen(new CreditsScreen(game));
         return false;
       }
     });

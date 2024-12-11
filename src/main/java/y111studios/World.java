@@ -6,14 +6,16 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import y111studios.position.GridPosition;
 import y111studios.utils.UnreachableException;
-import y111studios.achievements.AchievementManager;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.ObstacleBuilding;
@@ -156,6 +158,8 @@ public class World {
     }
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
+    // draw under the cursor
+    new BitmapFont().draw(game.spritebatch, "Test!", Gdx.input.getX() + 10, height - Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
@@ -180,7 +184,6 @@ public class World {
     ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
     camera.updateZoom(delta);
-
     game.spritebatch.begin();
     game.spritebatch.setColor(NORMAL);
     // Draw the game map

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import lombok.Getter;
+import lombok.Setter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
@@ -16,11 +17,17 @@ import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
+import y111studios.events.Event;
+import y111studios.events.FloodEvent;
+import y111studios.events.PandemicEvent;
+import y111studios.events.ResearchBreakthroughEvent;
+import y111studios.events.SnowEvent;
 
 public class StudentSatisfaction {
   private final BuildingManager buildingManager;
   private @Getter double satisfaction;
   private int[][] natureAreas;
+  private @Setter Event currentEvent;
 
   StudentSatisfaction(BuildingManager buildingManager, int[][] natureAreas) {
     this.buildingManager = buildingManager;
@@ -138,6 +145,9 @@ public class StudentSatisfaction {
       if (inNatureRegion)
         natureBonus += 0.1;
       natureBonus = Math.min(natureBonus, 0.2);
+      if (currentEvent instanceof FloodEvent) {
+        natureBonus *= 2;
+      }
 
       if (building.getVariant() instanceof AccommodationVariant) {
         int numAccommodationBuildings = buildingManager.getCounter().getBuildingMap().get(
@@ -210,6 +220,17 @@ public class StudentSatisfaction {
     // Apply reward for road flow
     double averageRoadFlow = Math.min(totalRoadFlow / Math.max(numRoads, 1), 0.12);
     satisfaction = satisfaction * (1.0 - averageRoadFlow) + 100.0 * averageRoadFlow;
+
+    // Apply non-per-building rewards/punishments for events
+    if (currentEvent instanceof SnowEvent) {
+      satisfaction = satisfaction * 0.75 + 25;
+    } else if (currentEvent instanceof ResearchBreakthroughEvent) {
+      satisfaction = satisfaction * 0.95 + 5;
+    } else if (currentEvent instanceof PandemicEvent) {
+      satisfaction *= 0.6;
+    } else if (currentEvent instanceof FloodEvent) {
+      satisfaction *= 0.7;
+    }
 
     return satisfaction;
   }

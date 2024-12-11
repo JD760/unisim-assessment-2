@@ -211,6 +211,7 @@ public class GameState implements GameTimer, BuildingController {
         studentSatisfaction.tick();
         buildingManager.tick();
 
+        // Update the current event every 62 seconds
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
           if (numTicks >= 60 * 62 * 4)
             currentEvent = null;
@@ -233,10 +234,12 @@ public class GameState implements GameTimer, BuildingController {
                 break;
             }
           }
+          studentSatisfaction.setCurrentEvent(currentEvent);
         }
 
         numTicks++;
       }
+
       if (timer.isTimeUp()) {
         timer.pause();
       }

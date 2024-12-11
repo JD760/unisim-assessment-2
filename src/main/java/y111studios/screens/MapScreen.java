@@ -106,10 +106,7 @@ public class MapScreen extends ScreenAdapter {
       world.setSelectedBuilding(null);
     }
 
-    // Check for game over
-    if (gameState.isTimeUp()) {
-      gameState.pause(); // Lock pause
-    }
+    gameState.tick();
 
     world.render(delta);
     buildingMenu.render();

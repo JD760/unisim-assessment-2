@@ -121,10 +121,10 @@ public class InfoBar {
         0, 0, 1, infoBarBackground.getHeight(),
         false, false);
 
-    // Render buildingCount onto InfoBar
-    int buildingCount = gameState.getCount();
-    String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS);
-    GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
+        // Render buildingCount onto InfoBar
+        int buildingCount = gameState.getCount();
+        String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
+        GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
 
     game.font.draw(game.spritebatch, buildingString,
         screenHeight * 0.01f, screenHeight * 0.99f);
@@ -156,11 +156,11 @@ public class InfoBar {
 
     game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
 
-    // Render the student satisfaction percentage in top right of infoBar
-    double satisfaction = gameState.getStudentSatisfaction().calculate();
-    String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
-    GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
-    float satisfactionStringWidth = satisfactionStringLayout.width;
+        // Render the student satisfaction percentage in top right of infoBar
+        double satisfaction = gameState.getStudentSatisfaction().getSatisfaction();
+        String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
+        GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
+        float satisfactionStringWidth = satisfactionStringLayout.width;
 
     game.font.draw(game.spritebatch,
         satisfactionString,

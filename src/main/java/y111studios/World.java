@@ -10,7 +10,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -31,6 +30,7 @@ public class World {
   // Height of map in tiles.
   public static final int TILE_HEIGHT = 75;
 
+  private static final Color NOT_BUILT = new Color(1f, 0.898f, 0f, 0.55f);
   private static final Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
   private static final Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
   private static final Color NORMAL = new Color(1, 1, 1, 1);
@@ -40,7 +40,7 @@ public class World {
   private final Texture[] gameMap = new Texture[4];
   private @Setter Vector3 cursorScreenPos;
   private @Getter Camera camera;
-  private @Setter Building selectedBuilding;
+  private Building selectedBuilding;
   private @Getter List<Building> buildings;
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
@@ -87,6 +87,10 @@ public class World {
       }
     }
     buildings.add(index, building);
+    // Prevent obstacle buildings from having the 'being built' animation
+    if (variant instanceof ObstacleVariant) {
+      building.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
+    }
     return true;
   }
 
@@ -155,6 +159,15 @@ public class World {
     if (deleteMode && building.getArea().contains(currentGridPosition())
         && !(building instanceof ObstacleBuilding)) {
       game.spritebatch.setColor(INVALID_PREVIEW);
+    } else if (building.getAge() < y111studios.buildings.MapObject.BUILDING_TIME) {
+      // If the building has not been built yet, tint the colour to show that
+      if (gameState.isPaused()) {
+        game.spritebatch.setColor(NOT_BUILT);
+      } else {
+        game.spritebatch.setColor(new Color(
+            NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
+            ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f));
+      }
     }
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
@@ -178,7 +191,7 @@ public class World {
   public void render(float delta) {
     // check for any achievement conditions that have been met
     GameState.getAchievementManager().checkConditions();
-    
+
     game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
@@ -235,5 +248,12 @@ public class World {
     this.height = height;
     camera.resize(width, height);
     viewport.update(width, height, true);
+  }
+
+  public void setSelectedBuilding(Building building) {
+    selectedBuilding = building;
+    if (building != null) {
+      selectedBuilding.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
+    }
   }
 }

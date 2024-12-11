@@ -15,7 +15,7 @@ import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 
-class StudentSatisfaction {
+public class StudentSatisfaction {
   private final BuildingManager buildingManager;
   private @Getter double satisfaction;
   private int[][] natureAreas;
@@ -173,10 +173,10 @@ class StudentSatisfaction {
     }
 
     // Punish poor building variety
-    System.out.println("Before " + satisfaction);
+    //System.out.println("Before " + satisfaction);
     satisfaction *= buildingVariants.size()
       / (double)Math.min(buildingManager.getCounter().getCount() - numRoads, 34);
-    System.out.println("After " + satisfaction);
+    //System.out.println("After " + satisfaction);
     // Punish building rotations being all the same
     satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
     // Apply reward for road flow

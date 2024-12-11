@@ -3,6 +3,7 @@ package y111studios;
 import com.badlogic.gdx.Screen;
 import java.time.Duration;
 import lombok.Getter;
+import y111studios.achievements.AchievementManager;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
@@ -26,6 +27,7 @@ import y111studios.utils.Score;
  */
 public class GameState implements GameTimer, BuildingController {
   private static Leaderboard leaderboard = new Leaderboard();
+  private static @Getter AchievementManager achievementManager = new AchievementManager();
   private GameTimer timer;
   private Main game;
   public BuildingManager buildingManager;

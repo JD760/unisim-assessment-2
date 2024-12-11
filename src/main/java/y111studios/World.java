@@ -3,11 +3,9 @@ package y111studios;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
@@ -15,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import y111studios.position.GridPosition;
 import y111studios.utils.UnreachableException;
+import y111studios.achievements.AchievementManager;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.ObstacleBuilding;
@@ -30,9 +29,9 @@ public class World {
   // Height of map in tiles.
   public static final int TILE_HEIGHT = 75;
 
-  private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
-  private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
-  private final static Color NORMAL = new Color(1, 1, 1, 1);
+  private static final Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
+  private static final Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
+  private static final Color NORMAL = new Color(1, 1, 1, 1);
 
   private final Main game;
   private @Getter GameState gameState;
@@ -173,6 +172,9 @@ public class World {
    * @param delta The time since the previous tick.
    */
   public void render(float delta) {
+    // check for any achievement conditions that have been met
+    GameState.getAchievementManager().checkConditions();
+    
     game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);

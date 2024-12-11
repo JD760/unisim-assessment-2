@@ -8,12 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import y111studios.*;
+import y111studios.AssetPaths;
+import y111studios.BuildingMenu;
+import y111studios.GameState;
+import y111studios.InfoBar;
+import y111studios.Main;
+import y111studios.UniversalInputProcessor;
+import y111studios.World;
+import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.VariantProperties;
-
-import static y111studios.AssetPaths.GAME_OVER;
 
 /**
  * A class to interact with LibGDX to render the game window.

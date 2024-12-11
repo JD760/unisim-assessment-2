@@ -126,11 +126,11 @@ public BuildingMenu(final Main game, Stage stage) {
     }
 
     tabLabelTable = new Table();
-    tabLabelTable.add(new Label("  Accommodation", SKIN));
-    tabLabelTable.add(new Label("  Catering", SKIN));
-    tabLabelTable.add(new Label("  Teaching", SKIN));
-    tabLabelTable.add(new Label("  Recreation & Trees", SKIN));
-    tabLabelTable.add(new Label("  Miscelaneous", SKIN));
+    tabLabelTable.add(new Label("     Accommodation", SKIN));
+    tabLabelTable.add(new Label("           Catering", SKIN));
+    tabLabelTable.add(new Label("           Teaching", SKIN));
+    tabLabelTable.add(new Label("   Recreation & Trees", SKIN));
+    tabLabelTable.add(new Label("       Miscelaneous", SKIN));
     int i = 0;
     for (Cell<Actor> cell : tabLabelTable.getCells()) {
       final int tab = i;
@@ -260,7 +260,7 @@ public BuildingMenu(final Main game, Stage stage) {
     for (Cell<Actor> cell : tabLabelTable.getCells()) {
       cell.width(
           viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
-      ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.001f);
+      ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.00105f);
     }
   }
 

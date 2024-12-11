@@ -1,9 +1,7 @@
 package y111studios;
 
-import java.time.Duration;
-
 import com.badlogic.gdx.Screen;
-
+import java.time.Duration;
 import lombok.Getter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
@@ -13,6 +11,8 @@ import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
+import y111studios.screens.Leaderboard;
+import y111studios.utils.Score;
 
 /**
  * A class representing the sum state of the game. This class contains the
@@ -25,6 +25,7 @@ import y111studios.position.GridPosition;
  * @see CollisionDetection
  */
 public class GameState implements GameTimer, BuildingController {
+  private static Leaderboard leaderboard = new Leaderboard();
   private GameTimer timer;
   private Main game;
   public BuildingManager buildingManager;
@@ -138,6 +139,14 @@ public class GameState implements GameTimer, BuildingController {
   @Override
   public Duration timeRemaining() {
     return timer.timeRemaining();
+  }
+
+  public static boolean addScore(Score score) {
+    return leaderboard.insertScore(score);
+  }
+
+  public static Leaderboard getLeaderboard() {
+    return leaderboard;
   }
 
   /**

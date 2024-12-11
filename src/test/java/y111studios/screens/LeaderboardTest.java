@@ -2,15 +2,12 @@ package y111studios.screens;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
-
-import com.badlogic.gdx.utils.Array;
-
 import y111studios.utils.Score;
 
 /**
@@ -84,5 +81,22 @@ public class LeaderboardTest {
     assertFalse(leaderboard.insertScore(new Score("Tiny", 10)));
     // test that a new larger score should be inserted
     assertTrue(leaderboard.insertScore(new Score("Big", 10_000)));
+  }
+
+  @Test
+  public void testGetScore() {
+    Leaderboard leaderboard = new Leaderboard();
+    Score oneScore = new Score("One", 100);
+    Score testScore = new Score("Test", 1200);
+    leaderboard.insertScore(oneScore);
+    leaderboard.insertScore(testScore);
+
+    assertEquals(oneScore, leaderboard.getScore(1));
+    assertEquals(testScore, leaderboard.getScore(0));
+    // test indices above, below and on the boundary of the range
+    // of the list of scores return the correct values
+    assertNull(leaderboard.getScore(-5));
+    assertNull(leaderboard.getScore(leaderboard.getSize()));
+    assertNull(leaderboard.getScore(Integer.MAX_VALUE - 10));
   }
 }

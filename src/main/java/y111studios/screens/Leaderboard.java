@@ -55,7 +55,17 @@ public class Leaderboard {
     return scores.size();
   }
 
+  /**
+   * Get the score at the given position in the leaderboard. 
+   * This is generally NOT equal to the order of insertion as the leaderboard sorts itself.
+   *
+   * @param index - the position of the score to return
+   * @return - the Score at the provided position, or null if no such position exists.
+   */
   public Score getScore(int index) {
+    if (index < 0 || index >= scores.size()) {
+      return null;
+    }
     return scores.get(index);
   }
 

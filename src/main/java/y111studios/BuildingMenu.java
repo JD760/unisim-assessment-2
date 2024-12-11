@@ -201,7 +201,7 @@ public BuildingMenu(final Main game, Stage stage) {
    * Updates the images in both tables depending on the selected tab.
    */
   @SuppressWarnings("unchecked")
-  private void updateTab(int tabNumber) {
+  public void updateTab(int tabNumber) {
     // Update currentMenuTab
     switch (tabNumber) {
       case 0:

@@ -110,11 +110,10 @@ public BuildingMenu(final Main game, Stage stage) {
       buildingImages[i].addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
-          if (buildingIndex == currentMenuItem || buildingIndex == 5) {
+          if (buildingIndex == 5) {
+            flipBuildings();
+          } else if (buildingIndex == currentMenuItem) {
             setCurrentMenuItem(-1);
-            if (buildingIndex == 5) {
-              flipBuildings();
-            }
           } else {
             setCurrentMenuItem(buildingIndex);
           }

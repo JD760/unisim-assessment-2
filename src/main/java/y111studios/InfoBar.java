@@ -1,9 +1,5 @@
 package y111studios;
 
-// project imports
-import y111studios.buildings.BuildingCounter;
-import y111studios.buildings.BuildingManager;
-import y111studios.buildings.BuildingType;
 // gdx imports
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -15,9 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 // java imports
 import java.time.Duration;
 import java.util.Map;
+// project imports
+import y111studios.buildings.BuildingCounter;
+import y111studios.buildings.BuildingManager;
+import y111studios.buildings.BuildingType;
+import y111studios.events.FloodEvent;
+import y111studios.events.SnowEvent;
 
 /**
- * Class which handles the creation and rendering of the info bar
+ * Class which handles the creation and rendering of the info bar.
  */
 public class InfoBar {
   private final Texture infoBarBackground;
@@ -33,13 +35,15 @@ public class InfoBar {
   private Image pauseImage;
   private Image playImage;
   private Table table;
+  @SuppressWarnings("rawtypes")
   private Cell muteButtonCell;
+  @SuppressWarnings("rawtypes")
   private Cell pauseButtonCell;
   private float infoBarHeight;
 
   /**
    * The InfoBar handles rendering of game information such as BuildingCounter,
-   * Clock and StudentSatisfaction
+   * Clock and StudentSatisfaction.
    *
    * @param gameState gameState calculates values such as time remaining, building
    *                  count and student satisfaction
@@ -62,6 +66,7 @@ public class InfoBar {
     playImage = new Image(playTexture);
 
     muteImage.addListener(new ClickListener() {
+      @SuppressWarnings("unchecked")
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         game.backgroundMusic.setVolume(0.3f);
@@ -69,6 +74,7 @@ public class InfoBar {
       }
     });
     unmuteImage.addListener(new ClickListener() {
+      @SuppressWarnings("unchecked")
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         game.backgroundMusic.setVolume(0f);
@@ -98,9 +104,6 @@ public class InfoBar {
     stage.addActor(table);
   }
 
-  /**
-   *
-   */
   @SuppressWarnings("unchecked")
   public void render() {
     game.spritebatch.begin();
@@ -121,10 +124,10 @@ public class InfoBar {
         0, 0, 1, infoBarBackground.getHeight(),
         false, false);
 
-        // Render buildingCount onto InfoBar
-        int buildingCount = gameState.getCount();
-        String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
-        GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
+    // Render buildingCount onto InfoBar
+    int buildingCount = gameState.getCount();
+    String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
+    GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
 
     game.font.draw(game.spritebatch, buildingString,
         screenHeight * 0.01f, screenHeight * 0.99f);
@@ -156,16 +159,33 @@ public class InfoBar {
 
     game.font.draw(game.spritebatch, timeString, timeStringX, timeStringY);
 
-        // Render the student satisfaction percentage in top right of infoBar
-        double satisfaction = gameState.getStudentSatisfaction().getSatisfaction();
-        String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
-        GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
-        float satisfactionStringWidth = satisfactionStringLayout.width;
+    // Render the student satisfaction percentage in top right of infoBar
+    double satisfaction = gameState.getStudentSatisfaction().getSatisfaction();
+    String satisfactionString = String.format("Satisfaction: " + "%.2f", satisfaction) + "%";
+    GlyphLayout satisfactionStringLayout = new GlyphLayout(game.font, satisfactionString);
+    float satisfactionStringWidth = satisfactionStringLayout.width;
 
     game.font.draw(game.spritebatch,
         satisfactionString,
         screenWidth - satisfactionStringWidth - 10,
         screenHeight - ((infoBarHeight - textHeight) / 2));
+
+    // Render the current event to the right of the time remaining
+    String eventString;
+    if (gameState.getCurrentEvent() instanceof FloodEvent) {
+      eventString = "Event: Flood";
+    } else if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      eventString = "Event: Snow";
+    } else {
+      eventString = "Event: None";
+    }
+    GlyphLayout eventStringLayout = new GlyphLayout(game.font, eventString);
+    textWidth = eventStringLayout.width;
+
+    float eventStringX = screenWidth - textWidth - satisfactionStringWidth * 1.3f;
+    float eventStringY = screenHeight - ((infoBarHeight - textHeight) / 2);
+
+    game.font.draw(game.spritebatch, eventString, eventStringX, eventStringY);
 
     game.spritebatch.end();
   }

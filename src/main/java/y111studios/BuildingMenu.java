@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +28,6 @@ import y111studios.utils.UnreachableException;
 public class BuildingMenu {
   private final Main game;
   private final Texture menuBackground;
-  private final Texture accommodationMenu;
-  private final Texture cateringMenu;
-  private final Texture teachingMenu;
   private @Getter MenuTab currentMenuTab;
   private @Getter int currentMenuItem;
   private @Getter Texture[] buildingTextures;
@@ -45,7 +41,7 @@ public class BuildingMenu {
   private final Image[] buildingImages = new Image[35];
 
   /**
-   * Sets up the camera and loads the background
+   * Sets up the camera and loads the background.
    *
    * @param game Reference to game manager
    */
@@ -53,9 +49,6 @@ public class BuildingMenu {
     this.game = game;
     viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
-    accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
-    cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
-    teachingMenu = game.getAsset(AssetPaths.TEACHING_MENU);
     currentMenuTab = MenuTab.ACCOMMODATION;
     currentMenuItem = -1;
     buildingTextures = new Texture[] {
@@ -119,8 +112,9 @@ public class BuildingMenu {
         public void clicked(InputEvent e, float x, float y) {
           if (buildingIndex == currentMenuItem || buildingIndex == 5) {
             setCurrentMenuItem(-1);
-            if (buildingIndex == 5)
+            if (buildingIndex == 5) {
               flipBuildings();
+            }
           } else {
             setCurrentMenuItem(buildingIndex);
           }
@@ -229,16 +223,16 @@ public class BuildingMenu {
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       cell.width(
-                      viewport.getScreenHeight() * 0.1f
-                              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
-              .height(
-                      viewport.getScreenHeight() * 0.1f
-                              * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
-              .pad(viewport.getScreenHeight() * 0.01f);
+          viewport.getScreenHeight() * 0.1f
+              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+          .height(
+              viewport.getScreenHeight() * 0.1f
+                  * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
+          .pad(viewport.getScreenHeight() * 0.01f);
     }
     for (Cell<Actor> cell : tabTable.getCells()) {
       cell.width(
-              viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
     }
   }
 
@@ -269,13 +263,13 @@ public class BuildingMenu {
       buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
     }
   }
-                                                    
+
   public void flipBuildings() {
     flipped = !flipped;
     updateBuildingRotations();
   }
 
-//  public boolean getFlipped() {
-//    return flipped;
-//  }
+  // public boolean getFlipped() {
+  // return flipped;
+  // }
 }

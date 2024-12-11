@@ -5,18 +5,18 @@ package y111studios;
  */
 public class Camera {
   @SuppressWarnings("MemberName")
-  float x;
+  public float x;
   @SuppressWarnings("MemberName")
-  float y;
+  public float y;
 
-  int width;
-  int height;
+  public int width;
+  public int height;
 
-  float vx;
-  float vy;
-  float vZoom;
+  public float vx;
+  public float vy;
+  public float vZoom;
 
-  float scale;
+  public float scale;
 
   private float time;
   // class variable in case of usage in future animations

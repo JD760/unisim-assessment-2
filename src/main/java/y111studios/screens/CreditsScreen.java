@@ -1,6 +1,7 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -37,16 +38,25 @@ public class CreditsScreen extends ScreenWithBackground {
         return false;
       }
     });
-    
+
     table.add(backButton);
     stage.addActor(table);
+
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
-    Gdx.input.setInputProcessor(stage);
     stage.draw();
     stage.act();
-  } 
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+  }
 }

@@ -45,6 +45,11 @@ public abstract class ScreenWithBackground extends ScreenAdapter {
     game.spritebatch.end();
   }
 
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height, true);
+  }
+
   /**
    * Create a back button that returns to the start screen.
    *

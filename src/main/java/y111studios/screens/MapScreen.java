@@ -17,7 +17,6 @@ import y111studios.BuildingMenu;
 import y111studios.GameState;
 import y111studios.InfoBar;
 import y111studios.Main;
-import y111studios.UniversalInputProcessor;
 import y111studios.World;
 import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
@@ -49,7 +48,6 @@ public class MapScreen extends ScreenAdapter {
   public boolean notificationShown = false;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
-  UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
   Stage stage = new Stage(new ScreenViewport());
 
   /**
@@ -73,7 +71,7 @@ public class MapScreen extends ScreenAdapter {
     
 
     inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(universalInputProcessor);
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
 
@@ -139,7 +137,6 @@ public class MapScreen extends ScreenAdapter {
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
     notification.resize(width, height);
-    universalInputProcessor.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);

@@ -1,8 +1,10 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,8 +23,6 @@ import y111studios.Main;
 public class StartScreen extends ScreenWithBackground {
   final Main game;
   Texture background;
-  int width = 640;
-  int height = 480;
   Stage stage;
   Table table;
   Skin skin = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
@@ -58,8 +58,12 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    Gdx.input.setInputProcessor(stage);
+
     createMenu();
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   private void createMenu() {
@@ -106,20 +110,20 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    logoCell = table.add(logo).colspan(3).padLeft(width * 0.05f);
+    logoCell = table.add(logo).colspan(3).padLeft(viewport.getScreenWidth() * 0.05f);
     table.row();
     playButtonCell = table.add(playButton).colspan(3)
-        .pad(height * 0.02f);
-    table.row().height(height * 0.25f);
+        .pad(viewport.getScreenHeight() * 0.02f);
+    table.row().height(viewport.getScreenHeight() * 0.25f);
     leaderboardButtonCell = table.add(leaderboardButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     acheivementsButtonCell = table.add(achievementsButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     settingsButtonCell = table.add(settingsButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     table.row();
     creditsButtonCell = table.add(creditsButton).colspan(3)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     stage.addActor(table);
   }
 
@@ -134,12 +138,11 @@ public class StartScreen extends ScreenWithBackground {
     stage.draw();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void resize(int width, int height) {
+    super.resize(width, height);
     final float guiScale = height * 0.75f;
-    this.width = width;
-    this.height = height;
-    viewport.update(width, height, true);
     table.setSize(width, height);
     logoCell.width(height * 0.8f).height(height * 0.25f);
     playButtonCell.width(guiScale).height(height * 0.06f);
@@ -147,11 +150,15 @@ public class StartScreen extends ScreenWithBackground {
     acheivementsButtonCell.width(guiScale / 3).height(height * 0.06f);
     settingsButtonCell.width(guiScale / 3).height(height * 0.06f);
     creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    for (Cell<Actor> cell : table.getCells()) {
+      if (cell.getActor() instanceof TextButton) {
+        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+      }
+    }
   }
 
   @Override
   public void hide() {
-    Gdx.input.setInputProcessor(null);
   }
 
   @Override

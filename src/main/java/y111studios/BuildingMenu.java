@@ -13,7 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import y111studios.buildings.premade_variants.AccommodationVariant;
@@ -22,9 +25,9 @@ import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
-
+import y111studios.utils.MenuTab;
+import static y111studios.utils.MenuTab.*;
 /**
  * A class to interact with LibGDX to render the game window.
  */
@@ -82,18 +85,18 @@ public BuildingMenu(final Main game, Stage stage) {
         game.getAsset(AssetPaths.TRASH)
     };
     buildingVariants = new HashMap<>();
-    buildingVariants.put(MenuTab.ACCOMMODATION, AccommodationVariant.values());
-    buildingVariants.put(MenuTab.CATERING, CateringVariant.values());
-    buildingVariants.put(MenuTab.TEACHING, TeachingVariant.values());
+    buildingVariants.put(ACCOMMODATION, AccommodationVariant.values());
+    buildingVariants.put(CATERING, CateringVariant.values());
+    buildingVariants.put(TEACHING, TeachingVariant.values());
 
     VariantProperties[] jointTabVariants = new VariantProperties[5];
     System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, 0, 2);
     System.arraycopy(MiscellaneousVariant.values(), 0, jointTabVariants, 2, 3);
-    buildingVariants.put(MenuTab.RECREATION, jointTabVariants);
+    buildingVariants.put(RECREATION, jointTabVariants);
 
     jointTabVariants = new VariantProperties[5];
     System.arraycopy(MiscellaneousVariant.values(), 3, jointTabVariants, 0, 5);
-    buildingVariants.put(MenuTab.MISCELLANEOUS, jointTabVariants);
+    buildingVariants.put(MISCELLANEOUS, jointTabVariants);
 
     tabTable = new Table();
     for (int i = 0; i < 5; i++) {
@@ -169,15 +172,12 @@ public BuildingMenu(final Main game, Stage stage) {
 
     // Draw the menu background
     float menuHeight = viewport.getScreenHeight() * 0.15f;
-    game.spritebatch.draw(menuBackground,
-        0, 0,
-        viewport.getScreenWidth(),
-        menuHeight,
-        0,
-        0,
-        1,
-        menuBackground.getHeight(),
-        false, false);
+    game.spritebatch.draw(menuBackground, 0, 0, viewport.getScreenWidth(), menuHeight, 0, 0, 1,
+      menuBackground.getHeight(), false, false);
+    if (currentMenuItem >= 0 && currentMenuItem < 6) {
+      game.font.draw(game.spritebatch, setCurrentMenuItem(currentMenuItem),
+        menuHeight * 0.03f, menuHeight + game.font.getLineHeight());
+    }
 
     game.spritebatch.end();
   }
@@ -205,19 +205,19 @@ public BuildingMenu(final Main game, Stage stage) {
     // Update currentMenuTab
     switch (tabNumber) {
       case 0:
-        currentMenuTab = MenuTab.ACCOMMODATION;
+        currentMenuTab = ACCOMMODATION;
         break;
       case 1:
-        currentMenuTab = MenuTab.CATERING;
+        currentMenuTab = CATERING;
         break;
       case 2:
-        currentMenuTab = MenuTab.TEACHING;
+        currentMenuTab = TEACHING;
         break;
       case 3:
-        currentMenuTab = MenuTab.RECREATION;
+        currentMenuTab = RECREATION;
         break;
       case 4:
-        currentMenuTab = MenuTab.MISCELLANEOUS;
+        currentMenuTab = MISCELLANEOUS;
         break;
       default:
         throw new UnreachableException("Unreachable state - menu tab not recognised");
@@ -300,17 +300,36 @@ public BuildingMenu(final Main game, Stage stage) {
     }
   }
 
-  public void setCurrentMenuItem(int itemNum) {
+  /**
+   * updates highlighting of currently selected menu item, returns said menu item's name to be rendered
+   *
+   * @param itemNum reference to current menu item
+   * @return Returns the name of the currently selected menu item
+   */
+  public String setCurrentMenuItem(int itemNum) {
     currentMenuItem = itemNum;
     updateSelectedBuildingHighlight();
+
+    if (itemNum >= 0 && itemNum < 5) {
+      VariantProperties selectedVariant = buildingVariants.get(currentMenuTab)[currentMenuItem];
+      return selectedVariant.getName();
+    } else if (itemNum == 6) {
+      return "item delete";
+    } else{
+      return "None selected";
+    }
   }
 
   @SuppressWarnings("unchecked")
   private void updateBuildingRotations() {
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
-      buildingImage.setScaleX(flipped ? -1f : 1f);
-      buildingImage.setOrigin(buildingImage.getWidth() / 2, 0);
+      buildingImage.setOrigin(buildingImage.getWidth() / 2, buildingImage.getHeight() / 2);
+      buildingImage.setScaleX(flipped ? -1f : 1f); // Horizontal flip
+      if (buildingImage == buildingImages[32]) {
+        buildingImage.setScaleY(flipped ? -1f : 1f); // Vertical flip
+      }
+
     }
   }
 

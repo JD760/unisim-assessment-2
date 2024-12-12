@@ -54,4 +54,9 @@ public class CreditsScreen extends ScreenWithBackground {
     stage.draw();
     stage.act();
   }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+  }
 }

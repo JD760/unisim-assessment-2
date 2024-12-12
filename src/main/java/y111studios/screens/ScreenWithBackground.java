@@ -46,6 +46,11 @@ public abstract class ScreenWithBackground extends ScreenAdapter {
     game.spritebatch.end();
   }
 
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height, true);
+  }
+
   public static TextButton backButton(Table table, Skin skin, Main game) {
     TextButton backButton = new TextButton("Return to Menu", skin);
     backButton.addListener(new InputListener() {

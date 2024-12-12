@@ -58,6 +58,7 @@ public class AchievementsScreen extends ScreenWithBackground {
 
   @Override
   public void resize(int width, int height) {
+    super.resize(width, height);
     this.width = width;
     this.height = height;
 

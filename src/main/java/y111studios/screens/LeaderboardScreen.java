@@ -3,9 +3,11 @@ package y111studios.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -113,11 +115,20 @@ public class LeaderboardScreen extends ScreenWithBackground {
     stage.draw();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void resize(int width, int height) {
+    super.resize(width, height);
     this.width = width;
     this.height = height;
     leaderboardTitle.setSize(width * 0.5f, height * 0.1f);
     viewport.update(width, height, true);
+    for (Cell<Actor> cell : table.getCells()) {
+      if (cell.getActor() instanceof TextButton) {
+        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+      } else if (cell.getActor() instanceof Label) {
+        ((Label)(cell.getActor())).setFontScale(height * 0.0015f);
+      }
+    }
   }
 }

@@ -59,4 +59,9 @@ public class InstructionsScreen extends ScreenWithBackground {
     stage.act();
     stage.draw();
   }
+
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+  }
 }

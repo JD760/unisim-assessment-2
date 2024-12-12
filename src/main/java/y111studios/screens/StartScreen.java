@@ -1,6 +1,7 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -58,8 +59,12 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    Gdx.input.setInputProcessor(stage);
+
     createMenu();
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   private void createMenu() {
@@ -151,7 +156,6 @@ public class StartScreen extends ScreenWithBackground {
 
   @Override
   public void hide() {
-    Gdx.input.setInputProcessor(null);
   }
 
   @Override

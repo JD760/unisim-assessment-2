@@ -2,12 +2,17 @@ package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
+import y111studios.AssetPaths;
 import y111studios.Main;
 
 /**
@@ -18,7 +23,7 @@ public class InstructionsScreen extends ScreenWithBackground {
   private Stage stage;
   private Table table;
   private static final Skin SKIN = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
-
+  private Cell<Actor> logoCell;
   private TextButton backButton;
 
   /**
@@ -41,8 +46,10 @@ public class InstructionsScreen extends ScreenWithBackground {
     stage = new Stage(viewport);
     table = new Table();
     table.setFillParent(true);
-    table.setDebug(true);
 
+    Image logo = new Image(game.getAsset(AssetPaths.INSTRUCTIONS));
+    logoCell = table.add(logo);
+    table.row();
     table.add(backButton);
 
     stage.addActor(table);
@@ -63,5 +70,6 @@ public class InstructionsScreen extends ScreenWithBackground {
   @Override
   public void resize(int width, int height) {
     super.resize(width, height);
+    logoCell.width(height * 0.8f).height(height * 0.8f).pad(height * 0.05f);
   }
 }

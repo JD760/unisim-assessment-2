@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.BuildingMenu;
@@ -89,6 +88,7 @@ public class MapScreen extends ScreenAdapter {
               notification.remove();
             }
             notificationShown = !notificationShown;
+            notification.resetAge();
             break;
           default:
             break;
@@ -116,9 +116,11 @@ public class MapScreen extends ScreenAdapter {
     }
 
     gameState.tick();
-    if (!notification.tick()) {
-      notificationShown = false;
-      notification.remove();
+    if (notificationShown) {
+      if (!notification.tick()) {
+        notification.remove();
+        notificationShown = false;
+      }
     }
 
     world.render(delta);
@@ -149,7 +151,6 @@ public class MapScreen extends ScreenAdapter {
 
   @Override
   public void dispose() {
-    notification.dispose();
     game.dispose();
   }
 }

@@ -1,5 +1,6 @@
 package y111studios;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,9 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Arrays;
@@ -32,9 +34,6 @@ import static y111studios.utils.MenuTab.*;
 public class BuildingMenu {
   private final Main game;
   private final Texture menuBackground;
-  private final Texture accommodationMenu;
-  private final Texture cateringMenu;
-  private final Texture teachingMenu;
   private @Getter MenuTab currentMenuTab;
   private @Getter int currentMenuItem;
   private @Getter Texture[] buildingTextures;
@@ -42,24 +41,26 @@ public class BuildingMenu {
   private @Getter Viewport viewport;
   private @Getter boolean flipped;
   private final Table buildingTable;
+  private final Table hotkeyTable;
   private final Table tabTable;
+  private final Table tabLabelTable;
   private final Image[] unselectedTabImages = new Image[5];
   private final Image[] selectedTabImages = new Image[5];
   private final Image[] buildingImages = new Image[35];
+  public static final Skin SKIN = new Skin(
+      Gdx.files.internal("assets/skins/default/uiskin.json"));
 
   /**
-   * Sets up the camera and loads the background
+   * Sets up the camera and loads the background.
    *
    * @param game Reference to game manager
    */
-  public BuildingMenu(final Main game, Stage stage) {
+  @SuppressWarnings("unchecked")
+public BuildingMenu(final Main game, Stage stage) {
     this.game = game;
-    viewport = new ScreenViewport();
+    viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
-    accommodationMenu = game.getAsset(AssetPaths.ACCOMMODATION_MENU);
-    cateringMenu = game.getAsset(AssetPaths.CATERING_MENU);
-    teachingMenu = game.getAsset(AssetPaths.TEACHING_MENU);
-    currentMenuTab = ACCOMMODATION;
+    currentMenuTab = MenuTab.ACCOMMODATION;
     currentMenuItem = -1;
     buildingTextures = new Texture[] {
         game.getAsset(AssetPaths.ACC1), game.getAsset(AssetPaths.ACC2),
@@ -104,13 +105,6 @@ public class BuildingMenu {
       selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
       final int tab = i;
       tabTable.add(i == 0 ? selectedTabImages[0] : unselectedTabImages[i]);
-      unselectedTabImages[tab].addListener(new ClickListener() {
-        @Override
-        public void clicked(InputEvent e, float x, float y) {
-          setCurrentMenuItem(-1);
-          updateTab(tab);
-        }
-      });
     }
 
     buildingTable = new Table();
@@ -120,10 +114,10 @@ public class BuildingMenu {
       buildingImages[i].addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
-          if (buildingIndex == currentMenuItem || buildingIndex == 5) {
+          if (buildingIndex == 5) {
+            flipBuildings();
+          } else if (buildingIndex == currentMenuItem) {
             setCurrentMenuItem(-1);
-            if (buildingIndex == 5)
-              flipBuildings();
           } else {
             setCurrentMenuItem(buildingIndex);
           }
@@ -133,8 +127,39 @@ public class BuildingMenu {
     for (int i = 0; i < 7; i++) {
       buildingTable.add(buildingImages[i]);
     }
+
+    tabLabelTable = new Table();
+    tabLabelTable.add(new Label("     Accommodation", SKIN));
+    tabLabelTable.add(new Label("           Catering", SKIN));
+    tabLabelTable.add(new Label("           Teaching", SKIN));
+    tabLabelTable.add(new Label("   Recreation & Trees", SKIN));
+    tabLabelTable.add(new Label("       Miscelaneous", SKIN));
+    int i = 0;
+    for (Cell<Actor> cell : tabLabelTable.getCells()) {
+      final int tab = i;
+      cell.getActor().addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent e, float x, float y) {
+          if (currentMenuTab.toInt() != tab) {
+            setCurrentMenuItem(-1);
+            updateTab(tab);
+          }
+        }
+      });
+      i++;
+    }
+
+    hotkeyTable = new Table();
+    for (i = 1; i < 6; i++) {
+      hotkeyTable.add(new Label("         " + Integer.toString(i), SKIN));
+    }
+    hotkeyTable.add(new Label("         R", SKIN));
+    hotkeyTable.add(new Label("         D", SKIN));
+
     stage.addActor(tabTable);
+    stage.addActor(tabLabelTable);
     stage.addActor(buildingTable);
+    stage.addActor(hotkeyTable);
   }
 
   /**
@@ -169,9 +194,10 @@ public class BuildingMenu {
    * @param height The new height of the window.
    */
   public void resize(int width, int height) {
-    viewport.update(width, height, true);
     buildingTable.setBounds(0, height * 0.01f, width, height * 0.11f);
+    hotkeyTable.setBounds(0, 0, width, height * 0.03f);
     tabTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
+    tabLabelTable.setBounds(0, height * 0.08f, width, height * 0.1015f);
     updateCellSizes();
     updateBuildingRotations();
   }
@@ -224,26 +250,44 @@ public class BuildingMenu {
   }
 
   /**
-   * Updates the sizes of the cells in both tables to be correct relative to the
+   * Updates the sizes of the cells in all tables to be correct relative to the
    * screen size
    * and the sizes of the images in the cells.
    */
   @SuppressWarnings("unchecked")
   private void updateCellSizes() {
+    int cellNum = 0;
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       cell.width(
-                      viewport.getScreenHeight() * 0.1f
-                              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
-              .height(
-                      viewport.getScreenHeight() * 0.1f
-                              * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
-              .pad(viewport.getScreenHeight() * 0.01f);
+          viewport.getScreenHeight() * 0.1f
+              * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+          .height(
+              viewport.getScreenHeight() * 0.1f
+                  * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1))
+          .pad(viewport.getScreenHeight() * 0.01f);
+      int i = 0;
+      for (Cell<Actor> labelCell : hotkeyTable.getCells()) {
+        if (i == cellNum) {
+          labelCell.width(
+            viewport.getScreenHeight() * 0.1f
+                * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+            .height(viewport.getScreenHeight() * 0.035f).pad(viewport.getScreenHeight() * 0.01f);
+          ((Label)labelCell.getActor()).setFontScale(viewport.getScreenHeight() * 0.001f);
+        }
+        i++;
+      }
+      cellNum++;
     }
     for (Cell<Actor> cell : tabTable.getCells()) {
       cell.width(
-              viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+    }
+    for (Cell<Actor> cell : tabLabelTable.getCells()) {
+      cell.width(
+          viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
+      ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.00105f);
     }
   }
 
@@ -256,7 +300,7 @@ public class BuildingMenu {
     int i = 0;
     for (Cell<Actor> cell : buildingTable.getCells()) {
       Image buildingImage = (Image) (cell.getActor());
-      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.5f : 1f);
+      buildingImage.setColor(1f, 1f, 1f, i == currentMenuItem ? 0.2f : 1f);
       i++;
     }
   }
@@ -332,7 +376,7 @@ public class BuildingMenu {
     }
   }
 
-  private void flipBuildings() {
+  public void flipBuildings() {
     flipped = !flipped;
     updateBuildingRotations();
   }

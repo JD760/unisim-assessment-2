@@ -12,14 +12,14 @@ import y111studios.AssetPaths;
  * MiscellaneousBuilding}.
  **/
 public enum MiscellaneousVariant implements VariantProperties {
-  TREE1(3, 3, AssetPaths.TREE1, "Round Tree"),
+  TREE1(1, 1, AssetPaths.TREE1, "Round Tree"),
   TREE2(1, 1, AssetPaths.TREE2, "Pine Tree"),
-  TREE3(2, 2, AssetPaths.TREE3, "Oak Tree"),
-  BIKE_SHED(5, 5, AssetPaths.BIKE_SHED, "Bike Shed"),
+  TREE3(1, 1, AssetPaths.TREE3, "Oak Tree"),
+  BIKE_SHED(5, 3, AssetPaths.BIKE_SHED, "Bike Shed"),
   STRAIGHT_ROAD(2, 2, AssetPaths.STRAIGHT_ROAD, "Straight Road"),
   ROAD_CROSS(2, 2, AssetPaths.ROAD_CROSS, "Cross Road"),
   ROAD_BEND1(2, 2, AssetPaths.ROAD_BEND1, "Road Bend 1"),
-  ROAD_BEND2(2, 2, AssetPaths.ROAD_BEND2, "Road Bend 2"),;
+  ROAD_BEND2(2, 2, AssetPaths.ROAD_BEND2, "Road Bend 2");
 
   private final int width;
   private final int height;

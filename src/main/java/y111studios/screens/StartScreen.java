@@ -1,10 +1,7 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,28 +12,32 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
 import y111studios.Main;
 
 /**
  * The initial screen when the game is started.
  */
-public class StartScreen extends ScreenAdapter {
-
+public class StartScreen extends ScreenWithBackground {
   final Main game;
-
-  Texture startScreen;
-
-  OrthographicCamera camera;
-  ScreenViewport viewport;
+  Texture background;
   int width = 640;
   int height = 480;
   Stage stage;
   Table table;
-  Cell<Image> startScreenCell;
   Skin skin = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
+  Image logo;
+  Cell<Image> logoCell;
+  Button playButton;
+  Cell<Button> playButtonCell;
+  Button leaderboardButton;
+  Cell<Button> leaderboardButtonCell;
+  Button achievementsButton;
+  Cell<Button> acheivementsButtonCell;
+  Button settingsButton;
+  Cell<Button> settingsButtonCell;
+  Button creditsButton;
+  Cell<Button> creditsButtonCell;
 
   /**
    * Sets up the camera and loads the background.
@@ -44,12 +45,19 @@ public class StartScreen extends ScreenAdapter {
    * @param game reference to game manager
    */
   public StartScreen(final Main game) {
+    super(game);
     this.game = game;
-    viewport = new ScreenViewport();
-    camera = (OrthographicCamera) viewport.getCamera();
-    startScreen = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
 
     stage = new Stage(viewport);
+    stage.addListener(new InputListener() {
+      @Override
+      public boolean keyDown(InputEvent event, int keycode) {
+        if (keycode == Keys.SPACE) {
+          game.setScreen(new MapScreen(game));
+        }
+        return false;
+      }
+    });
     Gdx.input.setInputProcessor(stage);
     createMenu();
   }
@@ -57,109 +65,88 @@ public class StartScreen extends ScreenAdapter {
   private void createMenu() {
     table = new Table();
     table.setFillParent(true);
-    //table.setDebug(true);
-    final Image logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
+    logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
-        @Override
-        public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-          Gdx.app.log("#INFO", "Play button clicked");
-          game.setScreen(new MapScreen(game));
-          return false;
-        }
-      });
-    final Button leaderboardButton = new TextButton("Leaderboard", skin);
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new MapScreen(game));
+        return false;
+      }
+    });
+    leaderboardButton = new TextButton("Leaderboard", skin);
     leaderboardButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new LeaderboardScreen());
+        game.setScreen(new LeaderboardScreen(game));
         return false;
       }
     });
-    final Button settingsButton = new TextButton("Settings", skin);
+    achievementsButton = new TextButton("Achievements", skin);
+    achievementsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new AchievementsScreen(game));
+        return false;
+      }
+    });
+    settingsButton = new TextButton("Instructions", skin);
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new SettingsScreen());
+        game.setScreen(new InstructionsScreen(game));
         return false;
       }
     });
-    final Button creditsButton = new TextButton("Credits", skin);
+    creditsButton = new TextButton("Credits", skin);
     creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new CreditsScreen());
+        game.setScreen(new CreditsScreen(game));
         return false;
       }
     });
-    table.add(logo).colspan(2).padLeft(width * 0.05f);
+    logoCell = table.add(logo).colspan(3).padLeft(width * 0.05f);
     table.row();
-    table.add(playButton)
-        .width(width * 0.4f)
-        .height(height * 0.1f)
-        .pad(height * 0.02f)
-        .colspan(2)
-        .center();
+    playButtonCell = table.add(playButton).colspan(3)
+        .pad(height * 0.02f);
     table.row().height(height * 0.25f);
-    table.add(leaderboardButton)
-        .width((int) (width * 0.15))
-        .height((int) (height * 0.1))
-        .pad(0f);
-    table.add(settingsButton)
-        .width((int) (width * 0.15))
-        .height((int) (height * 0.1))
-        .pad(0f);
+    leaderboardButtonCell = table.add(leaderboardButton)
+        .pad(height * 0.02f);
+    acheivementsButtonCell = table.add(achievementsButton)
+        .pad(height * 0.02f);
+    settingsButtonCell = table.add(settingsButton)
+        .pad(height * 0.02f);
     table.row();
-    table.add(creditsButton)
-        .width((int) (width * 0.085))
-        .height((int) (height * 0.05))
-        .center()
-        .colspan(2)
-        .padTop(height * 0.02f);
+    creditsButtonCell = table.add(creditsButton).colspan(3)
+        .pad(height * 0.02f);
     stage.addActor(table);
   }
 
   @Override
   public void show() {
-    Gdx.input.setInputProcessor(new InputAdapter() {
-      @Override
-      public boolean keyDown(int keyCode) {
-        if (keyCode == Input.Keys.SPACE) {
-          game.setScreen(new MapScreen(game));
-        }
-        return true;
-      }
-    });
   }
 
   @Override
   public void render(float delta) {
-    ScreenUtils.clear(0, 0, 0.2f, 0);
-    game.spritebatch.setProjectionMatrix(camera.combined);
-
-    game.spritebatch.begin();
-    //game.spritebatch.setColor(new Color(0.0f, 0.0f, 0.0f, 0.1f));
-    float backgroundWidth = (float)viewport.getScreenWidth() / viewport.getScreenHeight()
-      * startScreen.getHeight();
-    game.spritebatch.draw(
-        startScreen,
-        0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
-        (int)(startScreen.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
-        (int)backgroundWidth, startScreen.getHeight(),
-        false, false);
-    game.spritebatch.end();
-
+    super.render(delta);
     stage.act();
     stage.draw();
-    camera.update();
   }
 
   @Override
   public void resize(int width, int height) {
+    final float guiScale = height * 0.75f;
     this.width = width;
     this.height = height;
     viewport.update(width, height, true);
     table.setSize(width, height);
+    logoCell.width(height * 0.8f).height(height * 0.25f);
+    playButtonCell.width(guiScale).height(height * 0.06f);
+    leaderboardButtonCell.width(guiScale / 3).height(height * 0.06f);
+    acheivementsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    settingsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
   }
 
   @Override

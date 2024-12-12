@@ -18,6 +18,14 @@ public enum AssetPaths {
   MAP_BACKGROUND_TOP_RIGHT("assets/UnisimMapTR.png"),
   MAP_BACKGROUND_BOTTOM_LEFT("assets/UnisimMapBL.png"),
   MAP_BACKGROUND_BOTTOM_RIGHT("assets/UnisimMapBR.png"),
+  SNOWY_MAP_BACKGROUD_TOP_LEFT("assets/UnisimMapTL_Snow_final.png"),
+  SNOWY_MAP_BACKGROUD_TOP_RIGHT("assets/UnisimMapTR_Snow_final.png"),
+  SNOWY_MAP_BACKGROUD_BOTTOM_LEFT("assets/UnisimMapBL_Snow_final.png"),
+  SNOWY_MAP_BACKGROUD_BOTTOM_RIGHT("assets/UnisimMapBR_Snow_final.png"),
+  FLOODED_MAP_BACKGROUD_TOP_LEFT("assets/UnisimMapTL_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_TOP_RIGHT("assets/UnisimMapTR_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_BOTTOM_LEFT("assets/UnisimMapBL_flood_final.png"),
+  FLOODED_MAP_BACKGROUD_BOTTOM_RIGHT("assets/UnisimMapBR_flood_final.png"),
   OBSTACLE1("assets/obstacle1.png"),
   OBSTACLE2("assets/obstacle2.png"),
   OBSTACLE3("assets/obstacle3.png"),
@@ -43,13 +51,13 @@ public enum AssetPaths {
   REC2("assets/Rec2.png"),
   TREE1("assets/tree1.png"),
   TREE2("assets/tree3.png"),
-  TREE3("assets/tree8.png"),
+  TREE3("assets/tree_8_2.png"),
   TEACH1("assets/Teach1.png"),
   TEACH2("assets/Teach2.png"),
   TEACH3("assets/TEACH_3.png"),
   TEACH4("assets/TEACH_4.png"),
   TEACH5("assets/Teach5.png"),
-  BIKE_SHED("assets/bike-storage.png"),
+  BIKE_SHED("assets/bike_shed.png"),
   STRAIGHT_ROAD("assets/road1.png"),
   STRAIGHT_ROAD2("assets/road2.png"),
   ROAD_CROSS("assets/road5.png"),
@@ -63,7 +71,11 @@ public enum AssetPaths {
   MUTE_BUTTON("assets/volume-mute-filled.png"),
   UNMUTE_BUTTON("assets/volume-up-filled.png"),
   PAUSE_BUTTON("assets/pause-filled.png"),
-  PLAY_BUTTON("assets/play-filled-alt.png");
+  PLAY_BUTTON("assets/play-filled-alt.png"),
+  LEADERBOARD_TITLE("assets/LeaderboardTitle.png"),
+  ACHIEVEMENT_NOTIFICATION("assets/AchievementNotification.png"),
+  SNOWFLAKE("assets/snowflake.png"),
+  RAINDROP("assets/raindrop.png");
 
   private final String path;
 

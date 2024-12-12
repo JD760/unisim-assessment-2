@@ -5,18 +5,18 @@ package y111studios;
  */
 public class Camera {
   @SuppressWarnings("MemberName")
-  float x;
+  public float x;
   @SuppressWarnings("MemberName")
-  float y;
+  public float y;
 
-  int width;
-  int height;
+  public int width;
+  public int height;
 
-  float vx;
-  float vy;
-  float vZoom;
+  public float vx;
+  public float vy;
+  public float vZoom;
 
-  float scale;
+  public float scale;
 
   private float time;
   // class variable in case of usage in future animations
@@ -78,11 +78,10 @@ public class Camera {
     x += width * scale / 2;
     y += height * scale / 2;
     scale *= factor;
-    if (scale < 0.5f) {
-      scale = 0.5f;
-    }
-    if (scale > 15f) {
-      scale = 15f;
+    if (scale > 5f) {
+      scale = 5f;
+    } else if (scale < 0.25f) {
+      scale = 0.25f;
     }
     x -= width * scale / 2;
     y -= height * scale / 2;

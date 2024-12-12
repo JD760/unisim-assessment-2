@@ -1,9 +1,9 @@
 package y111studios;
 
 import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,7 +30,9 @@ public class Main extends Game {
     this.setScreen(new StartScreen(this));
 
     Audio audio = Gdx.audio;
-    backgroundMusic = audio.newMusic(Gdx.files.internal("assets/retro-8bit-happy-videogame-music-243998.mp3"));
+    backgroundMusic = audio.newMusic(Gdx.files.internal(
+      "assets/retro-8bit-happy-videogame-music-243998.mp3")
+    );
     backgroundMusic.setVolume(0.3f);
     backgroundMusic.setLooping(true);
     backgroundMusic.play();
@@ -48,8 +50,8 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
-    if (width > 0 && height > 0) {
-      font.getData().setScale(height * 0.002f);
+    if (width + height > 0) {
+      font.getData().setScale(height * 0.00165f);
       super.resize(width, height);
     }
   }

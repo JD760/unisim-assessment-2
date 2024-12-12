@@ -172,17 +172,12 @@ public BuildingMenu(final Main game, Stage stage) {
 
     // Draw the menu background
     float menuHeight = viewport.getScreenHeight() * 0.15f;
-    game.spritebatch.draw(menuBackground,
-        0, 0,
-        viewport.getScreenWidth(),
-        menuHeight,
-        0,
-        0,
-        1,
-        menuBackground.getHeight(),
-        false, false);
-    game.font.draw(game.spritebatch, "Current Menu Item:\n" + setCurrentMenuItem(currentMenuItem),
-            0,menuHeight - game.font.getLineHeight());
+    game.spritebatch.draw(menuBackground, 0, 0, viewport.getScreenWidth(), menuHeight, 0, 0, 1,
+      menuBackground.getHeight(), false, false);
+    if (currentMenuItem >= 0 && currentMenuItem < 6) {
+      game.font.draw(game.spritebatch, setCurrentMenuItem(currentMenuItem),
+        menuHeight * 0.03f, menuHeight + game.font.getLineHeight());
+    }
 
     game.spritebatch.end();
   }
@@ -315,46 +310,8 @@ public BuildingMenu(final Main game, Stage stage) {
     currentMenuItem = itemNum;
     updateSelectedBuildingHighlight();
 
-    Map<MenuTab, List<Enum<?>>> menuVariants = new HashMap<>();
-
-    menuVariants.put(ACCOMMODATION, Arrays.asList(
-            AccommodationVariant.SMALL_HOUSE,
-            AccommodationVariant.MEDIUM_HOUSE,
-            AccommodationVariant.MODERN_FLAT,
-            AccommodationVariant.LUXURY_FLAT,
-            AccommodationVariant.PRIVATE_HOUSE));
-
-    menuVariants.put(CATERING, Arrays.asList(
-            CateringVariant.FAST_FOOD,
-            CateringVariant.RESTAURANT1,
-            CateringVariant.SUPERMARKET,
-            CateringVariant.RESTAURANT2,
-            CateringVariant.CORNER_SHOP));
-
-    menuVariants.put(TEACHING, Arrays.asList(
-            TeachingVariant.SMALL_CLASSROOM,
-            TeachingVariant.MEDIUM_CLASSROOM,
-            TeachingVariant.SUBJECT_HUB,
-            TeachingVariant.DEPARTMENT,
-            TeachingVariant.LAB));
-
-    menuVariants.put(RECREATION, Arrays.asList(
-            RecreationVariant.PARK,
-            RecreationVariant.GYM,
-            MiscellaneousVariant.TREE1,
-            MiscellaneousVariant.TREE2,
-            MiscellaneousVariant.TREE3));
-
-    menuVariants.put(MISCELLANEOUS, Arrays.asList(
-            MiscellaneousVariant.BIKE_SHED,
-            MiscellaneousVariant.STRAIGHT_ROAD,
-            MiscellaneousVariant.ROAD_CROSS,
-            MiscellaneousVariant.ROAD_BEND1,
-            MiscellaneousVariant.ROAD_BEND2));
-
-    List<Enum<?>> variants = menuVariants.get(currentMenuTab);
-    if (variants != null && itemNum >= 0 && itemNum < variants.size()) {
-      VariantProperties selectedVariant = (VariantProperties) variants.get(itemNum);
+    if (itemNum >= 0 && itemNum < 5) {
+      VariantProperties selectedVariant = buildingVariants.get(currentMenuTab)[currentMenuItem];
       return selectedVariant.getName();
     } else if (itemNum == 6) {
       return "item delete";

@@ -24,6 +24,7 @@ public class InstructionsScreen extends ScreenWithBackground {
   private Table table;
   private static final Skin SKIN = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
   private Cell<Actor> logoCell;
+  private Cell<Actor> backButtonCell;
   private TextButton backButton;
 
   /**
@@ -50,7 +51,7 @@ public class InstructionsScreen extends ScreenWithBackground {
     Image logo = new Image(game.getAsset(AssetPaths.INSTRUCTIONS));
     logoCell = table.add(logo);
     table.row();
-    table.add(backButton);
+    backButtonCell = table.add(backButton);
 
     stage.addActor(table);
 
@@ -70,6 +71,13 @@ public class InstructionsScreen extends ScreenWithBackground {
   @Override
   public void resize(int width, int height) {
     super.resize(width, height);
-    logoCell.width(height * 0.8f).height(height * 0.8f).pad(height * 0.05f);
+    logoCell.width(height * 0.8f).height(height * 0.8f).pad(height * 0.025f);
+    final float guiScale = height * 0.75f;
+    backButtonCell.width(guiScale / 3).height(height * 0.06f);
+    for (Cell<Actor> cell : table.getCells()) {
+      if (cell.getActor() instanceof TextButton) {
+        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+      }
+    }
   }
 }

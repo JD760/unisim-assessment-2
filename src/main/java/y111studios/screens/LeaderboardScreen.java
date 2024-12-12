@@ -30,6 +30,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
   private Label[] leaderboardRows;
   private Stage stage;
   private Table table;
+  private Cell<Actor> backButtonCell;
   public static final Skin SKIN = new Skin(
       Gdx.files.internal("assets/skins/default/uiskin.json"));
 
@@ -68,7 +69,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
 
     table.add(leaderboardTitle);
     createLeaderboard();
-    table.add(backButton);
+    backButtonCell = table.add(backButton);
     stage.addActor(table);
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -122,7 +123,8 @@ public class LeaderboardScreen extends ScreenWithBackground {
     this.width = width;
     this.height = height;
     leaderboardTitle.setSize(width * 0.5f, height * 0.1f);
-    viewport.update(width, height, true);
+    final float guiScale = height * 0.75f;
+    backButtonCell.width(guiScale / 3).height(height * 0.06f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
         ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);

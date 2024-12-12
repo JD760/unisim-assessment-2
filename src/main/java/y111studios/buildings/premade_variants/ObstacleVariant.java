@@ -1,5 +1,6 @@
 package y111studios.buildings.premade_variants;
 
+import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.position.GridPosition;
@@ -13,21 +14,24 @@ import y111studios.position.GridPosition;
  * AccommodationBuilding}.
  */
 public enum ObstacleVariant implements VariantProperties {
-  OBSTACLE1(12, 14, 11, 35, AssetPaths.OBSTACLE1),
-  OBSTACLE2(8, 12, 55, 49, AssetPaths.OBSTACLE2),
-  OBSTACLE3(7, 7, 15, 16, AssetPaths.OBSTACLE3),
-  OBSTACLE4(17, 19, 43, 12, AssetPaths.OBSTACLE4);
+  OBSTACLE1(12, 14, 11, 35, AssetPaths.OBSTACLE1, "obstacle1"),
+  OBSTACLE2(8, 12, 55, 49, AssetPaths.OBSTACLE2, "obstacle2"),
+  OBSTACLE3(7, 7, 15, 16, AssetPaths.OBSTACLE3, "obstacle3"),
+  OBSTACLE4(17, 19, 43, 12, AssetPaths.OBSTACLE4, "obstacle4");
 
   private final int width;
   private final int height;
+  @Getter
   private final GridPosition position;
   private final AssetPaths texturePath;
+  private final String name;
 
-  ObstacleVariant(int width, int height, int xPos, int yPos, AssetPaths texturePath) {
+  ObstacleVariant(int width, int height, int xPos, int yPos, AssetPaths texturePath, String name) {
     this.width = width;
     this.height = height;
     this.position = new GridPosition(xPos, yPos);
     this.texturePath = texturePath;
+    this.name = name;
   }
 
   @Override
@@ -50,7 +54,8 @@ public enum ObstacleVariant implements VariantProperties {
     return ObstacleVariant.class;
   }
 
-  public GridPosition getPosition() {
-    return position;
+  @Override
+  public String getName() {
+    return name;
   }
 }

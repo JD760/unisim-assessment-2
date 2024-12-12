@@ -1,26 +1,21 @@
 package y111studios.notification;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import y111studios.AssetPaths;
 import y111studios.Main;
+import y111studios.screens.MapScreen;
 
 /**
  * Draw a notification onto the screen to inform the user of, for example,
  * a new event or achievement earned.
  */
 public class Notification extends Table {
-  Pixmap bg;
-  TextureRegionDrawable bgDrawable;
   private int maxAge;
   private int age;
-  
+  private Main game;
 
   /**
    * Determine the style of notification to render.
@@ -40,40 +35,32 @@ public class Notification extends Table {
    * @param game - a reference to the Main class
    */
   public Notification(
-      int screenWidth, int screenHeight, NotificationType type, Main game, int maxAge) { 
+      int screenWidth, int screenHeight, 
+      NotificationType type, String title, String description,
+      Main game, int maxAge) { 
     super();
     setDebug(true);
     this.maxAge = maxAge;
-
-    bg = new Pixmap(20, 20, Pixmap.Format.RGB565);
-    bgDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(bg)));
-    bg.setColor(Color.RED);
-    bg.fill();
+    this.game = game;
     
     //TODO: Fix the notification background
     //setBackground(bgDrawable);
-    
-    add(new Label("New Achievement!", SKIN)).top().left();
-    row();
-    add(new Label("Achievement description", SKIN)).center();
-    resize(screenWidth, screenHeight);
+    Image image = new Image(game.getAsset(AssetPaths.SNOW_EVENT));
+    image.setSize(getWidth(), getHeight());
+    add(image);
   }
 
   /* Create a Notification with the default lifetime of 250 ticks */
-  public Notification(int screenWidth, int screenHeight, NotificationType type, Main game) {
-    this(screenWidth, screenHeight, type, game, 250);
+  public Notification(int screenWidth, int screenHeight,
+      NotificationType type, String title, String description, Main game) {
+    this(screenWidth, screenHeight, type, title, description, game, 250);
   }
 
   public void resize(int width, int height) {
-    setSize(width * 0.2f, height * 0.1f);
-    setPosition(width - getWidth(), height * 0.9f - getHeight());
-  }
-
-  /**
-   * Free memory resources when they are no longer needed.
-   */
-  public void dispose() {
-    bg.dispose();
+    setSize(width * 0.3f, height * 0.15f);
+    MapScreen screen = (MapScreen) game.getScreen();
+    int infoBarHeight = (int) screen.getInfoBar().getInfoBarHeight();
+    setPosition(width - getWidth(), height - getHeight() - infoBarHeight);
   }
 
   /**

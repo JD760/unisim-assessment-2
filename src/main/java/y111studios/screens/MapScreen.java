@@ -64,7 +64,9 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
-    notification = new Notification(width, height, NotificationType.EVENT, game);
+    notification = new Notification(width, height,
+      NotificationType.EVENT, "Snow is falling!", "Student satisfaction will be improved",
+      game);
   
     world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);

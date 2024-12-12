@@ -2,6 +2,8 @@ package y111studios;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
+
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -45,6 +47,7 @@ public class World {
   private @Getter Camera camera;
   private Building selectedBuilding;
   private @Getter List<Building> buildings;
+  private Stack<Integer> recentlyPlaced = new Stack<>();
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
   private @Getter MapScreen parentScreen;
@@ -107,8 +110,11 @@ public class World {
       }
     }
     buildings.add(index, building);
-    // Prevent obstacle buildings from having the 'being built' animation
-    if (variant instanceof ObstacleVariant) {
+    if (!(variant instanceof ObstacleVariant)) {
+      recentlyPlaced.add(index);
+    }
+    // Prevent obstacle & tree/road buildings from having the 'being built' animation
+    if (variant instanceof ObstacleVariant || variant instanceof MiscellaneousVariant) {
       building.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
     return true;
@@ -315,5 +321,14 @@ public class World {
 
   public Main getGame() {
     return game;
+  }
+
+  public void undoPlacement() {
+    Gdx.app.log("#INFO", "Recently Placed: " + recentlyPlaced.size());
+    if (recentlyPlaced.size() == 0) {
+      return;
+    }
+    Building removed = buildings.get((int) recentlyPlaced.pop());
+    removeObject(removed.getPosition());
   }
 }

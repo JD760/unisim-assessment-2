@@ -13,6 +13,7 @@ import y111studios.position.GridPosition;
 @Getter
 public abstract class Building extends MapObject {
   private final VariantProperties variant;
+  private @Getter GridPosition position;
 
   /**
    * Constructor for a building that starts at a position and is of a specified
@@ -29,5 +30,6 @@ public abstract class Building extends MapObject {
       ), variant.getTexturePath(), flipped
     );
     this.variant = variant;
+    this.position = position;
   }
 }

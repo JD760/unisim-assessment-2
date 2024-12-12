@@ -77,7 +77,8 @@ public enum AssetPaths {
   LEADERBOARD_TITLE("assets/LeaderboardTitle.png"),
   ACHIEVEMENT_NOTIFICATION("assets/AchievementNotification.png"),
   SNOWFLAKE("assets/snowflake.png"),
-  RAINDROP("assets/raindrop.png");
+  RAINDROP("assets/raindrop.png"),
+  SNOW_EVENT("assets/events/SnowEvent.png");
 
   private final String path;
 

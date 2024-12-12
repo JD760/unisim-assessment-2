@@ -1,5 +1,8 @@
 package y111studios;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
@@ -20,6 +23,7 @@ public class WorldInputProcessor implements InputProcessor {
   private int clickY;
   private boolean clickedOnMap = false;
   private boolean dragging = true;
+  private List<Integer> keysDown = new ArrayList<>(3);
 
   public WorldInputProcessor(World world, BuildingMenu buildingMenu) {
     this.world = world;
@@ -28,6 +32,13 @@ public class WorldInputProcessor implements InputProcessor {
 
   @Override
   public boolean keyDown(int keyCode) {
+    keysDown.add(keyCode);
+
+    if (keysDown.contains(Keys.CONTROL_LEFT) || keysDown.contains(Keys.CONTROL_RIGHT)) {
+      if (keysDown.contains(Keys.Z)) {
+        world.undoPlacement();
+      }
+    }
     GameState state = world.getGameState();
     switch (keyCode) {
       case Keys.NUM_1:
@@ -53,6 +64,9 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.TAB:
         buildingMenu.updateTab((buildingMenu.getCurrentMenuTab().toInt() + 1) % 5);
+        break;
+      case Keys.U:
+        world.undoPlacement();
         break;
       case Keys.SPACE:
         if (state.isPaused()) {
@@ -84,6 +98,7 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean keyUp(int keyCode) {
+    keysDown.remove(Integer.valueOf(keyCode));
     return false;
   }
 

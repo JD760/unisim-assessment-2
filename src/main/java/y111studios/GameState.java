@@ -15,6 +15,7 @@ import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.events.Event;
 import y111studios.events.FloodEvent;
+import y111studios.events.OpenDayEvent;
 import y111studios.events.PandemicEvent;
 import y111studios.events.ResearchBreakthroughEvent;
 import y111studios.events.SnowEvent;
@@ -213,8 +214,10 @@ public class GameState implements GameTimer, BuildingController {
 
         // Update the current event every 62 seconds
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
-          if (numTicks >= 60 * 62 * 4)
+          if (numTicks > 60 * 62 * 4)
             currentEvent = null;
+          else if (numTicks == 60 * 62 * 4)
+            currentEvent = new OpenDayEvent(this);
           else {
             int eventIndex = new Random().nextInt(unplayedEvents.size());
             int eventNum = unplayedEvents.get(eventIndex).intValue();

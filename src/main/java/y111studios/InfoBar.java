@@ -16,6 +16,7 @@ import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.events.FloodEvent;
+import y111studios.events.OpenDayEvent;
 import y111studios.events.PandemicEvent;
 import y111studios.events.ResearchBreakthroughEvent;
 import y111studios.events.SnowEvent;
@@ -182,6 +183,8 @@ public class InfoBar {
       eventString = "Event: Research Breakthrough";
     } else if (gameState.getCurrentEvent() instanceof PandemicEvent) {
       eventString = "Event: Pandemic";
+    } else if (gameState.getCurrentEvent() instanceof OpenDayEvent) {
+      eventString = "Event: Open Day";
     } else {
       eventString = "Event: None";
     }

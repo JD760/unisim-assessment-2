@@ -2,18 +2,17 @@ package y111studios;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import y111studios.position.GridPosition;
+import y111studios.screens.MapScreen;
 import y111studios.utils.UnreachableException;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
@@ -48,16 +47,18 @@ public class World {
   private @Getter List<Building> buildings;
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
+  private @Getter MapScreen parentScreen;
 
   /**
    * Sets up the camera and loads the background
    *
    * @param game Reference to game manager
    */
-  public World(final Main game, GameState gameState) {
+  public World(final Main game, GameState gameState, MapScreen parentScreen) {
     viewport = new ScreenViewport();
     this.game = game;
     this.gameState = gameState;
+    this.parentScreen = parentScreen;
     buildings = new LinkedList<>();
     camera = new Camera(2000, 1000, width, height);
     gameState.setCamera(camera);
@@ -87,7 +88,13 @@ public class World {
    * @return Whether the object was added.
    */
   public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
-    Building building = BuildingFactory.createBuilding(variant, coords, flipped);
+    Building building;
+    if (variant == MiscellaneousVariant.ROAD_BEND2 && flipped) {
+      building = BuildingFactory.createBuilding(MiscellaneousVariant.ROAD_BEND2_FLIPPED, coords,
+       flipped);
+    } else {
+      building = BuildingFactory.createBuilding(variant, coords, flipped);
+    }
     if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
       return false;
     }
@@ -185,7 +192,7 @@ public class World {
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
-    game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
+    //game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
@@ -304,5 +311,9 @@ public class World {
     if (building != null) {
       selectedBuilding.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
+  }
+
+  public Main getGame() {
+    return game;
   }
 }

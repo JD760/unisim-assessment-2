@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 // java imports
 import java.time.Duration;
 import java.util.Map;
+import lombok.Getter;
 // project imports
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
 import y111studios.buildings.BuildingType;
 import y111studios.events.FloodEvent;
+import y111studios.events.OpenDayEvent;
 import y111studios.events.PandemicEvent;
 import y111studios.events.ResearchBreakthroughEvent;
 import y111studios.events.SnowEvent;
@@ -41,7 +43,7 @@ public class InfoBar {
   private Cell muteButtonCell;
   @SuppressWarnings("rawtypes")
   private Cell pauseButtonCell;
-  private float infoBarHeight;
+  private @Getter float infoBarHeight;
 
   /**
    * The InfoBar handles rendering of game information such as BuildingCounter,
@@ -106,6 +108,9 @@ public class InfoBar {
     stage.addActor(table);
   }
 
+  /**
+   * Called every tick, draws the UI components.
+   */
   @SuppressWarnings("unchecked")
   public void render() {
     game.spritebatch.begin();
@@ -128,8 +133,8 @@ public class InfoBar {
 
     // Render buildingCount onto InfoBar
     int buildingCount = gameState.getCount();
-    String buildingString = String.format("Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
-    GlyphLayout buildingLayout = new GlyphLayout(game.font, buildingString);
+    String buildingString = String.format(
+        "Count: %d / %d", buildingCount, BuildingManager.MAX_BUILDINGS - 4);
 
     game.font.draw(game.spritebatch, buildingString,
         screenHeight * 0.01f, screenHeight * 0.99f);
@@ -151,7 +156,8 @@ public class InfoBar {
 
     // Render the time remaining at the top centre of the infoBar
     Duration timeRemaining = gameState.timeRemaining();
-    String timeString = String.format("%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
+    String timeString = String.format(
+        "%02d:%02d", timeRemaining.toMinutesPart(), timeRemaining.toSecondsPart());
     GlyphLayout timeStringLayout = new GlyphLayout(game.font, timeString);
     float textWidth = timeStringLayout.width;
     float textHeight = timeStringLayout.height;
@@ -182,6 +188,8 @@ public class InfoBar {
       eventString = "Event: Research Breakthrough";
     } else if (gameState.getCurrentEvent() instanceof PandemicEvent) {
       eventString = "Event: Pandemic";
+    } else if (gameState.getCurrentEvent() instanceof OpenDayEvent) {
+      eventString = "Event: Open Day";
     } else {
       eventString = "Event: None";
     }
@@ -196,6 +204,12 @@ public class InfoBar {
     game.spritebatch.end();
   }
 
+  /**
+   * Called whenever the window size changes.
+   *
+   * @param width - the new width of the window
+   * @param height - the new height of the window
+   */
   public void resize(int width, int height) {
     infoBarHeight = height * 0.08f;
     table.setBounds(0, height - infoBarHeight, width, infoBarHeight);

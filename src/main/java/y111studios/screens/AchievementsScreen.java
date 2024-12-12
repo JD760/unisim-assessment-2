@@ -1,10 +1,10 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.Main;
 
 /**
@@ -18,7 +18,7 @@ public class AchievementsScreen extends ScreenWithBackground {
   Table completeTable = new Table(SKIN);
   Table incompleteTable = new Table(SKIN);
   private static final Skin SKIN = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
-  
+
   /**
    * Create a new Achievements screen, displaying the complete and incomplete achievements.
    *
@@ -26,33 +26,36 @@ public class AchievementsScreen extends ScreenWithBackground {
    */
   public AchievementsScreen(Main game) {
     super(game);
-    
+
     stage = new Stage(viewport);
     table = new Table(SKIN);
     table.setDebug(true);
     table.setFillParent(true);
-
-    TextButton backButton = ScreenWithBackground.backButton(table, SKIN, game);
     completeTable.setFillParent(true);
     incompleteTable.setFillParent(true);
 
     table.add(completeTable);
     table.add(incompleteTable);
     table.row();
-    table.add(backButton);
+    table.add(ScreenWithBackground.backButton(SKIN, game));
     stage.addActor(table);
+
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
-    Gdx.input.setInputProcessor(stage);
     stage.draw();
     stage.act();
   }
 
   @Override
   public void resize(int width, int height) {
+    super.resize(width, height);
     this.width = width;
     this.height = height;
 

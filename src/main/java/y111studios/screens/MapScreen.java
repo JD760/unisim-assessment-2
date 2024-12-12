@@ -11,15 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.BuildingMenu;
 import y111studios.GameState;
 import y111studios.InfoBar;
 import y111studios.Main;
-import y111studios.UniversalInputProcessor;
 import y111studios.World;
 import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.notification.Notification;
 import y111studios.notification.Notification.NotificationType;
@@ -38,16 +39,16 @@ public class MapScreen extends ScreenAdapter {
   public static final int TILE_HEIGHT = 76;
 
   final Main game;
-  private final InfoBar infoBar;
+  private final @Getter InfoBar infoBar;
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
   boolean[] showDebugInfo = { false };
   World world;
   Notification notification;
+  public boolean notificationShown = false;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
-  UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
   Stage stage = new Stage(new ScreenViewport());
 
   /**
@@ -64,13 +65,14 @@ public class MapScreen extends ScreenAdapter {
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
 
     notification = new Notification(width, height, NotificationType.EVENT, game);
-
-    world = new World(game, gameState);
+  
+    world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
+    
 
     inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(universalInputProcessor);
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
 
@@ -79,7 +81,13 @@ public class MapScreen extends ScreenAdapter {
       public boolean keyDown(InputEvent e, int keycode) {
         switch (keycode) {
           case Keys.N:
-            stage.addActor(notification);
+            if (!notificationShown) {
+              stage.addActor(notification);
+            } else {
+              notification.remove();
+            }
+            notificationShown = !notificationShown;
+            notification.resetAge();
             break;
           default:
             break;
@@ -100,13 +108,25 @@ public class MapScreen extends ScreenAdapter {
     if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
       VariantProperties variant = buildingMenu.getBuildingVariants().get(
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-      world.setSelectedBuilding(BuildingFactory.createBuilding(
-          variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      if (variant == MiscellaneousVariant.ROAD_BEND2 && buildingMenu.isFlipped()) {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+          MiscellaneousVariant.ROAD_BEND2_FLIPPED, world.currentGridPosition(),
+          buildingMenu.isFlipped()));
+      } else {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+            variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      }
     } else {
       world.setSelectedBuilding(null);
     }
 
     gameState.tick();
+    if (notificationShown) {
+      if (!notification.tick()) {
+        notification.remove();
+        notificationShown = false;
+      }
+    }
 
     world.render(delta);
     buildingMenu.render();
@@ -123,8 +143,7 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    notification.setScreenSize(width, height);
-    universalInputProcessor.resize(width, height);
+    notification.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);

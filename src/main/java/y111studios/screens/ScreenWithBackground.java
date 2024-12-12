@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
@@ -46,7 +45,19 @@ public abstract class ScreenWithBackground extends ScreenAdapter {
     game.spritebatch.end();
   }
 
-  public static TextButton backButton(Table table, Skin skin, Main game) {
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height, true);
+  }
+
+  /**
+   * Create a back button that returns to the start screen.
+   *
+   * @param skin - the skin to apply to the button
+   * @param game - a reference to the Main class
+   * @return - the created TextButton
+   */
+  public static TextButton backButton(Skin skin, Main game) {
     TextButton backButton = new TextButton("Return to Menu", skin);
     backButton.addListener(new InputListener() {
       @Override

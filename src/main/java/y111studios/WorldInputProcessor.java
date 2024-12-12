@@ -1,14 +1,16 @@
 package y111studios;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
-
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
+import y111studios.screens.InstructionsScreen;
 import y111studios.screens.StartScreen;
 
+/**
+ * Handles input events related to the world, such as building placement.
+ */
 public class WorldInputProcessor implements InputProcessor {
   private final World world;
   private final BuildingMenu buildingMenu;
@@ -24,6 +26,7 @@ public class WorldInputProcessor implements InputProcessor {
     this.buildingMenu = buildingMenu;
   }
 
+  @Override
   public boolean keyDown(int keyCode) {
     GameState state = world.getGameState();
     switch (keyCode) {
@@ -48,6 +51,9 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.D:
         buildingMenu.setCurrentMenuItem(setItem(6));
         break;
+      case Keys.TAB:
+        buildingMenu.updateTab((buildingMenu.getCurrentMenuTab().toInt() + 1) % 5);
+        break;
       case Keys.SPACE:
         if (state.isPaused()) {
           state.resume();
@@ -57,6 +63,11 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.ESCAPE:
         world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));
+        break;
+      case Keys.I:
+        InstructionsScreen instructionsScreen = new InstructionsScreen(
+            world.getGame(), world.getGame().getScreen());
+        world.getGame().setScreen(instructionsScreen);
         break;
       default:
         break;
@@ -80,7 +91,16 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
+  @Override
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    if (world.getViewport().getWorldHeight() - screenY < buildingMenu.getScreenHeight()) {
+      return false;
+    }
+    float infoBarHeight = world.getParentScreen().getInfoBar().getInfoBarHeight();
+    if (screenY < infoBarHeight) {
+      return false;
+    }
+
     clickX = cursorX = screenX;
     clickY = cursorY = screenY;
     clickedOnMap = true;
@@ -88,6 +108,7 @@ public class WorldInputProcessor implements InputProcessor {
     return true;
   }
 
+  @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     clickedOnMap = false;
     if (!dragging) {
@@ -98,7 +119,7 @@ public class WorldInputProcessor implements InputProcessor {
           world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight());
       if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
         VariantProperties variant = buildingMenu.getBuildingVariants().get(
-          buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
+            buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
         if (world.addObject(
             variant,
             world.pixelToTile(
@@ -120,6 +141,7 @@ public class WorldInputProcessor implements InputProcessor {
           world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),
               (int) (screenPos.y * world.getCamera().scale)));
         } catch (IllegalStateException ignored) {
+          
         }
       }
     }
@@ -127,6 +149,7 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
+  @Override
   public boolean touchDragged(int x, int y, int pointer) {
     world.setCursorScreenPos(world.getViewport().getCamera().unproject(
         new Vector3(x, y, 0),
@@ -149,6 +172,7 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
+  @Override
   public boolean mouseMoved(int x, int y) {
     world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
     world.setCursorScreenPos(world.getViewport().getCamera().unproject(

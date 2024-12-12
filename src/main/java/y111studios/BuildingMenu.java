@@ -14,9 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import y111studios.buildings.premade_variants.AccommodationVariant;
@@ -81,8 +79,8 @@ public BuildingMenu(final Main game, Stage stage) {
         game.getAsset(AssetPaths.TRASH),
         game.getAsset(AssetPaths.BIKE_SHED), game.getAsset(AssetPaths.STRAIGHT_ROAD),
         game.getAsset(AssetPaths.ROAD_CROSS), game.getAsset(AssetPaths.ROAD_BEND1),
-        game.getAsset(AssetPaths.ROAD_BEND2), game.getAsset(AssetPaths.ROTATE),
-        game.getAsset(AssetPaths.TRASH)
+        game.getAsset(AssetPaths.ROAD_BEND2),
+        game.getAsset(AssetPaths.ROTATE), game.getAsset(AssetPaths.TRASH)
     };
     buildingVariants = new HashMap<>();
     buildingVariants.put(ACCOMMODATION, AccommodationVariant.values());
@@ -201,7 +199,7 @@ public BuildingMenu(final Main game, Stage stage) {
    * Updates the images in both tables depending on the selected tab.
    */
   @SuppressWarnings("unchecked")
-  private void updateTab(int tabNumber) {
+  public void updateTab(int tabNumber) {
     // Update currentMenuTab
     switch (tabNumber) {
       case 0:
@@ -318,6 +316,10 @@ public BuildingMenu(final Main game, Stage stage) {
     } else{
       return "None selected";
     }
+  }
+
+  public int getScreenHeight() {
+    return (int) (viewport.getScreenHeight() * 0.15f);
   }
 
   @SuppressWarnings("unchecked")

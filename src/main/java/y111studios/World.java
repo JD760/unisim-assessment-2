@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import y111studios.position.GridPosition;
+import y111studios.screens.MapScreen;
 import y111studios.utils.UnreachableException;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
@@ -46,16 +47,18 @@ public class World {
   private @Getter List<Building> buildings;
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
+  private @Getter MapScreen parentScreen;
 
   /**
    * Sets up the camera and loads the background
    *
    * @param game Reference to game manager
    */
-  public World(final Main game, GameState gameState) {
+  public World(final Main game, GameState gameState, MapScreen parentScreen) {
     viewport = new ScreenViewport();
     this.game = game;
     this.gameState = gameState;
+    this.parentScreen = parentScreen;
     buildings = new LinkedList<>();
     camera = new Camera(2000, 1000, width, height);
     gameState.setCamera(camera);

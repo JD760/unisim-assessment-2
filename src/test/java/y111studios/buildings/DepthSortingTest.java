@@ -14,7 +14,7 @@ public class DepthSortingTest {
   public void insertingBehind() {
     GameState gameState = new GameState(75, 75, new Main());
     gameState.resume();
-    World world = new World(null, gameState);
+    World world = new World(null, gameState, null);
 
     world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3), false);
     world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(6, 5), false);
@@ -27,7 +27,7 @@ public class DepthSortingTest {
   public void insertingInFront() {
     GameState gameState = new GameState(75, 75, new Main());
     gameState.resume();
-    World world = new World(null, gameState);
+    World world = new World(null, gameState, null);
 
     world.addObject(TeachingVariant.SUBJECT_HUB, new GridPosition(3, 3), false);
     world.addObject(TeachingVariant.SMALL_CLASSROOM, new GridPosition(5, 6), false);

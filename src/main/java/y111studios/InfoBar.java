@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 // java imports
 import java.time.Duration;
 import java.util.Map;
+import lombok.Getter;
 // project imports
 import y111studios.buildings.BuildingCounter;
 import y111studios.buildings.BuildingManager;
@@ -39,7 +40,7 @@ public class InfoBar {
   private Cell muteButtonCell;
   @SuppressWarnings("rawtypes")
   private Cell pauseButtonCell;
-  private float infoBarHeight;
+  private @Getter float infoBarHeight;
 
   /**
    * The InfoBar handles rendering of game information such as BuildingCounter,

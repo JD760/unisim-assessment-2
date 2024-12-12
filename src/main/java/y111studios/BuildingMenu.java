@@ -305,6 +305,10 @@ public BuildingMenu(final Main game, Stage stage) {
     updateSelectedBuildingHighlight();
   }
 
+  public int getScreenHeight() {
+    return (int) (viewport.getScreenHeight() * 0.15f);
+  }
+
   @SuppressWarnings("unchecked")
   private void updateBuildingRotations() {
     for (Cell<Actor> cell : buildingTable.getCells()) {

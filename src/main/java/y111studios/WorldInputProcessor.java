@@ -93,6 +93,14 @@ public class WorldInputProcessor implements InputProcessor {
 
   @Override
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    if (world.getViewport().getWorldHeight() - screenY < buildingMenu.getScreenHeight()) {
+      return false;
+    }
+    float infoBarHeight = world.getParentScreen().getInfoBar().getInfoBarHeight();
+    if (screenY < infoBarHeight) {
+      return false;
+    }
+
     clickX = cursorX = screenX;
     clickY = cursorY = screenY;
     clickedOnMap = true;

@@ -18,6 +18,9 @@ import y111studios.Main;
 public class Notification extends Table {
   Pixmap bg;
   TextureRegionDrawable bgDrawable;
+  private static final int MAX_AGE = 100;
+  private int age;
+  
 
   /**
    * Determine the style of notification to render.
@@ -28,7 +31,6 @@ public class Notification extends Table {
 
   public static final Skin SKIN = new Skin(
       Gdx.files.internal("assets/skins/default/uiskin.json"));
-
   /**
    * Create a new notification displayed on the game screen.
 
@@ -63,6 +65,20 @@ public class Notification extends Table {
    */
   public void dispose() {
     bg.dispose();
+  }
+
+  /**
+   * Advance the age of the notification.
+   *
+   * @return - true if the notification should still exist, false if it should be destroyed
+   */
+  public boolean tick() {
+    age++;
+
+    if (age >= MAX_AGE) {
+      return false;
+    }
+    return true;
   }
   
 }

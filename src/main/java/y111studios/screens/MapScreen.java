@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.BuildingMenu;
 import y111studios.GameState;
@@ -38,14 +40,14 @@ public class MapScreen extends ScreenAdapter {
   public static final int TILE_HEIGHT = 76;
 
   final Main game;
-  private final InfoBar infoBar;
+  private final @Getter InfoBar infoBar;
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
   boolean[] showDebugInfo = { false };
   World world;
   Notification notification;
-  boolean notificationShown = false;
+  public boolean notificationShown = false;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
   UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
@@ -66,7 +68,7 @@ public class MapScreen extends ScreenAdapter {
 
     notification = new Notification(width, height, NotificationType.EVENT, game);
   
-    world = new World(game, gameState);
+    world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
     
@@ -114,6 +116,10 @@ public class MapScreen extends ScreenAdapter {
     }
 
     gameState.tick();
+    if (!notification.tick()) {
+      notificationShown = false;
+      notification.remove();
+    }
 
     world.render(delta);
     buildingMenu.render();

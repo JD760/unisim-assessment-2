@@ -2,6 +2,7 @@ package y111studios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,6 +39,7 @@ public class BuildingMenu {
   private @Getter Map<MenuTab, VariantProperties[]> buildingVariants;
   private @Getter Viewport viewport;
   private @Getter boolean flipped;
+  private GlyphLayout buildingNameLayout;
   private final Table buildingTable;
   private final Table hotkeyTable;
   private final Table tabTable;
@@ -173,8 +175,11 @@ public BuildingMenu(final Main game, Stage stage) {
     game.spritebatch.draw(menuBackground, 0, 0, viewport.getScreenWidth(), menuHeight, 0, 0, 1,
       menuBackground.getHeight(), false, false);
     if (currentMenuItem >= 0 && currentMenuItem < 6) {
-      game.font.draw(game.spritebatch, setCurrentMenuItem(currentMenuItem),
-        menuHeight * 0.03f, menuHeight + game.font.getLineHeight());
+      buildingNameLayout = new GlyphLayout(game.font, setCurrentMenuItem(currentMenuItem));
+      game.font.draw(game.spritebatch, buildingNameLayout,
+          viewport.getScreenWidth() * 0.5f - buildingNameLayout.width * 0.5f,
+          menuHeight + game.font.getLineHeight()
+      );
     }
 
     game.spritebatch.end();

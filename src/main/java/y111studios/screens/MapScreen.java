@@ -20,6 +20,7 @@ import y111studios.Main;
 import y111studios.World;
 import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.notification.Notification;
 import y111studios.notification.Notification.NotificationType;
@@ -107,8 +108,14 @@ public class MapScreen extends ScreenAdapter {
     if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
       VariantProperties variant = buildingMenu.getBuildingVariants().get(
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-      world.setSelectedBuilding(BuildingFactory.createBuilding(
-          variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      if (variant == MiscellaneousVariant.ROAD_BEND2 && buildingMenu.isFlipped()) {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+          MiscellaneousVariant.ROAD_BEND2_FLIPPED, world.currentGridPosition(),
+          buildingMenu.isFlipped()));
+      } else {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+            variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      }
     } else {
       world.setSelectedBuilding(null);
     }

@@ -19,7 +19,8 @@ public enum MiscellaneousVariant implements VariantProperties {
   STRAIGHT_ROAD(2, 2, AssetPaths.STRAIGHT_ROAD, "Straight Road"),
   ROAD_CROSS(2, 2, AssetPaths.ROAD_CROSS, "Cross Road"),
   ROAD_BEND1(2, 2, AssetPaths.ROAD_BEND1, "Road Bend 1"),
-  ROAD_BEND2(2, 2, AssetPaths.ROAD_BEND2, "Road Bend 2");
+  ROAD_BEND2(2, 2, AssetPaths.ROAD_BEND2, "Road Bend 2"),
+  ROAD_BEND2_FLIPPED(2, 2, AssetPaths.ROAD_BEND2_FLIPPED, "Road Bend 2");
 
   private final int width;
   private final int height;

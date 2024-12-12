@@ -88,7 +88,13 @@ public class World {
    * @return Whether the object was added.
    */
   public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
-    Building building = BuildingFactory.createBuilding(variant, coords, flipped);
+    Building building;
+    if (variant == MiscellaneousVariant.ROAD_BEND2 && flipped) {
+      building = BuildingFactory.createBuilding(MiscellaneousVariant.ROAD_BEND2_FLIPPED, coords,
+       flipped);
+    } else {
+      building = BuildingFactory.createBuilding(variant, coords, flipped);
+    }
     if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
       return false;
     }
@@ -186,7 +192,7 @@ public class World {
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
-    game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
+    //game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,

@@ -62,6 +62,7 @@ public enum AssetPaths {
   STRAIGHT_ROAD2("assets/road2.png"),
   ROAD_CROSS("assets/road5.png"),
   ROAD_BEND1("assets/road4.png"),
+  ROAD_BEND2_FLIPPED("assets/road6.png"),
   ROAD_BEND2("assets/road7.png"),
   GAME_OVER("assets/GameOver.png"),
   TRASH("assets/Trash.png"),

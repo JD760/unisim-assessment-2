@@ -1,11 +1,14 @@
 package y111studios.events;
 
+import y111studios.AssetPaths;
 import y111studios.GameState;
+import y111studios.Main;
 
-public class PandemicEvent implements Event {
+public class PandemicEvent extends Event {
   private GameState gameState;
 
-  public PandemicEvent(GameState gameState) {
+  public PandemicEvent(Main game, GameState gameState) {
+    super(game, AssetPaths.PANDEMIC_EVENT);
     this.gameState = gameState;
   }
 

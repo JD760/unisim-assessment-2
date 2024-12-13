@@ -94,7 +94,7 @@ public class World {
     Building building;
     if (variant == MiscellaneousVariant.ROAD_BEND2 && flipped) {
       building = BuildingFactory.createBuilding(MiscellaneousVariant.ROAD_BEND2_FLIPPED, coords,
-       flipped);
+          flipped);
     } else {
       building = BuildingFactory.createBuilding(variant, coords, flipped);
     }
@@ -113,7 +113,8 @@ public class World {
     if (!(variant instanceof ObstacleVariant)) {
       recentlyPlaced.add(index);
     }
-    // Prevent obstacle & tree/road buildings from having the 'being built' animation
+    // Prevent obstacle & tree/road buildings from having the 'being built'
+    // animation
     if (variant instanceof ObstacleVariant || variant instanceof MiscellaneousVariant) {
       building.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
@@ -198,7 +199,8 @@ public class World {
     Texture texture = game.getAsset(building.getTexturePath());
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
-    //game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height - Gdx.input.getY());
+    // game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height -
+    // Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
@@ -239,9 +241,8 @@ public class World {
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
       game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
+          1f, 1f, 1f,
+          (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
       game.spritebatch.draw(snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
@@ -255,9 +256,8 @@ public class World {
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
       game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
+          1f, 1f, 1f,
+          (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
       game.spritebatch.draw(floodedMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(floodedMap[1], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,

@@ -23,16 +23,15 @@ import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.notification.Notification;
-import y111studios.notification.Notification.NotificationType;
 
 /**
  * A class to interact with LibGDX to render the game window.
  */
 public class MapScreen extends ScreenAdapter {
   // Proportional width of the display.
-  static int width = 640;
+  private @Getter int width = 640;
   // Proportional height of the display.
-  static int height = 480;
+  private @Getter int height = 480;
   // Width of map in tiles.
   public static final int TILE_WIDTH = 76;
   // Height of map in tiles.
@@ -63,15 +62,12 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().position.set(width / 2f, height / 2f, 0);
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
-
-    notification = new Notification(width, height,
-      NotificationType.EVENT, "Snow is falling!", "Student satisfaction will be improved",
-      game);
   
     world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
     
+    notification = new Notification(width, height, AssetPaths.PANDEMIC_EVENT, game);
 
     inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(game.universalInputProcessor);
@@ -84,12 +80,10 @@ public class MapScreen extends ScreenAdapter {
         switch (keycode) {
           case Keys.N:
             if (!notificationShown) {
-              stage.addActor(notification);
+              setNotification(notification);
             } else {
-              notification.remove();
+              removeNotification();
             }
-            notificationShown = !notificationShown;
-            notification.resetAge();
             break;
           default:
             break;
@@ -112,8 +106,8 @@ public class MapScreen extends ScreenAdapter {
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
       if (variant == MiscellaneousVariant.ROAD_BEND2 && buildingMenu.isFlipped()) {
         world.setSelectedBuilding(BuildingFactory.createBuilding(
-          MiscellaneousVariant.ROAD_BEND2_FLIPPED, world.currentGridPosition(),
-          buildingMenu.isFlipped()));
+            MiscellaneousVariant.ROAD_BEND2_FLIPPED, world.currentGridPosition(),
+            buildingMenu.isFlipped()));
       } else {
         world.setSelectedBuilding(BuildingFactory.createBuilding(
             variant, world.currentGridPosition(), buildingMenu.isFlipped()));
@@ -125,8 +119,7 @@ public class MapScreen extends ScreenAdapter {
     gameState.tick();
     if (notificationShown) {
       if (!notification.tick()) {
-        notification.remove();
-        notificationShown = false;
+        removeNotification();
       }
     }
 
@@ -158,5 +151,28 @@ public class MapScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     game.dispose();
+  }
+
+  /**
+   * Set the notification to be rendered on the screen.
+   *
+   * @param notification - the notification to render
+   */
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+    notificationShown = true;
+    stage.addActor(notification);
+  }
+
+  /**
+   * Clear the notification currently displayed.
+   */
+  public void removeNotification() {
+    if (notification.getParent() == null) {
+      return;
+    }
+    notification.remove();
+    notificationShown = false;
+    notification.resetAge();
   }
 }

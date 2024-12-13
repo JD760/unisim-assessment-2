@@ -1,11 +1,14 @@
 package y111studios.events;
 
+import y111studios.AssetPaths;
 import y111studios.GameState;
+import y111studios.Main;
 
-public class ResearchBreakthroughEvent implements Event {
+public class ResearchBreakthroughEvent extends Event {
   private GameState gameState;
 
-  public ResearchBreakthroughEvent(GameState gameState) {
+  public ResearchBreakthroughEvent(Main game, GameState gameState) {
+    super(game, AssetPaths.SNOW_EVENT);
     this.gameState = gameState;
   }
 

@@ -1,5 +1,6 @@
 package y111studios;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -74,8 +75,9 @@ public class GameState implements GameTimer, BuildingController {
     collisionDetection = new CollisionDetection(width, height, staticObjects);
     studentSatisfaction = new StudentSatisfaction(buildingManager, staticObjects);
     unplayedEvents = new ArrayList<>();
-    for (int i = 0; i < NUM_EVENT_TYPES; i++)
+    for (int i = 0; i < NUM_EVENT_TYPES; i++) {
       unplayedEvents.add(i);
+    }
     currentEvent = null;
   }
 
@@ -214,11 +216,11 @@ public class GameState implements GameTimer, BuildingController {
 
         // Update the current event every 62 seconds
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
-          if (numTicks > 60 * 62 * 4)
+          if (numTicks > 60 * 62 * 4) {
             currentEvent = null;
-          else if (numTicks == 60 * 62 * 4)
-            currentEvent = new OpenDayEvent(this);
-          else {
+          } else if (numTicks == 60 * 62 * 4) {
+            currentEvent = new OpenDayEvent(game, this);
+          } else {
             int eventIndex = new Random().nextInt(unplayedEvents.size());
             int eventNum = unplayedEvents.get(eventIndex).intValue();
             unplayedEvents.remove(eventIndex);
@@ -230,14 +232,18 @@ public class GameState implements GameTimer, BuildingController {
                 currentEvent = new SnowEvent(game, this, camera);
                 break;
               case 2:
-                currentEvent = new ResearchBreakthroughEvent(this);
+                currentEvent = new ResearchBreakthroughEvent(game, this);
                 break;
               case 3:
-                currentEvent = new PandemicEvent(this);
+                currentEvent = new PandemicEvent(game, this);
+                break;
+              default:
                 break;
             }
           }
+          Gdx.app.log("#INFO", "Event started: " + currentEvent.getClass().toString());
           studentSatisfaction.setCurrentEvent(currentEvent);
+          currentEvent.setNotification();
         }
 
         numTicks++;

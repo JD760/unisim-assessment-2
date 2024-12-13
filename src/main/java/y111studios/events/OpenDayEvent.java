@@ -1,11 +1,14 @@
 package y111studios.events;
 
+import y111studios.AssetPaths;
 import y111studios.GameState;
+import y111studios.Main;
 
-public class OpenDayEvent implements Event {
+public class OpenDayEvent extends Event {
   private GameState gameState;
 
-  public OpenDayEvent(GameState gameState) {
+  public OpenDayEvent(Main game, GameState gameState) {
+    super(game, AssetPaths.OPEN_DAY_EVENT);
     this.gameState = gameState;
   }
 

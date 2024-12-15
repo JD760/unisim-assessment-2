@@ -1,6 +1,7 @@
 package y111studios.buildings.premade_variants;
 
 import y111studios.AssetPaths;
+import y111studios.position.GridPosition;
 
 /**
  * An enum representing the different predefined variants a
@@ -24,11 +25,20 @@ public enum MiscellaneousVariant implements VariantProperties {
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
+  private final AssetPaths texturePathSnow;
 
   MiscellaneousVariant(int width, int height, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
+    this.texturePathSnow = texturePath;
+  }
+
+  MiscellaneousVariant(int width, int height, int xPos, int yPos, AssetPaths texturePath, AssetPaths texturePathSnow) {
+    this.width = width;
+    this.height = height;
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
   }
 
   @Override
@@ -44,6 +54,10 @@ public enum MiscellaneousVariant implements VariantProperties {
   @Override
   public AssetPaths getTexturePath() {
     return texturePath;
+  }
+
+  public AssetPaths getTexturePathSnow() {
+    return texturePathSnow;
   }
 
   @Override

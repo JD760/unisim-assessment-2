@@ -13,21 +13,30 @@ import y111studios.position.GridPosition;
  * AccommodationBuilding}.
  */
 public enum ObstacleVariant implements VariantProperties {
-  OBSTACLE1(12, 14, 11, 35, AssetPaths.OBSTACLE1),
-  OBSTACLE2(8, 12, 55, 49, AssetPaths.OBSTACLE2),
-  OBSTACLE3(7, 7, 15, 16, AssetPaths.OBSTACLE3),
-  OBSTACLE4(17, 19, 43, 12, AssetPaths.OBSTACLE4);
+  OBSTACLE1(12, 14, 11, 35, AssetPaths.OBSTACLE1 ,AssetPaths.OBSTACLE1SNOW),
+  OBSTACLE2(8, 12, 55, 49, AssetPaths.OBSTACLE2 ,AssetPaths.OBSTACLE2SNOW),
+  OBSTACLE3(7, 7, 15, 16, AssetPaths.OBSTACLE3 ,AssetPaths.OBSTACLE3SNOW),
+  OBSTACLE4(17, 19, 43, 12, AssetPaths.OBSTACLE4 ,AssetPaths.OBSTACLE4SNOW );
 
   private final int width;
   private final int height;
   private final GridPosition position;
   private final AssetPaths texturePath;
+  private final AssetPaths texturePathSnow;
 
   ObstacleVariant(int width, int height, int xPos, int yPos, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.position = new GridPosition(xPos, yPos);
     this.texturePath = texturePath;
+    this.texturePathSnow =texturePath;
+  }
+  ObstacleVariant(int width, int height, int xPos, int yPos, AssetPaths texturePath, AssetPaths texturePathSnow) {
+    this.width = width;
+    this.height = height;
+    this.position = new GridPosition(xPos, yPos);
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
   }
 
   @Override
@@ -43,6 +52,10 @@ public enum ObstacleVariant implements VariantProperties {
   @Override
   public AssetPaths getTexturePath() {
     return texturePath;
+  }
+
+  public AssetPaths getTexturePathSnow() {
+    return texturePathSnow;
   }
 
   @Override

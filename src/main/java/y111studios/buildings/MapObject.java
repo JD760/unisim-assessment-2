@@ -15,6 +15,7 @@ public abstract class MapObject {
 
   protected @Getter GridArea area;
   protected @Getter AssetPaths texturePath;
+  protected @Getter AssetPaths texturePathSnow;
   protected @Setter @Getter int age;  // The number of game ticks since the object was placed
   protected boolean flipped;
   public static final int BUILDING_TIME = 1800;
@@ -26,7 +27,7 @@ public abstract class MapObject {
    *
    * @throws IllegalArgumentException if the area or texture are null
    */
-  protected MapObject(GridArea area, AssetPaths texturePath, boolean flipped) {
+  protected MapObject(GridArea area, AssetPaths texturePath, AssetPaths texturePathSnow, boolean flipped) {
     if (area == null) {
       throw new IllegalArgumentException("GridArea must not be null");
     }
@@ -35,6 +36,7 @@ public abstract class MapObject {
     }
     this.area = area;
     this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
     this.flipped = flipped;
     this.age = 0;
   }

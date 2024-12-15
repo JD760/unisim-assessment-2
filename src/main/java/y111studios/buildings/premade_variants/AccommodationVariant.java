@@ -12,7 +12,7 @@ import y111studios.buildings.AccommodationBuilding;
  * AccommodationBuilding}.
  */
 public enum AccommodationVariant implements VariantProperties {
-  SMALL_HOUSE(5, 5, AssetPaths.ACC1),
+  SMALL_HOUSE(5, 5, AssetPaths.ACC1 ,AssetPaths.ACC1SNOW),
   MEDIUM_HOUSE(3, 3, AssetPaths.ACC2),
   MODERN_FLAT(2, 2, AssetPaths.ACC3),
   LUXURY_FLAT(3, 3, AssetPaths.ACC4),
@@ -21,11 +21,19 @@ public enum AccommodationVariant implements VariantProperties {
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
+  private final AssetPaths texturePathSnow;
 
   AccommodationVariant(int width, int height, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
+    this.texturePathSnow = texturePath;
+  }
+  AccommodationVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow) {
+    this.width = width;
+    this.height = height;
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
   }
 
   @Override
@@ -41,6 +49,9 @@ public enum AccommodationVariant implements VariantProperties {
   @Override
   public AssetPaths getTexturePath() {
     return texturePath;
+  }
+  public AssetPaths getTexturePathSnow() {
+    return texturePathSnow;
   }
 
   @Override

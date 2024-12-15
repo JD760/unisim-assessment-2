@@ -184,7 +184,9 @@ public class World {
         ));
       }
     }
-    Texture texture = game.getAsset(building.getTexturePath());
+    Texture texture;
+    texture = game.getAsset(building.getTexturePath());
+  
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
@@ -193,6 +195,20 @@ public class World {
         2f * texture.getHeight() / camera.scale,
         0, 0, texture.getWidth(), texture.getHeight(),
         building.getFlipped(), false);
+    if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      game.spritebatch.setColor(new Color(
+        1f, 1f, 1f,
+        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
+      ));
+      texture = game.getAsset(building.getTexturePathSnow());
+      game.spritebatch.draw(texture,
+        pixelCoords[0] / camera.scale,
+        (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+        2f * texture.getWidth() / camera.scale,
+        2f * texture.getHeight() / camera.scale,
+        0, 0, texture.getWidth(), texture.getHeight(),
+        building.getFlipped(), false);
+    }
     game.spritebatch.setColor(NORMAL);
   }
 

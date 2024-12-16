@@ -13,10 +13,10 @@ import y111studios.buildings.AccommodationBuilding;
  */
 public enum AccommodationVariant implements VariantProperties {
   SMALL_HOUSE(5, 5, AssetPaths.ACC1 ,AssetPaths.ACC1SNOW),
-  MEDIUM_HOUSE(3, 3, AssetPaths.ACC2),
-  MODERN_FLAT(2, 2, AssetPaths.ACC3),
-  LUXURY_FLAT(3, 3, AssetPaths.ACC4),
-  PRIVATE_HOUSE(3, 3, AssetPaths.ACC5);
+  MEDIUM_HOUSE(3, 3, AssetPaths.ACC2 , AssetPaths.ACC2SNOW),
+  MODERN_FLAT(2, 2, AssetPaths.ACC3 ,AssetPaths.ACC3SNOW),
+  LUXURY_FLAT(3, 3, AssetPaths.ACC4,AssetPaths.ACC4SNOW),
+  PRIVATE_HOUSE(3, 3, AssetPaths.ACC5 ,AssetPaths.ACC5SNOW);
 
   private final int width;
   private final int height;

@@ -12,11 +12,11 @@ import y111studios.AssetPaths;
  * TeachingBuilding}.
  */
 public enum TeachingVariant implements VariantProperties {
-  SMALL_CLASSROOM(3, 3, AssetPaths.TEACH1),
-  MEDIUM_CLASSROOM(3, 3, AssetPaths.TEACH2),
-  SUBJECT_HUB(3, 2, AssetPaths.TEACH3),
-  DEPARTMENT(6, 6, AssetPaths.TEACH4),
-  LAB(3, 4, AssetPaths.TEACH5),;
+  SMALL_CLASSROOM(3, 3, AssetPaths.TEACH1, AssetPaths.TEACH1SNOW),
+  MEDIUM_CLASSROOM(3, 3, AssetPaths.TEACH2, AssetPaths.TEACH2SNOW),
+  SUBJECT_HUB(3, 2, AssetPaths.TEACH3, AssetPaths.TEACH3SNOW),
+  DEPARTMENT(6, 6, AssetPaths.TEACH4, AssetPaths.TEACH4SNOW),
+  LAB(3, 4, AssetPaths.TEACH5, AssetPaths.TEACH5SNOW),;
 
   private final int width;
   private final int height;

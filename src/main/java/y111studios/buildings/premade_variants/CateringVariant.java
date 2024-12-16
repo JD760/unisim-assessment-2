@@ -12,11 +12,11 @@ import y111studios.AssetPaths;
  * CateringBuilding}.
  */
 public enum CateringVariant implements VariantProperties {
-  FAST_FOOD(2, 3, AssetPaths.CATER1),
-  RESTAURANT1(2, 2, AssetPaths.CATER2),
-  SUPERMARKET(8, 11, AssetPaths.CATER3),
-  REASTURANT2(2, 2, AssetPaths.CATER4),
-  CORNER_SHOP(1, 2, AssetPaths.CATER5);
+  FAST_FOOD(2, 3, AssetPaths.CATER1, AssetPaths.CATER1SNOW),
+  RESTAURANT1(2, 2, AssetPaths.CATER2, AssetPaths.CATER2SNOW),
+  SUPERMARKET(8, 11, AssetPaths.CATER3, AssetPaths.CATER3SNOW),
+  REASTURANT2(2, 2, AssetPaths.CATER4, AssetPaths.CATER4SNOW),
+  CORNER_SHOP(1, 2, AssetPaths.CATER5, AssetPaths.CATER5SNOW);
 
   private final int width;
   private final int height;

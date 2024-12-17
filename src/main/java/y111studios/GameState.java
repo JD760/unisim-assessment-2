@@ -1,12 +1,13 @@
 package y111studios;
 
-import java.time.Duration;
-import java.util.Random;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
+import y111studios.achievements.AchievementManager;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
@@ -15,9 +16,14 @@ import y111studios.clock.Clock;
 import y111studios.clock.GameTimer;
 import y111studios.events.Event;
 import y111studios.events.FloodEvent;
+import y111studios.events.OpenDayEvent;
+import y111studios.events.PandemicEvent;
+import y111studios.events.ResearchBreakthroughEvent;
 import y111studios.events.SnowEvent;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
+import y111studios.screens.Leaderboard;
+import y111studios.utils.Score;
 
 /**
  * A class representing the sum state of the game. This class contains the
@@ -30,6 +36,9 @@ import y111studios.position.GridPosition;
  * @see CollisionDetection
  */
 public class GameState implements GameTimer, BuildingController {
+  private static final int NUM_EVENT_TYPES = 4;
+  private static Leaderboard leaderboard = new Leaderboard();
+  private static @Getter AchievementManager achievementManager = new AchievementManager();
   private GameTimer timer;
   private Main game;
   public BuildingManager buildingManager;
@@ -39,6 +48,7 @@ public class GameState implements GameTimer, BuildingController {
   private long lastTickTime;
   private @Setter Camera camera;
   private @Getter int numTicks;
+  private ArrayList<Integer> unplayedEvents;
 
   /**
    * Constructor for the GameState class.
@@ -64,6 +74,10 @@ public class GameState implements GameTimer, BuildingController {
     };
     collisionDetection = new CollisionDetection(width, height, staticObjects);
     studentSatisfaction = new StudentSatisfaction(buildingManager, staticObjects);
+    unplayedEvents = new ArrayList<>();
+    for (int i = 0; i < NUM_EVENT_TYPES; i++) {
+      unplayedEvents.add(i);
+    }
     currentEvent = null;
   }
 
@@ -152,6 +166,14 @@ public class GameState implements GameTimer, BuildingController {
     return timer.timeRemaining();
   }
 
+  public static boolean addScore(Score score) {
+    return leaderboard.insertScore(score);
+  }
+
+  public static Leaderboard getLeaderboard() {
+    return leaderboard;
+  }
+
   /**
    * Returns if the building can be placed given the current state of the game.
    *
@@ -170,6 +192,10 @@ public class GameState implements GameTimer, BuildingController {
     return game;
   }
 
+  /**
+   * Simulates 1/60th of a second of game time.
+   * Updates student satisfaction and events.
+   */
   public void tick() {
     // Only tick the game if the timer is unpaused
     if (!timer.isPaused()) {
@@ -188,23 +214,41 @@ public class GameState implements GameTimer, BuildingController {
         studentSatisfaction.tick();
         buildingManager.tick();
 
+        // Update the current event every 62 seconds
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
-          if (numTicks >= 60 * 62 * 4)
+          if (numTicks > 60 * 62 * 4) {
             currentEvent = null;
-          else {
-            int eventNum = new Random().nextInt(2);
+          } else if (numTicks == 60 * 62 * 4) {
+            currentEvent = new OpenDayEvent(game, this);
+          } else {
+            int eventIndex = new Random().nextInt(unplayedEvents.size());
+            int eventNum = unplayedEvents.get(eventIndex).intValue();
+            unplayedEvents.remove(eventIndex);
             switch (eventNum) {
               case 0:
                 currentEvent = new FloodEvent(game, this, camera);
                 break;
               case 1:
                 currentEvent = new SnowEvent(game, this, camera);
+                break;
+              case 2:
+                currentEvent = new ResearchBreakthroughEvent(game, this);
+                break;
+              case 3:
+                currentEvent = new PandemicEvent(game, this);
+                break;
+              default:
+                break;
             }
           }
+          Gdx.app.log("#INFO", "Event started: " + currentEvent.getClass().toString());
+          studentSatisfaction.setCurrentEvent(currentEvent);
+          currentEvent.setNotification();
         }
 
         numTicks++;
       }
+
       if (timer.isTimeUp()) {
         timer.pause();
       }

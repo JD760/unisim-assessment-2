@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import y111studios.screens.StartScreen;
+import y111studios.UniversalInputProcessor;
 
 /**
  * Holds most driver code for the game, handles graphics/windowing and textures management.
@@ -18,6 +19,7 @@ public class Main extends Game {
   public SpriteBatch spritebatch;
   public BitmapFont font;
   public Music backgroundMusic;
+  public UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
 
   @Override
   public void create() {
@@ -50,7 +52,12 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
-    font.getData().setScale(height * 0.0015f);
+    if (width + height > 0) {
+      font.getData().setScale(height * 0.00165f);
+      super.resize(width, height);
+    }
+    universalInputProcessor.resize(width, height);
+    font.getData().setScale(height * 0.00165f);
     super.resize(width, height);
   }
 

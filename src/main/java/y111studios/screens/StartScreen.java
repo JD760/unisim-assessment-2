@@ -1,10 +1,10 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,24 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import y111studios.AssetPaths;
 import y111studios.Main;
 
 /**
  * The initial screen when the game is started.
  */
-public class StartScreen extends ScreenAdapter {
-
+public class StartScreen extends ScreenWithBackground {
   final Main game;
-
   Texture background;
-
-  OrthographicCamera camera;
-  ScreenViewport viewport;
-  int width = 640;
-  int height = 480;
   Stage stage;
   Table table;
   Skin skin = new Skin(Gdx.files.internal("assets/skins/default/uiskin.json"));
@@ -54,10 +45,8 @@ public class StartScreen extends ScreenAdapter {
    * @param game reference to game manager
    */
   public StartScreen(final Main game) {
+    super(game);
     this.game = game;
-    viewport = new ScreenViewport();
-    camera = (OrthographicCamera) viewport.getCamera();
-    background = game.assetLib.manager.get(AssetPaths.START_SCREEN.getPath());
 
     stage = new Stage(viewport);
     stage.addListener(new InputListener() {
@@ -69,20 +58,22 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    Gdx.input.setInputProcessor(stage);
+
     createMenu();
+    InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   private void createMenu() {
     table = new Table();
     table.setFillParent(true);
-    table.setDebug(true);
     logo = new Image(game.getAsset(AssetPaths.UNISIM_LOGO));
     final Button playButton = new TextButton("New Game", skin);
     playButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        Gdx.app.log("#INFO", "Play button clicked");
         game.setScreen(new MapScreen(game));
         return false;
       }
@@ -103,11 +94,11 @@ public class StartScreen extends ScreenAdapter {
         return false;
       }
     });
-    settingsButton = new TextButton("Settings", skin);
+    settingsButton = new TextButton("Instructions", skin);
     settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new SettingsScreen(game));
+        game.setScreen(new InstructionsScreen(game, null));
         return false;
       }
     });
@@ -115,24 +106,24 @@ public class StartScreen extends ScreenAdapter {
     creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        game.setScreen(new CreditsScreen());
+        game.setScreen(new CreditsScreen(game));
         return false;
       }
     });
-    logoCell = table.add(logo).colspan(3).padLeft(width * 0.05f);
+    logoCell = table.add(logo).colspan(3).padLeft(viewport.getScreenWidth() * 0.05f);
     table.row();
     playButtonCell = table.add(playButton).colspan(3)
-        .pad(height * 0.02f);
-    table.row().height(height * 0.25f);
+        .pad(viewport.getScreenHeight() * 0.02f);
+    table.row().height(viewport.getScreenHeight() * 0.25f);
     leaderboardButtonCell = table.add(leaderboardButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     acheivementsButtonCell = table.add(achievementsButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     settingsButtonCell = table.add(settingsButton)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     table.row();
     creditsButtonCell = table.add(creditsButton).colspan(3)
-        .pad(height * 0.02f);
+        .pad(viewport.getScreenHeight() * 0.02f);
     stage.addActor(table);
   }
 
@@ -142,31 +133,16 @@ public class StartScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    ScreenUtils.clear(0, 0, 0.2f, 0);
-    game.spritebatch.setProjectionMatrix(camera.combined);
-
-    game.spritebatch.begin();
-    float backgroundWidth = (float) viewport.getScreenWidth() / viewport.getScreenHeight()
-        * background.getHeight();
-    game.spritebatch.draw(
-        background,
-        0, 0, viewport.getScreenWidth(), viewport.getScreenHeight(),
-        (int) (background.getWidth() / 2.0 - backgroundWidth / 2.0), 0,
-        (int) backgroundWidth, background.getHeight(),
-        false, false);
-    game.spritebatch.end();
-
+    super.render(delta);
     stage.act();
     stage.draw();
-    camera.update();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void resize(int width, int height) {
+    super.resize(width, height);
     final float guiScale = height * 0.75f;
-    this.width = width;
-    this.height = height;
-    viewport.update(width, height, true);
     table.setSize(width, height);
     logoCell.width(height * 0.8f).height(height * 0.25f);
     playButtonCell.width(guiScale).height(height * 0.06f);
@@ -174,11 +150,15 @@ public class StartScreen extends ScreenAdapter {
     acheivementsButtonCell.width(guiScale / 3).height(height * 0.06f);
     settingsButtonCell.width(guiScale / 3).height(height * 0.06f);
     creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    for (Cell<Actor> cell : table.getCells()) {
+      if (cell.getActor() instanceof TextButton) {
+        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+      }
+    }
   }
 
   @Override
   public void hide() {
-    Gdx.input.setInputProcessor(null);
   }
 
   @Override

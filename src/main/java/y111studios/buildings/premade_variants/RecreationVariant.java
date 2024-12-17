@@ -12,37 +12,43 @@ import y111studios.AssetPaths;
  * RecreationBuilding}.
  **/
 public enum RecreationVariant implements VariantProperties {
-  PARK(2, 3, AssetPaths.REC1, AssetPaths.REC1SNOW),
-  GYM(3, 5, AssetPaths.REC2, AssetPaths.REC2SNOW),;
+
+  PARK(2, 3, AssetPaths.REC1, "Park", AssetPaths.REC1SNOW),
+  GYM(3, 5, AssetPaths.REC2, "Gym", AssetPaths.REC2SNOW),;
+
 
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
   private final AssetPaths texturePathSnow;
   private final AssetPaths texturePathFlood;
+  private final String name;
 
-  RecreationVariant(int width, int height, AssetPaths texturePath) {
+  RecreationVariant(int width, int height, AssetPaths texturePath, String name) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePath;
     this.texturePathFlood = texturePath;
+    this.name = name;
   }
 
-  RecreationVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow) {
+  RecreationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePathSnow;
     this.texturePathFlood = texturePath;
+    this.name = name;
   }
 
-  RecreationVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+  RecreationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePathSnow;
     this.texturePathFlood = texturePathFlood;
+    this.name = name;
   }
 
   @Override
@@ -71,6 +77,11 @@ public enum RecreationVariant implements VariantProperties {
   @Override
   public Class<? extends VariantProperties> getVariantClass() {
     return RecreationVariant.class;
+  }
+
+  @Override
+  public String getName(){
+    return name;
   }
 
 }

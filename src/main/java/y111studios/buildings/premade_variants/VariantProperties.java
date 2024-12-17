@@ -13,6 +13,8 @@ public interface VariantProperties {
 
   int getHeight();
 
+  String getName();
+
   AssetPaths getTexturePath();
 
   AssetPaths getTexturePathSnow();

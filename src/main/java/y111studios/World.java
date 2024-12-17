@@ -2,19 +2,19 @@ package y111studios;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import lombok.Getter;
 import lombok.Setter;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import y111studios.position.GridPosition;
+import y111studios.screens.MapScreen;
 import y111studios.utils.UnreachableException;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
@@ -33,10 +33,10 @@ public class World {
   // Height of map in tiles.
   public static final int TILE_HEIGHT = 75;
 
-  private final static Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
-  private final static Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
-  private final static Color NOT_BUILT = new Color(1f, 0.898f, 0f, 0.55f);
-  private final static Color NORMAL = new Color(1, 1, 1, 1);
+  private static final Color NOT_BUILT = new Color(1f, 0.898f, 0f, 0.55f);
+  private static final Color TRANSPARENT_PREVIEW = new Color(1, 1, 1, 0.475f);
+  private static final Color INVALID_PREVIEW = new Color(1, 0.5f, 0.5f, 0.475f);
+  private static final Color NORMAL = new Color(1, 1, 1, 1);
 
   private final Main game;
   private @Getter GameState gameState;
@@ -47,18 +47,21 @@ public class World {
   private @Getter Camera camera;
   private Building selectedBuilding;
   private @Getter List<Building> buildings;
+  private Stack<Integer> recentlyPlaced = new Stack<>();
   private @Getter Viewport viewport;
   private @Setter boolean deleteMode = false;
+  private @Getter MapScreen parentScreen;
 
   /**
    * Sets up the camera and loads the background
    *
    * @param game Reference to game manager
    */
-  public World(final Main game, GameState gameState) {
+  public World(final Main game, GameState gameState, MapScreen parentScreen) {
     viewport = new ScreenViewport();
     this.game = game;
     this.gameState = gameState;
+    this.parentScreen = parentScreen;
     buildings = new LinkedList<>();
     camera = new Camera(2000, 1000, width, height);
     gameState.setCamera(camera);
@@ -88,7 +91,13 @@ public class World {
    * @return Whether the object was added.
    */
   public boolean addObject(VariantProperties variant, GridPosition coords, boolean flipped) {
-    Building building = BuildingFactory.createBuilding(variant, coords, flipped);
+    Building building;
+    if (variant == MiscellaneousVariant.ROAD_BEND2 && flipped) {
+      building = BuildingFactory.createBuilding(MiscellaneousVariant.ROAD_BEND2_FLIPPED, coords,
+          flipped);
+    } else {
+      building = BuildingFactory.createBuilding(variant, coords, flipped);
+    }
     if (!gameState.push(building) && !(variant instanceof ObstacleVariant)) {
       return false;
     }
@@ -101,8 +110,12 @@ public class World {
       }
     }
     buildings.add(index, building);
-    // Prevent obstacle buildings from having the 'being built' animation
-    if (variant instanceof ObstacleVariant) {
+    if (!(variant instanceof ObstacleVariant)) {
+      recentlyPlaced.add(index);
+    }
+    // Prevent obstacle & tree/road buildings from having the 'being built'
+    // animation
+    if (variant instanceof ObstacleVariant || variant instanceof MiscellaneousVariant) {
       building.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
     }
     return true;
@@ -179,15 +192,17 @@ public class World {
         game.spritebatch.setColor(NOT_BUILT);
       } else {
         game.spritebatch.setColor(new Color(
-          NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
-          ((float)Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f
-        ));
+            NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
+            ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f));
       }
     }
     Texture texture;
     texture = game.getAsset(building.getTexturePath());
   
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
+    // draw under the cursor
+    // game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height -
+    // Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
@@ -232,12 +247,14 @@ public class World {
    * @param delta The time since the previous frame.
    */
   public void render(float delta) {
+    // check for any achievement conditions that have been met
+    GameState.getAchievementManager().checkConditions();
+
     game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);
 
     camera.updateZoom(delta);
-
     game.spritebatch.begin();
     game.spritebatch.setColor(NORMAL);
     // Draw the game map
@@ -254,9 +271,8 @@ public class World {
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
       game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
+          1f, 1f, 1f,
+          (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
       game.spritebatch.draw(snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
@@ -270,9 +286,8 @@ public class World {
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
       game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
+          1f, 1f, 1f,
+          (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
       game.spritebatch.draw(floodedMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(floodedMap[1], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
@@ -329,7 +344,21 @@ public class World {
 
   public void setSelectedBuilding(Building building) {
     selectedBuilding = building;
-    if (building != null)
+    if (building != null) {
       selectedBuilding.setAge(y111studios.buildings.MapObject.BUILDING_TIME);
+    }
+  }
+
+  public Main getGame() {
+    return game;
+  }
+
+  public void undoPlacement() {
+    Gdx.app.log("#INFO", "Recently Placed: " + recentlyPlaced.size());
+    if (recentlyPlaced.size() == 0) {
+      return;
+    }
+    Building removed = buildings.get((int) recentlyPlaced.pop());
+    removeObject(removed.getPosition());
   }
 }

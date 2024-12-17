@@ -1,43 +1,53 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import y111studios.*;
+import lombok.Getter;
+import y111studios.AssetPaths;
+import y111studios.BuildingMenu;
+import y111studios.GameState;
+import y111studios.InfoBar;
+import y111studios.Main;
+import y111studios.World;
+import y111studios.WorldInputProcessor;
 import y111studios.buildings.BuildingFactory;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
-
-import static y111studios.AssetPaths.GAME_OVER;
+import y111studios.notification.Notification;
 
 /**
  * A class to interact with LibGDX to render the game window.
  */
 public class MapScreen extends ScreenAdapter {
   // Proportional width of the display.
-  static int width = 640;
+  private @Getter int width = 640;
   // Proportional height of the display.
-  static int height = 480;
+  private @Getter int height = 480;
   // Width of map in tiles.
   public static final int TILE_WIDTH = 76;
   // Height of map in tiles.
   public static final int TILE_HEIGHT = 76;
 
   final Main game;
-  private final InfoBar infoBar;
+  private final @Getter InfoBar infoBar;
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
   boolean[] showDebugInfo = { false };
   World world;
+  Notification notification;
+  public boolean notificationShown = false;
   BuildingMenu buildingMenu;
   InputMultiplexer inputMultiplexer;
-  UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
   Stage stage = new Stage(new ScreenViewport());
 
   /**
@@ -52,15 +62,35 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().position.set(width / 2f, height / 2f, 0);
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
-
-    world = new World(game, gameState);
+  
+    world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
+    
+    notification = new Notification(width, height, AssetPaths.PANDEMIC_EVENT, game);
 
     inputMultiplexer = new InputMultiplexer();
-    inputMultiplexer.addProcessor(universalInputProcessor);
+    inputMultiplexer.addProcessor(game.universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
+
+    stage.addListener(new InputListener() {
+      @Override
+      public boolean keyDown(InputEvent e, int keycode) {
+        switch (keycode) {
+          case Keys.N:
+            if (!notificationShown) {
+              setNotification(notification);
+            } else {
+              removeNotification();
+            }
+            break;
+          default:
+            break;
+        }
+        return false;
+      }
+    });
   }
 
   @Override
@@ -74,13 +104,24 @@ public class MapScreen extends ScreenAdapter {
     if (buildingMenu.getCurrentMenuItem() >= 0 && buildingMenu.getCurrentMenuItem() < 5) {
       VariantProperties variant = buildingMenu.getBuildingVariants().get(
           buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
-      world.setSelectedBuilding(BuildingFactory.createBuilding(
-          variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      if (variant == MiscellaneousVariant.ROAD_BEND2 && buildingMenu.isFlipped()) {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+            MiscellaneousVariant.ROAD_BEND2_FLIPPED, world.currentGridPosition(),
+            buildingMenu.isFlipped()));
+      } else {
+        world.setSelectedBuilding(BuildingFactory.createBuilding(
+            variant, world.currentGridPosition(), buildingMenu.isFlipped()));
+      }
     } else {
       world.setSelectedBuilding(null);
     }
 
     gameState.tick();
+    if (notificationShown) {
+      if (!notification.tick()) {
+        removeNotification();
+      }
+    }
 
     world.render(delta);
     buildingMenu.render();
@@ -97,7 +138,7 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    universalInputProcessor.resize(width, height);
+    notification.resize(width, height);
     buildingMenu.resize(width, height);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
@@ -110,5 +151,28 @@ public class MapScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     game.dispose();
+  }
+
+  /**
+   * Set the notification to be rendered on the screen.
+   *
+   * @param notification - the notification to render
+   */
+  public void setNotification(Notification notification) {
+    this.notification = notification;
+    notificationShown = true;
+    stage.addActor(notification);
+  }
+
+  /**
+   * Clear the notification currently displayed.
+   */
+  public void removeNotification() {
+    if (notification.getParent() == null) {
+      return;
+    }
+    notification.remove();
+    notificationShown = false;
+    notification.resetAge();
   }
 }

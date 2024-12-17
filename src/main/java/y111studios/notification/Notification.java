@@ -1,7 +1,6 @@
 package y111studios.notification;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,6 +14,8 @@ import y111studios.Main;
 public class Notification extends Table {
   private int maxAge;
   private int age;
+  private int screenWidth;
+  private int screenHeight;
 
   public static final Skin SKIN = new Skin(
       Gdx.files.internal("assets/skins/default/uiskin.json"));
@@ -23,12 +24,18 @@ public class Notification extends Table {
 
    * @param screenWidth - the width of the screen the notification is displayed on
    * @param screenHeight - the height of the screen the notification is displayed on
-   * @param texture - the texture to draw onto the screen
+   * @param path - the path to the image that should be drawn
    * @param game - a reference to the Main class
    */
   public Notification(
       int screenWidth, int screenHeight, AssetPaths path, Main game, int maxAge) { 
     super();
+
+    Gdx.app.log("#INFO", "Notification created with args: " + screenWidth + " , " + screenHeight + ", " + path.toString() + ", " + maxAge);
+
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
+    setDebug(true);
     this.maxAge = maxAge;
     
     Image image = new Image(game.getAsset(path));
@@ -41,9 +48,18 @@ public class Notification extends Table {
     this(screenWidth, screenHeight, path, game, 250);
   }
 
+  /**
+   * Called whenever the screen size changes. Adjusts the scale of UI elements to ensure
+   * consistency when resizing.
+   *
+   * @param width - the new width of the screen
+   * @param height - the new height of the screen
+   */
   public void resize(int width, int height) {
     setSize(width * 0.3f, height * 0.15f);
     setPosition(width - (getWidth() * 0.85f), height * 0.85f - (getHeight() / 2));
+    //setSize(400, 200);
+    //setPosition(0, 0);
   }
 
   /**
@@ -66,5 +82,4 @@ public class Notification extends Table {
   public void resetAge() {
     age = 0;
   }
-  
 }

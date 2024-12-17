@@ -218,7 +218,7 @@ public class GameState implements GameTimer, BuildingController {
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
           if (numTicks > 60 * 62 * 4) {
             currentEvent = null;
-          } else if (numTicks == 60 * 62 * 4) {
+          } else if (numTicks == 60 * 10 * 4) {
             currentEvent = new OpenDayEvent(game, this);
           } else {
             int eventIndex = new Random().nextInt(unplayedEvents.size());

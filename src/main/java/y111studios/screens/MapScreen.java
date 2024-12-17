@@ -42,7 +42,6 @@ public class MapScreen extends ScreenAdapter {
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
-  boolean[] showDebugInfo = { false };
   World world;
   Notification notification;
   public boolean notificationShown = false;
@@ -80,7 +79,7 @@ public class MapScreen extends ScreenAdapter {
         switch (keycode) {
           case Keys.N:
             if (!notificationShown) {
-              setNotification(notification);
+              setNotification(AssetPaths.SNOW_EVENT);
             } else {
               removeNotification();
             }
@@ -117,11 +116,6 @@ public class MapScreen extends ScreenAdapter {
     }
 
     gameState.tick();
-    if (notificationShown) {
-      if (!notification.tick()) {
-        removeNotification();
-      }
-    }
 
     world.render(delta);
     buildingMenu.render();
@@ -156,10 +150,11 @@ public class MapScreen extends ScreenAdapter {
   /**
    * Set the notification to be rendered on the screen.
    *
-   * @param notification - the notification to render
+   * @param path - the notification to render
    */
-  public void setNotification(Notification notification) {
-    this.notification = notification;
+  public void setNotification(AssetPaths path) {
+    Gdx.app.log("#INFO", "Notification created");
+    this.notification = new Notification(width, height, path, game);
     notificationShown = true;
     stage.addActor(notification);
   }

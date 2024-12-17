@@ -12,6 +12,7 @@ import y111studios.screens.MapScreen;
  */
 public abstract class Event {
   private @Getter Notification notification;
+  private AssetPaths texturePath;
   private MapScreen screen;
 
   public abstract void render(float delta);
@@ -24,12 +25,10 @@ public abstract class Event {
    * @param game - a reference to the main class
    */
   public Event(Main game, AssetPaths texturePath) {
-    screen = (MapScreen) game.getScreen();
-    notification = new Notification(
-      screen.getWidth(), screen.getHeight(), texturePath, game, 1000);
+    this.texturePath = texturePath;
   }
 
   public void setNotification() {
-    screen.setNotification(notification);
+    screen.setNotification(texturePath);
   }
 }

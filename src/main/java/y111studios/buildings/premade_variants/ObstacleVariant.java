@@ -68,6 +68,11 @@ public enum ObstacleVariant implements VariantProperties {
     return height;
   }
 
+  
+  public GridPosition getPosition() {
+    return position;
+  }
+
   @Override
   public AssetPaths getTexturePath() {
     return texturePath;

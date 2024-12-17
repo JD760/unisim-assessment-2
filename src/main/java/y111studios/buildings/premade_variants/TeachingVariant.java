@@ -22,12 +22,14 @@ public enum TeachingVariant implements VariantProperties {
   private final int height;
   private final AssetPaths texturePath;
   private final AssetPaths texturePathSnow;
+  private final AssetPaths texturePathFlood;
 
   TeachingVariant(int width, int height, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePath;
+    this.texturePathFlood = texturePath;
   }
 
   TeachingVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow) {
@@ -35,6 +37,15 @@ public enum TeachingVariant implements VariantProperties {
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePath;
+  }
+
+  TeachingVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+    this.width = width;
+    this.height = height;
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePathFlood;
   }
 
   @Override
@@ -54,6 +65,10 @@ public enum TeachingVariant implements VariantProperties {
 
   public AssetPaths getTexturePathSnow() {
     return texturePathSnow;
+  }
+
+  public AssetPaths getTexturePathFlood() {
+    return texturePathFlood;
   }
 
   @Override

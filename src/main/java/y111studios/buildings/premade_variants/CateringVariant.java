@@ -22,18 +22,29 @@ public enum CateringVariant implements VariantProperties {
   private final int height;
   private final AssetPaths texturePath;
   private final AssetPaths texturePathSnow;
+  private final AssetPaths texturePathFlood;
 
   CateringVariant(int width, int height, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePath;
+    this.texturePathFlood = texturePath;
   }
   CateringVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePath;
+  }
+
+  CateringVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+    this.width = width;
+    this.height = height;
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePathFlood;
   }
 
   @Override
@@ -53,6 +64,10 @@ public enum CateringVariant implements VariantProperties {
 
   public AssetPaths getTexturePathSnow() {
     return texturePathSnow;
+  }
+
+  public AssetPaths getTexturePathFlood() {
+    return texturePathFlood;
   }
 
   @Override

@@ -12,19 +12,21 @@ import y111studios.AssetPaths;
  * RecreationBuilding}.
  **/
 public enum RecreationVariant implements VariantProperties {
-  PARK(2, 3, AssetPaths.REC1),
-  GYM(3, 5, AssetPaths.REC2),;
+  PARK(2, 3, AssetPaths.REC1, AssetPaths.REC1SNOW),
+  GYM(3, 5, AssetPaths.REC2, AssetPaths.REC2SNOW),;
 
   private final int width;
   private final int height;
   private final AssetPaths texturePath;
   private final AssetPaths texturePathSnow;
+  private final AssetPaths texturePathFlood;
 
   RecreationVariant(int width, int height, AssetPaths texturePath) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePath;
+    this.texturePathFlood = texturePath;
   }
 
   RecreationVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow) {
@@ -32,6 +34,15 @@ public enum RecreationVariant implements VariantProperties {
     this.height = height;
     this.texturePath = texturePath;
     this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePath;
+  }
+
+  RecreationVariant(int width, int height, AssetPaths texturePath, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+    this.width = width;
+    this.height = height;
+    this.texturePath = texturePath;
+    this.texturePathSnow = texturePathSnow;
+    this.texturePathFlood = texturePathFlood;
   }
 
   @Override
@@ -51,6 +62,10 @@ public enum RecreationVariant implements VariantProperties {
 
   public AssetPaths getTexturePathSnow() {
     return texturePathSnow;
+  }
+
+  public AssetPaths getTexturePathFlood() {
+    return texturePathFlood;
   }
 
   @Override

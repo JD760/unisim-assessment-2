@@ -164,10 +164,6 @@ public class GameState implements GameTimer, BuildingController {
     return timer.timeRemaining();
   }
 
-  public static boolean addScore(Score score) {
-    return leaderboard.insertScore(score);
-  }
-
   public static Leaderboard getLeaderboard() {
     return leaderboard;
   }

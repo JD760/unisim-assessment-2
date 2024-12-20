@@ -99,4 +99,24 @@ public class LeaderboardTest {
     assertNull(leaderboard.getScore(leaderboard.getSize()));
     assertNull(leaderboard.getScore(Integer.MAX_VALUE - 10));
   }
+
+  @Test
+  public void testAddEqualScores() {
+    Leaderboard leaderboard = new Leaderboard();
+    Score oneScore = new Score("One", 100);
+    Score testScore = new Score("Test", 1200);
+    Score firstEqualScore = new Score("First", 0.0);
+    Score secondEqualScore = new Score("Second", 0.0);
+    leaderboard.insertScore(oneScore);
+    leaderboard.insertScore(testScore);
+    leaderboard.insertScore(firstEqualScore);
+    leaderboard.insertScore(secondEqualScore);
+
+    assertEquals(oneScore, leaderboard.getScore(1));
+    assertEquals(testScore, leaderboard.getScore(0));
+    // Test that if someone ties a previous score, the order in which
+    // the scores were achieved is reflected by the leaderboard
+    assertEquals(firstEqualScore, leaderboard.getScore(2));
+    assertEquals(secondEqualScore, leaderboard.getScore(3));
+  }
 }

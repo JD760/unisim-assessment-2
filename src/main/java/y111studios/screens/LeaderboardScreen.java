@@ -45,9 +45,6 @@ public class LeaderboardScreen extends ScreenWithBackground {
     table = new Table(SKIN);
     table.setFillParent(true);
 
-    leaderboard.insertScore(new Score("Test", 100));
-    leaderboard.insertScore(new Score("Better", 10_000));
-
     leaderboardTitle = new Image(game.getAsset(AssetPaths.LEADERBOARD_TITLE));
     TextButton backButton = new TextButton("Return to Menu", SKIN);
     backButton.addListener(new InputListener() {

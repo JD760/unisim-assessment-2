@@ -80,7 +80,8 @@ public enum AssetPaths {
   RAINDROP("assets/raindrop.png"),
   SNOW_EVENT("assets/events/SnowEvent.png"),
   PANDEMIC_EVENT("assets/events/PandemicEvent.png"),
-  OPEN_DAY_EVENT("assets/events/OpenDayEvent.png");
+  OPEN_DAY_EVENT("assets/events/OpenDayEvent.png"),
+  SATISFACTION_ACHIEVEMENT("assets/achievements/satisfactionAchievement.png");
 
   private final String path;
 

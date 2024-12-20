@@ -3,6 +3,7 @@ package y111studios.achievements;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
+import y111studios.AssetPaths;
 import y111studios.World;
 
 /**
@@ -14,7 +15,13 @@ public class AchievementManager {
   private @Getter Map<String, Achievement> achievements;
   private @Getter Map<String, Achievement> completedAchievements;
 
-  public AchievementManager() {
+  /**
+   * Create a new achievement manager to handle checking for completion and awarding achievements.
+   *
+   * @param world - a reference to the {@link World}.
+   */
+  public AchievementManager(World world) {
+    this.world = world;
     achievements = new HashMap<>();
     completedAchievements = new HashMap<>();
   }
@@ -56,5 +63,13 @@ public class AchievementManager {
     // apply the consequences of the achievement
     achievement.result();
     return;
+  }
+
+  /**
+   * Add the achievements to the manager.
+   */
+  public void setupAchievements() {
+    add(new SatisfactionAchievement(
+        "satisfactionAchievement", this, world, AssetPaths.SATISFACTION_ACHIEVEMENT));
   }
 }

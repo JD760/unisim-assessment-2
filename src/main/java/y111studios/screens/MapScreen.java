@@ -17,6 +17,7 @@ import y111studios.InfoBar;
 import y111studios.Main;
 import y111studios.World;
 import y111studios.WorldInputProcessor;
+import y111studios.achievements.AchievementManager;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
@@ -44,6 +45,7 @@ public class MapScreen extends ScreenAdapter {
   private Table table = new Table();
   BuildingMenu buildingMenu;
   private @Getter NotificationManager notificationManager;
+  private @Getter AchievementManager achievementManager;
   InputMultiplexer inputMultiplexer;
   Stage stage = new Stage(new ScreenViewport());
 
@@ -68,6 +70,8 @@ public class MapScreen extends ScreenAdapter {
     // will be stacked in the top right corner
     table.top().right();
     notificationManager = new NotificationManager(table, game);
+    achievementManager = new AchievementManager(world);
+    achievementManager.setupAchievements();
     stage.addActor(table);
 
     inputMultiplexer = new InputMultiplexer();
@@ -100,7 +104,10 @@ public class MapScreen extends ScreenAdapter {
     }
 
     gameState.tick();
-    notificationManager.tick();
+    if (!gameState.isPaused()) {
+      notificationManager.tick();
+      achievementManager.checkConditions();
+    }
 
     world.render(delta);
     buildingMenu.render();

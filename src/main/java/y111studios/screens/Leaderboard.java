@@ -76,7 +76,7 @@ public class Leaderboard {
         return -1;
       }
       // sort scores from highest to lowest.
-      return b.getScore() - a.getScore();
+      return b.getScore() > a.getScore() ? 1 : -1;
     }
   }
 }

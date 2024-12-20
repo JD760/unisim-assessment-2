@@ -62,6 +62,7 @@ public BuildingMenu(final Main game, Stage stage) {
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
     currentMenuTab = MenuTab.ACCOMMODATION;
     currentMenuItem = -1;
+
     buildingTextures = new Texture[] {
         game.getAsset(AssetPaths.ACC1), game.getAsset(AssetPaths.ACC2),
         game.getAsset(AssetPaths.ACC3), game.getAsset(AssetPaths.ACC4),
@@ -84,29 +85,30 @@ public BuildingMenu(final Main game, Stage stage) {
         game.getAsset(AssetPaths.ROAD_BEND2),
         game.getAsset(AssetPaths.ROTATE), game.getAsset(AssetPaths.TRASH)
     };
+
+    // Initialise building variants
     buildingVariants = new HashMap<>();
     buildingVariants.put(ACCOMMODATION, AccommodationVariant.values());
     buildingVariants.put(CATERING, CateringVariant.values());
     buildingVariants.put(TEACHING, TeachingVariant.values());
-
     VariantProperties[] jointTabVariants = new VariantProperties[5];
     System.arraycopy(RecreationVariant.values(), 0, jointTabVariants, 0, 2);
     System.arraycopy(MiscellaneousVariant.values(), 0, jointTabVariants, 2, 3);
     buildingVariants.put(RECREATION, jointTabVariants);
-
     jointTabVariants = new VariantProperties[5];
     System.arraycopy(MiscellaneousVariant.values(), 3, jointTabVariants, 0, 5);
     buildingVariants.put(MISCELLANEOUS, jointTabVariants);
 
+    // Add the tab images
     tabTable = new Table();
     for (int i = 0; i < 5; i++) {
       flipped = false;
       unselectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_UNSELECTED_TAB));
       selectedTabImages[i] = new Image(game.getAsset(AssetPaths.MENU_SELECTED_TAB));
-      final int tab = i;
       tabTable.add(i == 0 ? selectedTabImages[0] : unselectedTabImages[i]);
     }
 
+    // Add the building icons as buttons
     buildingTable = new Table();
     for (int i = 0; i < 35; i++) {
       buildingImages[i] = new Image(buildingTextures[i]);
@@ -128,6 +130,7 @@ public BuildingMenu(final Main game, Stage stage) {
       buildingTable.add(buildingImages[i]);
     }
 
+    // Add the tab labels as buttons
     tabLabelTable = new Table();
     tabLabelTable.add(new Label("     Accommodation", SKIN));
     tabLabelTable.add(new Label("           Catering", SKIN));

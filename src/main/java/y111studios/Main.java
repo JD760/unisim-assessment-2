@@ -55,9 +55,6 @@ public class Main extends Game {
       font.getData().setScale(height * 0.00165f);
       super.resize(width, height);
     }
-    universalInputProcessor.resize(width, height);
-    font.getData().setScale(height * 0.00165f);
-    super.resize(width, height);
   }
 
   @Override

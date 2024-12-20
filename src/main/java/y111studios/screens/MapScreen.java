@@ -113,7 +113,7 @@ public class MapScreen extends ScreenAdapter {
       achievementManager.checkConditions();
     }
     if (gameState.getTimer().isTimeUp() && gameOverMenu == null) {
-      gameOverMenu = new GameOverMenu(game, stage);
+      gameOverMenu = new GameOverMenu(gameState, game, stage);
       buildingMenu.removeActors();
     }
 
@@ -136,7 +136,11 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    buildingMenu.resize(width, height);
+    if (gameOverMenu == null) {
+      buildingMenu.resize(width, height);
+    } else {
+      gameOverMenu.resize(width, height);
+    }
     table.setSize(width, height * 0.9f);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);

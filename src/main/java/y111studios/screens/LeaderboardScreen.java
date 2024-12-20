@@ -100,7 +100,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
         leaderboardRows[i + 1] = new Label("-- empty --", SKIN);
       } else {
         leaderboardRows[i] = new Label(((i / 2) + 1) + ". " + score.getName(), SKIN);
-        leaderboardRows[i + 1] = new Label(Integer.toString(score.getScore()), SKIN);
+        leaderboardRows[i + 1] = new Label(Double.toString(score.getScore()), SKIN);
       }
       table.row();
       table.add(leaderboardRows[i]).padTop(height * 0.05f);

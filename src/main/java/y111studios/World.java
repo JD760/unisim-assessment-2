@@ -196,7 +196,9 @@ public class World {
             ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f));
       }
     }
-    Texture texture = game.getAsset(building.getTexturePath());
+    Texture texture;
+    texture = game.getAsset(building.getTexturePath());
+  
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
     // game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height -
@@ -208,6 +210,34 @@ public class World {
         2f * texture.getHeight() / camera.scale,
         0, 0, texture.getWidth(), texture.getHeight(),
         building.getFlipped(), false);
+    if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      game.spritebatch.setColor(new Color(
+        1f, 1f, 1f,
+        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
+      ));
+      texture = game.getAsset(building.getTexturePathSnow());
+      game.spritebatch.draw(texture,
+        pixelCoords[0] / camera.scale,
+        (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+        2f * texture.getWidth() / camera.scale,
+        2f * texture.getHeight() / camera.scale,
+        0, 0, texture.getWidth(), texture.getHeight(),
+        building.getFlipped(), false);
+    }
+    else if (gameState.getCurrentEvent() instanceof FloodEvent) {
+      game.spritebatch.setColor(new Color(
+        1f, 1f, 1f,
+        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
+      ));
+      texture = game.getAsset(building.getTexturePathFlood());
+      game.spritebatch.draw(texture,
+        pixelCoords[0] / camera.scale,
+        (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+        2f * texture.getWidth() / camera.scale,
+        2f * texture.getHeight() / camera.scale,
+        0, 0, texture.getWidth(), texture.getHeight(),
+        building.getFlipped(), false);
+    }
     game.spritebatch.setColor(NORMAL);
   }
 

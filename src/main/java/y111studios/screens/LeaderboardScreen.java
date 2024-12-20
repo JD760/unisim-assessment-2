@@ -45,9 +45,6 @@ public class LeaderboardScreen extends ScreenWithBackground {
     table = new Table(SKIN);
     table.setFillParent(true);
 
-    leaderboard.insertScore(new Score("Test", 100));
-    leaderboard.insertScore(new Score("Better", 10_000));
-
     leaderboardTitle = new Image(game.getAsset(AssetPaths.LEADERBOARD_TITLE));
     TextButton backButton = new TextButton("Return to Menu", SKIN);
     backButton.addListener(new InputListener() {
@@ -127,9 +124,9 @@ public class LeaderboardScreen extends ScreenWithBackground {
     backButtonCell.width(guiScale / 3).height(height * 0.06f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
-        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+        ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
       } else if (cell.getActor() instanceof Label) {
-        ((Label)(cell.getActor())).setFontScale(height * 0.0015f);
+        ((Label) (cell.getActor())).setFontScale(height * 0.0015f);
       }
     }
   }

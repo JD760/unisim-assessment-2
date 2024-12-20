@@ -1,5 +1,10 @@
 package y111studios.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,6 +16,22 @@ import y111studios.utils.Score;
 public class Leaderboard {
   public static final int MAX_SIZE = 5;
   List<Score> scores = new ArrayList<>(MAX_SIZE);
+  boolean persistent;
+  FileHandle leaderboardFile;
+
+  public Leaderboard(boolean persistent) {
+    this.persistent = persistent;
+    if (!persistent) {
+      return;
+    }
+    Gdx.app.log("#INFO", Gdx.files.getLocalStoragePath());
+    leaderboardFile = Gdx.files.local("data/leaderboard.json");
+    String leaderboardJson = leaderboardFile.readString();
+    if (leaderboardJson == null || leaderboardJson == "") {
+      return;
+    }
+    loadJson(leaderboardJson);
+  }
 
   /**
    * Add a new score to the leaderboard. Ensures the size stays below the maximum
@@ -38,6 +59,45 @@ public class Leaderboard {
     scores.add(score);
     scores.sort(new SortByScore());
     return true;
+  }
+
+  /**
+   * Save the leaderboard to a JSON file.
+   */
+  public void saveJson() {
+    if (!persistent) {
+      return;
+    }
+  
+    Json json = new Json();
+    Scores currentScores = new Scores();
+    currentScores.setScores(scores);
+    OutputStream stream = leaderboardFile.write(false);
+    String jsonStr = json.toJson(currentScores);
+    try {
+      stream.write(jsonStr.getBytes(), 0, jsonStr.length());
+    } catch (IOException e) {
+      Gdx.app.log("#WARN", "Failed to save JSON");
+      return;
+    }
+  }
+
+  /**
+   * Attempt to load a JSON string representation of the leaderboard scores.
+   *
+   * @param jsonStr - a string that should be valid JSON encoding a {@link Scores} object
+   */
+  public void loadJson(String jsonStr) {
+    Json json = new Json();
+    Scores loadedScores = json.fromJson(Scores.class, jsonStr);
+    if (loadedScores == null) {
+      Gdx.app.log("#WARN", "Failed to load leaderboard JSON, falling back to empty leaderboard");
+      scores = new ArrayList<>();
+      return;
+    }
+
+    scores = loadedScores.getScores();
+    return;
   }
 
   /**
@@ -77,6 +137,18 @@ public class Leaderboard {
       }
       // sort scores from highest to lowest.
       return b.getScore() - a.getScore();
+    }
+  }
+
+  class Scores {
+    private List<Score> scores;
+
+    public void setScores(List<Score> scores) {
+      this.scores = scores;
+    }
+
+    public List<Score> getScores() {
+      return scores;
     }
   }
 }

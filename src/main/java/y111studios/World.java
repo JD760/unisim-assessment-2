@@ -179,7 +179,7 @@ public class World {
    * @return The current grid position of the cursor.
    */
   public GridPosition currentGridPosition() {
-    return pixelToTile((int) (cursorScreenPos.x * camera.scale), (int) (cursorScreenPos.y * camera.scale));
+    return pixelToTile((cursorScreenPos.x * camera.scale), (cursorScreenPos.y * camera.scale));
   }
 
   public void renderBuilding(Building building) {
@@ -198,7 +198,7 @@ public class World {
     }
     Texture texture;
     texture = game.getAsset(building.getTexturePath());
-  
+
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
     // draw under the cursor
     // game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height -

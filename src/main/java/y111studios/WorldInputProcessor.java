@@ -42,25 +42,25 @@ public class WorldInputProcessor implements InputProcessor {
     GameState state = world.getGameState();
     switch (keyCode) {
       case Keys.NUM_1:
-        buildingMenu.setCurrentMenuItem(setItem(0));
+        setItem(0);
         break;
       case Keys.NUM_2:
-        buildingMenu.setCurrentMenuItem(setItem(1));
+        setItem(1);
         break;
       case Keys.NUM_3:
-        buildingMenu.setCurrentMenuItem(setItem(2));
+        setItem(2);
         break;
       case Keys.NUM_4:
-        buildingMenu.setCurrentMenuItem(setItem(3));
+        setItem(3);
         break;
       case Keys.NUM_5:
-        buildingMenu.setCurrentMenuItem(setItem(4));
+        setItem(4);
         break;
       case Keys.R:
         buildingMenu.flipBuildings();
         break;
       case Keys.D:
-        buildingMenu.setCurrentMenuItem(setItem(6));
+        setItem(6);
         break;
       case Keys.TAB:
         buildingMenu.updateTab((buildingMenu.getCurrentMenuTab().toInt() + 1) % 5);
@@ -76,7 +76,7 @@ public class WorldInputProcessor implements InputProcessor {
         }
         break;
       case Keys.ESCAPE:
-        world.getGameState().setScreen(new StartScreen(world.getGameState().getGame()));
+        buildingMenu.setCurrentMenuItem(-1);
         break;
       case Keys.I:
         InstructionsScreen instructionsScreen = new InstructionsScreen(
@@ -89,12 +89,13 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
-  private int setItem(int item) {
+  private void setItem(int item) {
     if (buildingMenu.getCurrentMenuItem() == item) {
       // selecting the same item twice clears the cursor
-      return -1;
+      buildingMenu.setCurrentMenuItem(-1);
+    } else {
+      buildingMenu.setCurrentMenuItem(item);
     }
-    return item;
   }
 
   public boolean keyUp(int keyCode) {
@@ -155,9 +156,7 @@ public class WorldInputProcessor implements InputProcessor {
         try {
           world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),
               (int) (screenPos.y * world.getCamera().scale)));
-        } catch (IllegalStateException ignored) {
-          
-        }
+        } catch (IllegalStateException ignored) {}
       }
     }
     dragging = true;

@@ -10,7 +10,7 @@ import java.time.Instant;
  * <p>
  * The clock implements the GameTimer interface so shares the maximum duration
  * of
- * {@value GameTimer#MAX_SECONDS} seconds. After this time has elapsed, the
+ * {@value GameTimer#INITIAL_SECONDS} seconds. After this time has elapsed, the
  * clock will return true
  * when the {@link #isTimeUp()} method is called.
  * </p>
@@ -95,10 +95,10 @@ public class Clock implements GameTimer {
    */
   @Override
   public boolean isTimeUp() {
-    boolean isTimeUp = totalElapsedTime().compareTo(MAX_DURATION) >= 0;
+    boolean isTimeUp = totalElapsedTime().compareTo(INITIAL_DURATION) >= 0;
     // Fix clock to 0
     if (isTimeUp) {
-      totalDuration = MAX_DURATION;
+      totalDuration = INITIAL_DURATION;
     }
     return isTimeUp;
   }
@@ -110,7 +110,7 @@ public class Clock implements GameTimer {
    */
   @Override
   public Duration timeRemaining() {
-    return MAX_DURATION.minus(totalElapsedTime());
+    return INITIAL_DURATION.minus(totalElapsedTime());
   }
 
   /**

@@ -344,4 +344,11 @@ public BuildingMenu(final Main game, Stage stage) {
     flipped = !flipped;
     updateBuildingRotations();
   }
+
+  public void removeActors() {
+    buildingTable.remove();
+    hotkeyTable.remove();
+    tabTable.remove();
+    tabLabelTable.remove();
+  }
 }

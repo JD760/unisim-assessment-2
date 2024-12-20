@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
-import y111studios.achievements.AchievementManager;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingController;
 import y111studios.buildings.BuildingManager;
@@ -38,7 +37,6 @@ import y111studios.utils.Score;
 public class GameState implements GameTimer, BuildingController {
   private static final int NUM_EVENT_TYPES = 4;
   private static Leaderboard leaderboard = new Leaderboard();
-  private static @Getter AchievementManager achievementManager = new AchievementManager();
   private GameTimer timer;
   private Main game;
   public BuildingManager buildingManager;
@@ -218,7 +216,7 @@ public class GameState implements GameTimer, BuildingController {
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {
           if (numTicks > 60 * 62 * 4) {
             currentEvent = null;
-          } else if (numTicks == 60 * 62 * 4) {
+          } else if (numTicks == 60 * 10 * 4) {
             currentEvent = new OpenDayEvent(game, this);
           } else {
             int eventIndex = new Random().nextInt(unplayedEvents.size());

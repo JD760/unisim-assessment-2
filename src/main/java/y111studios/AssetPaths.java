@@ -74,7 +74,7 @@ public enum AssetPaths {
   TREE3("assets/tree_8_2.png"),
   TREE1SNOW("assets/Tree_1Snow.png"),
   TREE2SNOW("assets/Tree_3Snow.png"),
-  TREE3SNOW("assets/Tree_8_2Snow.png"),
+  TREE3SNOW("assets/Tree_8Snow.png"),
   TEACH1("assets/Teach1.png"),
   TEACH2("assets/Teach2.png"),
   TEACH3("assets/TEACH_3.png"),
@@ -113,7 +113,8 @@ public enum AssetPaths {
   RAINDROP("assets/raindrop.png"),
   SNOW_EVENT("assets/events/SnowEvent.png"),
   PANDEMIC_EVENT("assets/events/PandemicEvent.png"),
-  OPEN_DAY_EVENT("assets/events/OpenDayEvent.png");
+  OPEN_DAY_EVENT("assets/events/OpenDayEvent.png"),
+  SATISFACTION_ACHIEVEMENT("assets/achievements/satisfactionAchievement.png");
 
   private final String path;
 

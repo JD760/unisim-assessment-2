@@ -1,9 +1,8 @@
 package y111studios.events;
 
-import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.Main;
-import y111studios.notification.Notification;
+import y111studios.notification.NotificationManager;
 import y111studios.screens.MapScreen;
 
 /**
@@ -11,7 +10,7 @@ import y111studios.screens.MapScreen;
  * generate a notification which is delivered to the user when it starts
  */
 public abstract class Event {
-  private @Getter Notification notification;
+  private AssetPaths texturePath;
   private MapScreen screen;
 
   public abstract void render(float delta);
@@ -24,12 +23,12 @@ public abstract class Event {
    * @param game - a reference to the main class
    */
   public Event(Main game, AssetPaths texturePath) {
-    screen = (MapScreen) game.getScreen();
-    notification = new Notification(
-      screen.getWidth(), screen.getHeight(), texturePath, game, 1000);
+    this.texturePath = texturePath;
+    this.screen = (MapScreen) game.getScreen();
   }
 
   public void setNotification() {
-    screen.setNotification(notification);
+    NotificationManager manager = screen.getNotificationManager();
+    manager.createNotification(1000, texturePath);
   }
 }

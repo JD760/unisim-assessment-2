@@ -1,6 +1,7 @@
 package y111studios.achievements;
 
 import com.badlogic.gdx.Gdx;
+import y111studios.AssetPaths;
 import y111studios.GameState;
 import y111studios.StudentSatisfaction;
 import y111studios.World;
@@ -13,8 +14,9 @@ public class SatisfactionAchievement extends Achievement {
   private static final String DISPLAY_NAME = "High Satisfaction!";
   private static final String DESCRIPTION = "Reach a student satisfaction level of 60%";
 
-  public SatisfactionAchievement(String name, AchievementManager manager, World world) {
-    super(name, manager, DISPLAY_NAME, DESCRIPTION);
+  public SatisfactionAchievement(String name, AchievementManager manager,
+      World world, AssetPaths notificationPath) {
+    super(name, manager, DISPLAY_NAME, DESCRIPTION, world, notificationPath);
     this.world = world;
   }
 
@@ -30,6 +32,8 @@ public class SatisfactionAchievement extends Achievement {
 
   @Override
   public void result() {
+    // use the superclass method to deliver an achievement notification
+    super.result();
     Gdx.app.log("#INFO", "Satisfaction Achieved!");
     return;
   }

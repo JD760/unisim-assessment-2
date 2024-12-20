@@ -1,13 +1,11 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,10 +17,11 @@ import y111studios.InfoBar;
 import y111studios.Main;
 import y111studios.World;
 import y111studios.WorldInputProcessor;
+import y111studios.achievements.AchievementManager;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.notification.Notification;
+import y111studios.notification.NotificationManager;
 
 /**
  * A class to interact with LibGDX to render the game window.
@@ -42,11 +41,11 @@ public class MapScreen extends ScreenAdapter {
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
-  boolean[] showDebugInfo = { false };
   World world;
-  Notification notification;
-  public boolean notificationShown = false;
+  private Table table = new Table();
   BuildingMenu buildingMenu;
+  private @Getter NotificationManager notificationManager;
+  private @Getter AchievementManager achievementManager;
   InputMultiplexer inputMultiplexer;
   Stage stage = new Stage(new ScreenViewport());
 
@@ -66,31 +65,20 @@ public class MapScreen extends ScreenAdapter {
     world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
-    
-    notification = new Notification(width, height, AssetPaths.PANDEMIC_EVENT, game);
+
+    // create the notification table and align it such that notifications
+    // will be stacked in the top right corner
+    table.top().right();
+    notificationManager = new NotificationManager(table, game);
+    notificationManager.createNotification(500, AssetPaths.SNOW_EVENT);
+    achievementManager = new AchievementManager(world);
+    achievementManager.setupAchievements();
+    stage.addActor(table);
 
     inputMultiplexer = new InputMultiplexer();
     inputMultiplexer.addProcessor(game.universalInputProcessor);
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(new WorldInputProcessor(world, buildingMenu));
-
-    stage.addListener(new InputListener() {
-      @Override
-      public boolean keyDown(InputEvent e, int keycode) {
-        switch (keycode) {
-          case Keys.N:
-            if (!notificationShown) {
-              setNotification(notification);
-            } else {
-              removeNotification();
-            }
-            break;
-          default:
-            break;
-        }
-        return false;
-      }
-    });
   }
 
   @Override
@@ -117,10 +105,9 @@ public class MapScreen extends ScreenAdapter {
     }
 
     gameState.tick();
-    if (notificationShown) {
-      if (!notification.tick()) {
-        removeNotification();
-      }
+    if (!gameState.isPaused()) {
+      notificationManager.tick();
+      achievementManager.checkConditions();
     }
 
     world.render(delta);
@@ -138,41 +125,19 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    notification.resize(width, height);
     buildingMenu.resize(width, height);
+    table.setSize(width, height * 0.9f);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
   }
 
   @Override
   public void hide() {
+    return;
   }
 
   @Override
   public void dispose() {
     game.dispose();
-  }
-
-  /**
-   * Set the notification to be rendered on the screen.
-   *
-   * @param notification - the notification to render
-   */
-  public void setNotification(Notification notification) {
-    this.notification = notification;
-    notificationShown = true;
-    stage.addActor(notification);
-  }
-
-  /**
-   * Clear the notification currently displayed.
-   */
-  public void removeNotification() {
-    if (notification.getParent() == null) {
-      return;
-    }
-    notification.remove();
-    notificationShown = false;
-    notification.resetAge();
   }
 }

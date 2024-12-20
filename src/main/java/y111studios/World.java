@@ -247,9 +247,6 @@ public class World {
    * @param delta The time since the previous frame.
    */
   public void render(float delta) {
-    // check for any achievement conditions that have been met
-    GameState.getAchievementManager().checkConditions();
-
     game.spritebatch.setProjectionMatrix(viewport.getCamera().combined);
     viewport.apply();
     ScreenUtils.clear(0.2f, 0.6f, 0.8f, 1f);

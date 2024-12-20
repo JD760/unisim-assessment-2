@@ -1,16 +1,21 @@
 package y111studios.achievements;
 
 import lombok.Getter;
+import y111studios.AssetPaths;
+import y111studios.World;
+import y111studios.screens.MapScreen;
 
 /**
  * Represents an achievement, which requires a unique name and a conditio
  * on which it is awarded.
  */
 public abstract class Achievement {
+  private World world;
   private @Getter String name;
   private AchievementManager manager;
   private @Getter String displayName;
   private @Getter String description;
+  private AssetPaths notificationPath;
 
   /**
    * Create a new achievement.
@@ -19,11 +24,14 @@ public abstract class Achievement {
    * @param manager - the AchievementManager handling the achievement
    */
   public Achievement(
-      String name, AchievementManager manager, String displayName, String description) {
+      String name, AchievementManager manager, String displayName, String description,
+      World world, AssetPaths notificationPath) {
     this.name = name;
     this.manager = manager;
     this.displayName = displayName;
     this.description = description;
+    this.world = world;
+    this.notificationPath = notificationPath;
 
     if (manager.getAchievements().containsKey(name)) {
       throw new IllegalArgumentException("Achievement names must be unique");
@@ -42,7 +50,10 @@ public abstract class Achievement {
    * The effect of the achievement being awarded - this is run once when the achievement
    * is marked as completed.
    */
-  public abstract void result();
+  public void result() {
+    MapScreen screen = (MapScreen) world.getGame().getScreen();
+    screen.getNotificationManager().createNotification(500, notificationPath);
+  }
 
   public boolean isComplete() {
     return manager.getCompletedAchievements().containsKey(name);

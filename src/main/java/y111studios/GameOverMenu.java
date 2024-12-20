@@ -61,6 +61,7 @@ public class GameOverMenu {
         name = name == "" ? "Unnamed Player" : name;
         Score score = new Score(name, gameState.getStudentSatisfaction().getSatisfaction());
         GameState.getLeaderboard().insertScore(score);
+        GameState.getLeaderboard().saveJson();
         gameState.setScreen(new StartScreen(game));
       }
     });

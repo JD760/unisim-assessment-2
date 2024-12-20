@@ -36,7 +36,8 @@ import y111studios.utils.Score;
  */
 public class GameState implements GameTimer, BuildingController {
   private static final int NUM_EVENT_TYPES = 4;
-  private @Getter static Leaderboard leaderboard = new Leaderboard();
+  private static Leaderboard leaderboard = new Leaderboard(true);
+
   private @Getter GameTimer timer;
   private Main game;
   public BuildingManager buildingManager;

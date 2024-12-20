@@ -70,6 +70,7 @@ public class MapScreen extends ScreenAdapter {
     // will be stacked in the top right corner
     table.top().right();
     notificationManager = new NotificationManager(table, game);
+    notificationManager.createNotification(500, AssetPaths.SNOW_EVENT);
     achievementManager = new AchievementManager(world);
     achievementManager.setupAchievements();
     stage.addActor(table);

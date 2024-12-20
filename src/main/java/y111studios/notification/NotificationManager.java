@@ -1,6 +1,8 @@
 package y111studios.notification;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.utils.Queue;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-
 import y111studios.AssetPaths;
 import y111studios.Main;
 
@@ -98,7 +99,9 @@ public class NotificationManager {
       if (notification == null) {
         cell.setActor(null);
       } else {
-        cell.setActor(notification.getImage());
+        Image image = notification.getImage();
+        image.addListener(new ClickToDismissListener(notification));
+        cell.setActor(image);
       }
     }
   }
@@ -134,6 +137,19 @@ public class NotificationManager {
       
       return (notification.getMaxAge() - notification.getAge()) 
         - (otherNotification.getMaxAge() - otherNotification.getAge());
+    }
+  }
+
+  class ClickToDismissListener extends InputListener {
+    private Notification notification;
+
+    public ClickToDismissListener(Notification notification) {
+      this.notification = notification;
+    }
+
+    public boolean touchDown(InputEvent e, float x, float y, int pointer, int parent) {
+      notification.remove();
+      return false;
     }
   }
 }

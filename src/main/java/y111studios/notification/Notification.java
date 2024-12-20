@@ -54,4 +54,8 @@ public class Notification {
   public Image getImage() {
     return new Image(game.getAsset(path));
   }
+
+  public void remove() {
+    age = maxAge;
+  }
 }

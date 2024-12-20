@@ -17,5 +17,9 @@ public interface VariantProperties {
 
   AssetPaths getTexturePath();
 
+  AssetPaths getTexturePathSnow();
+
+  AssetPaths getTexturePathFlood();
+
   Class<? extends VariantProperties> getVariantClass();
 }

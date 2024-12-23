@@ -2,11 +2,11 @@ package y111studios.utils;
 
 import lombok.Getter;
 
-public class Score {
+public class LeaderboardScore {
   private @Getter String name;
   private @Getter int score;
 
-  public Score(String name, int score) {
+  public LeaderboardScore(String name, int score) {
     this.name = name;
     this.score = score;
   }

@@ -8,14 +8,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import y111studios.utils.Score;
+import y111studios.utils.LeaderboardScore;
 
 /**
  * Represents the leaderboard. Contains the names associated with the top 5 recent scores.
  */
 public class Leaderboard {
   public static final int MAX_SIZE = 5;
-  List<Score> scores = new ArrayList<>(MAX_SIZE);
+  List<LeaderboardScore> scores = new ArrayList<>(MAX_SIZE);
   boolean persistent;
   FileHandle leaderboardFile;
 
@@ -41,7 +41,7 @@ public class Leaderboard {
    * @param score - The score to insert to the leaderboard
    * @return - false if the name or score are invalid.
    */
-  public boolean insertScore(Score score) {
+  public boolean insertScore(LeaderboardScore score) {
     if (score.getScore() < 0 || score.getName() == null || score.getName() == "") {
       return false;
     }
@@ -107,7 +107,7 @@ public class Leaderboard {
     scores.clear();
   }
 
-  public List<Score> getScores() {
+  public List<LeaderboardScore> getScores() {
     return scores;
   }
 
@@ -122,15 +122,15 @@ public class Leaderboard {
    * @param index - the position of the score to return
    * @return - the Score at the provided position, or null if no such position exists.
    */
-  public Score getScore(int index) {
+  public LeaderboardScore getScore(int index) {
     if (index < 0 || index >= scores.size()) {
       return null;
     }
     return scores.get(index);
   }
 
-  class SortByScore implements Comparator<Score> {
-    public int compare(Score a, Score b) {
+  class SortByScore implements Comparator<LeaderboardScore> {
+    public int compare(LeaderboardScore a, LeaderboardScore b) {
       if (a == null || b == null) {
         // any null item should be smaller than any non-null item so the leaderboard has no gaps
         return -1;
@@ -141,13 +141,13 @@ public class Leaderboard {
   }
 
   class Scores {
-    private List<Score> scores;
+    private List<LeaderboardScore> scores;
 
-    public void setScores(List<Score> scores) {
+    public void setScores(List<LeaderboardScore> scores) {
       this.scores = scores;
     }
 
-    public List<Score> getScores() {
+    public List<LeaderboardScore> getScores() {
       return scores;
     }
   }

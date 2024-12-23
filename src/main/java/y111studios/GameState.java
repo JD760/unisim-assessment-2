@@ -22,7 +22,7 @@ import y111studios.events.SnowEvent;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
 import y111studios.screens.Leaderboard;
-import y111studios.utils.Score;
+import y111studios.utils.LeaderboardScore;
 
 /**
  * A class representing the sum state of the game. This class contains the
@@ -164,7 +164,7 @@ public class GameState implements GameTimer, BuildingController {
     return timer.timeRemaining();
   }
 
-  public static boolean addScore(Score score) {
+  public static boolean addScore(LeaderboardScore score) {
     return leaderboard.insertScore(score);
   }
 

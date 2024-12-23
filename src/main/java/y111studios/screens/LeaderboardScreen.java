@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.AssetPaths;
 import y111studios.GameState;
 import y111studios.Main;
-import y111studios.utils.Score;
+import y111studios.utils.LeaderboardScore;
 
 
 /**
@@ -91,7 +91,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
     // programmatically create labels for each element in the leaderboard
     // this approach allows us to have leaderboards of any MAX_SIZE
     for (int i = 1; i < 2 * Leaderboard.MAX_SIZE; i += 2) {
-      Score score = leaderboard.getScore(i / 2);
+      LeaderboardScore score = leaderboard.getScore(i / 2);
       if (score == null) {
         leaderboardRows[i] = new Label(((i  / 2) + 1) + ". -- empty --", SKIN);
         leaderboardRows[i + 1] = new Label("-- empty --", SKIN);

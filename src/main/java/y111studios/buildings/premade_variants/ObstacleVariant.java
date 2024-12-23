@@ -1,6 +1,5 @@
 package y111studios.buildings.premade_variants;
 
-import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.buildings.ObstacleBuilding;
 import y111studios.position.GridPosition;

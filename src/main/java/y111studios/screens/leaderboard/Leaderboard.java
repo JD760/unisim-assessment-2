@@ -1,4 +1,4 @@
-package y111studios.screens;
+package y111studios.screens.leaderboard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import y111studios.utils.LeaderboardScore;
 
 /**
  * Represents the leaderboard. Contains the names associated with the top 5 recent scores.
@@ -26,11 +25,12 @@ public class Leaderboard {
     }
     Gdx.app.log("#INFO", Gdx.files.getLocalStoragePath());
     leaderboardFile = Gdx.files.local("data/leaderboard.json");
-    String leaderboardJson = leaderboardFile.readString();
-    if (leaderboardJson == null || leaderboardJson == "") {
-      return;
+    if (leaderboardFile.exists()) {
+      String leaderboardJson = leaderboardFile.readString();
+      if (leaderboardJson != null && leaderboardJson != "") {
+        loadJson(leaderboardJson);
+      }
     }
-    loadJson(leaderboardJson);
   }
 
   /**
@@ -68,7 +68,7 @@ public class Leaderboard {
     if (!persistent) {
       return;
     }
-  
+
     Json json = new Json();
     Scores currentScores = new Scores();
     currentScores.setScores(scores);
@@ -136,7 +136,7 @@ public class Leaderboard {
         return -1;
       }
       // sort scores from highest to lowest.
-      return b.getScore() - a.getScore();
+      return a.getScore() > b.getScore() ? -1 : 1;
     }
   }
 

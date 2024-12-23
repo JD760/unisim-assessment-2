@@ -1,8 +1,8 @@
 package y111studios.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -152,7 +152,7 @@ public class StartScreen extends ScreenWithBackground {
     creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
-        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+        ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
       }
     }
   }

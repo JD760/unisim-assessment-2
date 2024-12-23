@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.Getter;
 import y111studios.AssetPaths;
 import y111studios.BuildingMenu;
+import y111studios.GameOverMenu;
 import y111studios.GameState;
 import y111studios.InfoBar;
 import y111studios.Main;
@@ -41,6 +42,7 @@ public class MapScreen extends ScreenAdapter {
   GameState gameState;
   Viewport viewport;
   Texture pauseMenu;
+  GameOverMenu gameOverMenu;
   World world;
   private Table table = new Table();
   BuildingMenu buildingMenu;
@@ -61,10 +63,11 @@ public class MapScreen extends ScreenAdapter {
     viewport.getCamera().position.set(width / 2f, height / 2f, 0);
     viewport.getCamera().update();
     pauseMenu = game.getAsset(AssetPaths.PAUSE);
-  
+
     world = new World(game, gameState, this);
     buildingMenu = new BuildingMenu(game, stage);
     infoBar = new InfoBar(gameState, game, stage);
+    gameOverMenu = null;
 
     // create the notification table and align it such that notifications
     // will be stacked in the top right corner
@@ -109,9 +112,17 @@ public class MapScreen extends ScreenAdapter {
       notificationManager.tick();
       achievementManager.checkConditions();
     }
+    if (gameState.getTimer().isTimeUp() && gameOverMenu == null) {
+      gameOverMenu = new GameOverMenu(gameState, game, stage);
+      buildingMenu.removeActors();
+    }
 
     world.render(delta);
-    buildingMenu.render();
+    if (gameOverMenu == null) {
+      buildingMenu.render();
+    } else {
+      gameOverMenu.render();
+    }
     infoBar.render();
     stage.act(delta);
     stage.draw();
@@ -125,7 +136,11 @@ public class MapScreen extends ScreenAdapter {
     viewport.update(width, height, true);
     stage.getViewport().update(width, height, true);
     world.resize(width, height);
-    buildingMenu.resize(width, height);
+    if (gameOverMenu == null) {
+      buildingMenu.resize(width, height);
+    } else {
+      gameOverMenu.resize(width, height);
+    }
     table.setSize(width, height * 0.9f);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);

@@ -14,16 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.AssetPaths;
-import y111studios.GameState;
 import y111studios.Main;
-import y111studios.utils.LeaderboardScore;
+import y111studios.screens.leaderboard.Leaderboard;
+import y111studios.screens.leaderboard.LeaderboardScore;
 
 
 /**
  * Displays the Leaderboard.
  */
 public class LeaderboardScreen extends ScreenWithBackground {
-  private Leaderboard leaderboard = GameState.getLeaderboard();
+  private Leaderboard leaderboard;
   private int width = 640;
   private int height = 480;
   private final Image leaderboardTitle;
@@ -41,6 +41,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
    */
   public LeaderboardScreen(Main game) {
     super(game);
+    leaderboard = game.leaderboard;
     stage = new Stage(viewport);
     table = new Table(SKIN);
     table.setFillParent(true);
@@ -97,7 +98,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
         leaderboardRows[i + 1] = new Label("-- empty --", SKIN);
       } else {
         leaderboardRows[i] = new Label(((i / 2) + 1) + ". " + score.getName(), SKIN);
-        leaderboardRows[i + 1] = new Label(Integer.toString(score.getScore()), SKIN);
+        leaderboardRows[i + 1] = new Label(Double.toString(score.getScore()), SKIN);
       }
       table.row();
       table.add(leaderboardRows[i]).padTop(height * 0.05f);

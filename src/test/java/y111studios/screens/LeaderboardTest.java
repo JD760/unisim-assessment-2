@@ -15,10 +15,9 @@ import y111studios.utils.Score;
  * and sorting scores properly.
  */
 public class LeaderboardTest {
-
   @Test
   public void testInsert() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     // test inserting a score to an empty leaderboard
     assertTrue(leaderboard.insertScore(new Score("Jacob", 1200)));
     assertEquals(1_200, leaderboard.getScore(0).getScore());
@@ -31,7 +30,7 @@ public class LeaderboardTest {
 
   @Test
   public void testInsertValidScore() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     // allow valid scores
     assertTrue(leaderboard.insertScore(new Score("Jacob", 1200)));
     leaderboard.insertScore(new Score("Test", 1500));
@@ -45,7 +44,7 @@ public class LeaderboardTest {
 
   @Test
   public void testClear() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
 
     leaderboard.insertScore(new Score("Jacob", 1200));
     assertEquals(1, leaderboard.getSize());
@@ -55,7 +54,7 @@ public class LeaderboardTest {
 
   @Test
   public void testGetScores() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     assertEquals(new ArrayList<Score>(), leaderboard.getScores());
     Score testScore = new Score("test", 1200);
     Score otherScore = new Score("other", 10_000);
@@ -71,7 +70,7 @@ public class LeaderboardTest {
 
   @Test
   public void testRemoveLowest() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     leaderboard.insertScore(new Score("One", 100));
     leaderboard.insertScore(new Score("Two", 200));
     leaderboard.insertScore(new Score("Three", 300));
@@ -85,7 +84,7 @@ public class LeaderboardTest {
 
   @Test
   public void testGetScore() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     Score oneScore = new Score("One", 100);
     Score testScore = new Score("Test", 1200);
     leaderboard.insertScore(oneScore);
@@ -98,5 +97,25 @@ public class LeaderboardTest {
     assertNull(leaderboard.getScore(-5));
     assertNull(leaderboard.getScore(leaderboard.getSize()));
     assertNull(leaderboard.getScore(Integer.MAX_VALUE - 10));
+  }
+
+  @Test
+  public void testAddEqualScores() {
+    Leaderboard leaderboard = new Leaderboard(false);
+    Score oneScore = new Score("One", 100);
+    Score testScore = new Score("Test", 1200);
+    Score firstEqualScore = new Score("First", 0.0);
+    Score secondEqualScore = new Score("Second", 0.0);
+    leaderboard.insertScore(oneScore);
+    leaderboard.insertScore(testScore);
+    leaderboard.insertScore(firstEqualScore);
+    leaderboard.insertScore(secondEqualScore);
+
+    assertEquals(oneScore, leaderboard.getScore(1));
+    assertEquals(testScore, leaderboard.getScore(0));
+    // Test that if someone ties a previous score, the order in which
+    // the scores were achieved is reflected by the leaderboard
+    assertEquals(firstEqualScore, leaderboard.getScore(2));
+    assertEquals(secondEqualScore, leaderboard.getScore(3));
   }
 }

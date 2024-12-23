@@ -4,10 +4,15 @@ import lombok.Getter;
 
 public class Score {
   private @Getter String name;
-  private @Getter int score;
+  private @Getter double score;
 
-  public Score(String name, int score) {
+  public Score(String name, double score) {
     this.name = name;
     this.score = score;
+  }
+
+  public Score() {
+    this.name = "broken";
+    this.score = 50;
   }
 }

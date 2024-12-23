@@ -103,7 +103,7 @@ public class InfoBar {
     });
 
     this.table = new Table();
-    muteButtonCell = table.add(unmuteImage);
+    muteButtonCell = table.add(game.backgroundMusic.getVolume() == 0f ? muteImage : unmuteImage);
     pauseButtonCell = table.add(playImage);
     stage.addActor(table);
   }

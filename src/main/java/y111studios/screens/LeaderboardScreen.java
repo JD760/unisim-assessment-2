@@ -23,7 +23,7 @@ import y111studios.utils.Score;
  * Displays the Leaderboard.
  */
 public class LeaderboardScreen extends ScreenWithBackground {
-  private Leaderboard leaderboard = GameState.getLeaderboard();
+  private Leaderboard leaderboard;
   private int width = 640;
   private int height = 480;
   private final Image leaderboardTitle;
@@ -41,12 +41,10 @@ public class LeaderboardScreen extends ScreenWithBackground {
    */
   public LeaderboardScreen(Main game) {
     super(game);
+    leaderboard = game.leaderboard;
     stage = new Stage(viewport);
     table = new Table(SKIN);
     table.setFillParent(true);
-
-    leaderboard.insertScore(new Score("Test", 100));
-    leaderboard.insertScore(new Score("Better", 10_000));
 
     leaderboardTitle = new Image(game.getAsset(AssetPaths.LEADERBOARD_TITLE));
     TextButton backButton = new TextButton("Return to Menu", SKIN);
@@ -100,7 +98,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
         leaderboardRows[i + 1] = new Label("-- empty --", SKIN);
       } else {
         leaderboardRows[i] = new Label(((i / 2) + 1) + ". " + score.getName(), SKIN);
-        leaderboardRows[i + 1] = new Label(Integer.toString(score.getScore()), SKIN);
+        leaderboardRows[i + 1] = new Label(Double.toString(score.getScore()), SKIN);
       }
       table.row();
       table.add(leaderboardRows[i]).padTop(height * 0.05f);
@@ -127,9 +125,9 @@ public class LeaderboardScreen extends ScreenWithBackground {
     backButtonCell.width(guiScale / 3).height(height * 0.06f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
-        ((TextButton)(cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+        ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
       } else if (cell.getActor() instanceof Label) {
-        ((Label)(cell.getActor())).setFontScale(height * 0.0015f);
+        ((Label) (cell.getActor())).setFontScale(height * 0.0015f);
       }
     }
   }

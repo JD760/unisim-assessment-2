@@ -23,7 +23,7 @@ import y111studios.utils.Score;
  * Displays the Leaderboard.
  */
 public class LeaderboardScreen extends ScreenWithBackground {
-  private Leaderboard leaderboard = GameState.getLeaderboard();
+  private Leaderboard leaderboard;
   private int width = 640;
   private int height = 480;
   private final Image leaderboardTitle;
@@ -41,6 +41,7 @@ public class LeaderboardScreen extends ScreenWithBackground {
    */
   public LeaderboardScreen(Main game) {
     super(game);
+    leaderboard = game.leaderboard;
     stage = new Stage(viewport);
     table = new Table(SKIN);
     table.setFillParent(true);

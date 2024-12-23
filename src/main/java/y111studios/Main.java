@@ -21,6 +21,7 @@ public class Main extends Game {
   public BitmapFont font;
   public Music backgroundMusic;
   public UniversalInputProcessor universalInputProcessor = new UniversalInputProcessor();
+  public Leaderboard leaderboard;
 
   @Override
   public void create() {
@@ -39,6 +40,8 @@ public class Main extends Game {
     backgroundMusic.setVolume(0.3f);
     backgroundMusic.setLooping(true);
     backgroundMusic.play();
+
+    leaderboard = new Leaderboard(true);
   }
 
   /**

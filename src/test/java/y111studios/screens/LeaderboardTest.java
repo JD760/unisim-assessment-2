@@ -101,7 +101,7 @@ public class LeaderboardTest {
 
   @Test
   public void testAddEqualScores() {
-    Leaderboard leaderboard = new Leaderboard();
+    Leaderboard leaderboard = new Leaderboard(false);
     Score oneScore = new Score("One", 100);
     Score testScore = new Score("Test", 1200);
     Score firstEqualScore = new Score("First", 0.0);

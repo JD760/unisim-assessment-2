@@ -21,7 +21,6 @@ import y111studios.events.ResearchBreakthroughEvent;
 import y111studios.events.SnowEvent;
 import y111studios.map.CollisionDetection;
 import y111studios.position.GridPosition;
-import y111studios.screens.Leaderboard;
 import y111studios.utils.Score;
 
 /**
@@ -36,7 +35,6 @@ import y111studios.utils.Score;
  */
 public class GameState implements GameTimer, BuildingController {
   private static final int NUM_EVENT_TYPES = 4;
-  private static Leaderboard leaderboard = new Leaderboard(true);
 
   private @Getter GameTimer timer;
   private Main game;
@@ -163,10 +161,6 @@ public class GameState implements GameTimer, BuildingController {
   @Override
   public Duration timeRemaining() {
     return timer.timeRemaining();
-  }
-
-  public static Leaderboard getLeaderboard() {
-    return leaderboard;
   }
 
   /**

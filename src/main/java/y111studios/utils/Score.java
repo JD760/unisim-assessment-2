@@ -10,4 +10,9 @@ public class Score {
     this.name = name;
     this.score = score;
   }
+
+  public Score() {
+    this.name = "broken";
+    this.score = 50;
+  }
 }

@@ -26,11 +26,12 @@ public class Leaderboard {
     }
     Gdx.app.log("#INFO", Gdx.files.getLocalStoragePath());
     leaderboardFile = Gdx.files.local("data/leaderboard.json");
-    String leaderboardJson = leaderboardFile.readString();
-    if (leaderboardJson == null || leaderboardJson == "") {
-      return;
+    if (leaderboardFile.exists()) {
+      String leaderboardJson = leaderboardFile.readString();
+      if (leaderboardJson != null && leaderboardJson != "") {
+        loadJson(leaderboardJson);
+      }
     }
-    loadJson(leaderboardJson);
   }
 
   /**
@@ -140,15 +141,4 @@ public class Leaderboard {
     }
   }
 
-  class Scores {
-    private List<Score> scores;
-
-    public void setScores(List<Score> scores) {
-      this.scores = scores;
-    }
-
-    public List<Score> getScores() {
-      return scores;
-    }
-  }
 }

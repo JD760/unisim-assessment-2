@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.Getter;
+import y111studios.score.ScoreManager;
 import y111studios.screens.StartScreen;
 import y111studios.screens.leaderboard.LeaderboardScore;
 
@@ -21,6 +22,7 @@ import y111studios.screens.leaderboard.LeaderboardScore;
  */
 public class GameOverMenu {
   private final Main game;
+  private final GameState gameState;
   private final Texture menuBackground;
   private @Getter Viewport viewport;
   private Table titleTable;
@@ -39,11 +41,15 @@ public class GameOverMenu {
    */
   public GameOverMenu(GameState gameState, final Main game, Stage stage) {
     this.game = game;
+    this.gameState = gameState;
     viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
 
+    ScoreManager scoreManager = gameState.getScoreManager();
+    int score = scoreManager.calculateScore();
+
     titleTable = new Table();
-    titleTable.add(new Label("Game Over", SKIN));
+    titleTable.add(new Label("Game Over - Score: " + score, SKIN));
 
     mainTable = new Table();
     nameInput = new TextField("", SKIN);
@@ -56,9 +62,7 @@ public class GameOverMenu {
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         String name = nameInput.getText();
         name = name == "" ? "Unnamed Player" : name;
-        LeaderboardScore score = new LeaderboardScore(
-            name, (int) gameState.getStudentSatisfaction().getSatisfaction());
-        game.leaderboard.insertScore(score);
+        game.leaderboard.insertScore(new LeaderboardScore(name, score));
         game.leaderboard.saveJson();
         gameState.setScreen(new StartScreen(game));
       }

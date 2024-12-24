@@ -40,7 +40,7 @@ public class Main extends Game {
     backgroundMusic.setLooping(true);
     backgroundMusic.play();
 
-    leaderboard = new Leaderboard(false);
+    leaderboard = new Leaderboard(true);
   }
 
   /**

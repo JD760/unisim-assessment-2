@@ -139,16 +139,4 @@ public class Leaderboard {
       return a.getScore() > b.getScore() ? -1 : 1;
     }
   }
-
-  class Scores {
-    private List<LeaderboardScore> scores;
-
-    public void setScores(List<LeaderboardScore> scores) {
-      this.scores = scores;
-    }
-
-    public List<LeaderboardScore> getScores() {
-      return scores;
-    }
-  }
 }

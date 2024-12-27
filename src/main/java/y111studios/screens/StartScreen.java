@@ -110,7 +110,7 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    logoCell = table.add(logo).colspan(3).padLeft(viewport.getScreenWidth() * 0.05f);
+    logoCell = table.add(logo).colspan(3);
     table.row();
     playButtonCell = table.add(playButton).colspan(3)
         .pad(viewport.getScreenHeight() * 0.02f);
@@ -155,6 +155,11 @@ public class StartScreen extends ScreenWithBackground {
         ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
       }
     }
+    playButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    leaderboardButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    acheivementsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    settingsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    creditsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
   }
 
   @Override

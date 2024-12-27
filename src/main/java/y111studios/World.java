@@ -162,12 +162,12 @@ public class World {
    * @return A {@link GridPosition} containing the tile coordinates.
    */
   public GridPosition pixelToTile(float x, float y) {
-    float sum = (x + camera.x - 129) / 32;
-    float diff = (y - camera.y - (height * camera.scale) + 1343) / 16;
-    int tileY = (int) ((sum - diff) / 2);
-    int tileX = (int) (sum - tileY);
+    x += 7f;
+    y += 1f;
+    int tileX = (int) ((x - 2*y) * 0.0156f);
+    int tileY = (int) ((x + 2*y) * 0.0156f);
     try {
-      return new GridPosition(tileX, tileY);
+      return new GridPosition(tileX + 39, tileY - 44);
     } catch (IllegalArgumentException e) {
       return new GridPosition(10000, 10000);
     }
@@ -179,7 +179,7 @@ public class World {
    * @return The current grid position of the cursor.
    */
   public GridPosition currentGridPosition() {
-    return pixelToTile((cursorScreenPos.x * camera.scale), (cursorScreenPos.y * camera.scale));
+    return pixelToTile((cursorScreenPos.x * camera.scale + camera.x), (cursorScreenPos.y * camera.scale + camera.y));
   }
 
   public void renderBuilding(Building building) {

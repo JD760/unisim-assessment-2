@@ -152,8 +152,7 @@ public class WorldInputProcessor implements InputProcessor {
         }
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
         try {
-          world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),
-              (int) (screenPos.y * world.getCamera().scale)));
+          world.removeObject(world.currentGridPosition());
         } catch (IllegalStateException ignored) {}
       }
     }

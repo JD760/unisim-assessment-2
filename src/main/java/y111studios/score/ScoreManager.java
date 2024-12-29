@@ -1,14 +1,10 @@
 package y111studios.score;
 
 import lombok.Getter;
-import y111studios.GameState;
-import y111studios.Main;
 /**
  * Handles logic related to tracking and calculating the total score as the game progresses.
  */
 public class ScoreManager {
-  private final GameState gameState;
-  private final Main game;
   private @Getter int score;
   public static final int PEAK_SATISFACTION_FACTOR = 5;
   public static final int AVERAGE_SATISFACTION_FACTOR = 10;
@@ -16,19 +12,13 @@ public class ScoreManager {
   private int satisfactionSum = 0;
   private double peakSatisfaction = 0;
 
-  public ScoreManager(GameState gameState, Main game) {
-    this.gameState = gameState;
-    this.game = game;
-  }
-
   /**
    * Called once per tick.
    */
-  public void tick() {
-    double satisfaction = gameState.getStudentSatisfaction().getSatisfaction();
-    satisfactionSum += satisfaction;
-    if (satisfaction > peakSatisfaction) {
-      peakSatisfaction = satisfaction;
+  public void tick(double currentSatisfaction) {
+    satisfactionSum += currentSatisfaction;
+    if (currentSatisfaction > peakSatisfaction) {
+      peakSatisfaction = currentSatisfaction;
     }
     ticksElapsed++;
   }

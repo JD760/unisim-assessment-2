@@ -72,7 +72,7 @@ public class GameState implements GameTimer, BuildingController {
     };
     collisionDetection = new CollisionDetection(width, height, staticObjects);
     studentSatisfaction = new StudentSatisfaction(buildingManager, staticObjects);
-    scoreManager = new ScoreManager(this, game);
+    scoreManager = new ScoreManager();
     unplayedEvents = new ArrayList<>();
     for (int i = 0; i < NUM_EVENT_TYPES; i++) {
       unplayedEvents.add(i);
@@ -204,7 +204,7 @@ public class GameState implements GameTimer, BuildingController {
       while (numTicksToSimulate-- > 0) {
         studentSatisfaction.tick();
         buildingManager.tick();
-        scoreManager.tick();
+        scoreManager.tick(studentSatisfaction.getSatisfaction());
 
         // Update the current event every 62 seconds
         if (numTicks % (60 * 62) == 0 && numTicks > 0) {

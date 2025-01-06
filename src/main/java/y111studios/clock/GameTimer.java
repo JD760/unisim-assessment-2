@@ -13,7 +13,7 @@ public interface GameTimer {
   /**
    * The maximum duration of the timer in seconds.
    */
-  int INITIAL_SECONDS = 300;
+  int INITIAL_SECONDS = 60;
   /**
    * The maximum duration of the timer.
    */

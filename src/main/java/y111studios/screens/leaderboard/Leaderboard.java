@@ -46,18 +46,11 @@ public class Leaderboard {
       return false;
     }
 
-    // make space by removing the lowest score if a new score is added.
-    if (scores.size() >= MAX_SIZE) {
-      // only add a new score if it is higher than the current lowest score
-      if (score.getScore() > scores.get(MAX_SIZE - 1).getScore()) {
-        scores.set(scores.size() - 1, null);
-      } else {
-        return false;
-      }
-    }
-
     scores.add(score);
     scores.sort(new SortByScore());
+    while(scores.size() >= MAX_SIZE)
+      scores.remove(MAX_SIZE - 1);
+
     return true;
   }
 
@@ -131,8 +124,11 @@ public class Leaderboard {
 
   class SortByScore implements Comparator<LeaderboardScore> {
     public int compare(LeaderboardScore a, LeaderboardScore b) {
-      if (a == null || b == null) {
-        // any null item should be smaller than any non-null item so the leaderboard has no gaps
+      // any null item should be smaller than any non-null item so the leaderboard has no gaps
+      if (a == null) {
+        return 1;
+      }
+      if (b == null) {
         return -1;
       }
       // sort scores from highest to lowest.

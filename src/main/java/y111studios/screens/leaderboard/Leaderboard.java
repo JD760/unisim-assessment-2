@@ -39,7 +39,8 @@ public class Leaderboard {
    * the leaderboard properly ordered.
    *
    * @param score - The score to insert to the leaderboard
-   * @return - false if the name or score are invalid.
+   * @return - false if the name or score are invalid, or if the score is not in
+   *           the top MAX_SIZE scores
    */
   public boolean insertScore(LeaderboardScore score) {
     if (score.getScore() < 0 || score.getName() == null || score.getName() == "") {
@@ -51,7 +52,7 @@ public class Leaderboard {
     while(scores.size() >= MAX_SIZE)
       scores.remove(MAX_SIZE - 1);
 
-    return true;
+    return scores.contains(score);
   }
 
   /**

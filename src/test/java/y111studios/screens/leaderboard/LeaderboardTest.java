@@ -40,7 +40,22 @@ public class LeaderboardTest {
     // prevent null string
     assertFalse(leaderboard.insertScore(new LeaderboardScore(null, 100)));
   }
-
+  
+  @Test 
+  public void testInsertScoresExceedingMaxSize() {
+    for (int i = 0; i < 7; i++) {
+        leaderboard.insertScore(new Score("Player" + (i + 1), i * 10));
+    }
+    assertEquals(Leaderboard.MAX_SIZE, leaderboard.getSize());
+    
+    // Check that only the top 5 scores remain
+    List<Score> scores = leaderboard.getScores();
+    assertEquals("Player5", scores.get(0).getName()); // Highest score
+    assertEquals("Player4", scores.get(1).getName());
+    assertEquals("Player3", scores.get(2).getName());
+    assertEquals("Player2", scores.get(3).getName());
+    assertEquals("Player1", scores.get(4).getName());
+}
   @Test
   public void testClear() {
     Leaderboard leaderboard = new Leaderboard(false);

@@ -237,10 +237,6 @@ public class StudentSatisfaction {
     return satisfaction;
   }
 
-  public void setSatisfaction(double satisfaction) {
-    this.satisfaction = satisfaction;
-  }
-
   private double getSquaredDistance(Building building1, Building building2) {
     int xDist = building1.getArea().getOrigin().getX() + building1.getArea().getWidth() / 2
       - building2.getArea().getOrigin().getX() - building2.getArea().getWidth() / 2;

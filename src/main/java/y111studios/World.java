@@ -1,6 +1,6 @@
 package y111studios;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -62,7 +62,7 @@ public class World {
     this.game = game;
     this.gameState = gameState;
     this.parentScreen = parentScreen;
-    buildings = new ArrayList<>();
+    buildings = new LinkedList<>();
     camera = new Camera(2000, 1000, width, height);
     gameState.setCamera(camera);
     if (game != null) {

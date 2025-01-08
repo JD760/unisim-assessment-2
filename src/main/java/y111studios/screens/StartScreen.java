@@ -32,10 +32,12 @@ public class StartScreen extends ScreenWithBackground {
   Cell<Button> playButtonCell;
   Button leaderboardButton;
   Cell<Button> leaderboardButtonCell;
-  Button instructionsButton;
-  Cell<Button> instructionsButtonCell;
-  Button quitButton;
-  Cell<Button> quitButtonCell;
+  Button achievementsButton;
+  Cell<Button> acheivementsButtonCell;
+  Button settingsButton;
+  Cell<Button> settingsButtonCell;
+  Button creditsButton;
+  Cell<Button> creditsButtonCell;
 
   /**
    * Sets up the camera and loads the background.
@@ -84,30 +86,44 @@ public class StartScreen extends ScreenWithBackground {
         return false;
       }
     });
-    instructionsButton = new TextButton("Instructions", skin);
-    instructionsButton.addListener(new InputListener() {
+    achievementsButton = new TextButton("Achievements", skin);
+    achievementsButton.addListener(new InputListener() {
+      @Override
+      public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
+        game.setScreen(new AchievementsScreen(game));
+        return false;
+      }
+    });
+    settingsButton = new TextButton("Instructions", skin);
+    settingsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
         game.setScreen(new InstructionsScreen(game, null));
         return false;
       }
     });
-    quitButton = new TextButton("Quit", skin);
-    quitButton.addListener(new InputListener() {
+    creditsButton = new TextButton("Credits", skin);
+    creditsButton.addListener(new InputListener() {
       @Override
       public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
-        Gdx.app.exit();
+        game.setScreen(new CreditsScreen(game));
         return false;
       }
     });
-    logoCell = table.add(logo).colspan(2);
+    logoCell = table.add(logo).colspan(3);
     table.row();
-    playButtonCell = table.add(playButton).colspan(2);
+    playButtonCell = table.add(playButton).colspan(3)
+        .pad(viewport.getScreenHeight() * 0.02f);
     table.row().height(viewport.getScreenHeight() * 0.25f);
-    leaderboardButtonCell = table.add(leaderboardButton);
-    instructionsButtonCell = table.add(instructionsButton);
+    leaderboardButtonCell = table.add(leaderboardButton)
+        .pad(viewport.getScreenHeight() * 0.02f);
+    acheivementsButtonCell = table.add(achievementsButton)
+        .pad(viewport.getScreenHeight() * 0.02f);
+    settingsButtonCell = table.add(settingsButton)
+        .pad(viewport.getScreenHeight() * 0.02f);
     table.row();
-    quitButtonCell = table.add(quitButton).colspan(2);
+    creditsButtonCell = table.add(creditsButton).colspan(3)
+        .pad(viewport.getScreenHeight() * 0.02f);
     stage.addActor(table);
   }
 
@@ -130,9 +146,10 @@ public class StartScreen extends ScreenWithBackground {
     table.setSize(width, height);
     logoCell.width(height * 0.8f).height(height * 0.25f);
     playButtonCell.width(guiScale).height(height * 0.06f);
-    leaderboardButtonCell.width(guiScale / 2).height(height * 0.06f);
-    instructionsButtonCell.width(guiScale / 2).height(height * 0.06f);
-    quitButtonCell.width(guiScale / 2).height(height * 0.06f);
+    leaderboardButtonCell.width(guiScale / 3).height(height * 0.06f);
+    acheivementsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    settingsButtonCell.width(guiScale / 3).height(height * 0.06f);
+    creditsButtonCell.width(guiScale / 3).height(height * 0.06f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
         ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
@@ -140,8 +157,9 @@ public class StartScreen extends ScreenWithBackground {
     }
     playButtonCell.pad(viewport.getScreenHeight() * 0.02f);
     leaderboardButtonCell.pad(viewport.getScreenHeight() * 0.02f);
-    instructionsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
-    quitButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    acheivementsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    settingsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
+    creditsButtonCell.pad(viewport.getScreenHeight() * 0.02f);
   }
 
   @Override

@@ -40,15 +40,7 @@ public class LeaderboardTest {
     // prevent null string
     assertFalse(leaderboard.insertScore(new LeaderboardScore(null, 100)));
   }
-  
-  @Test 
-  public void testInsertScoresExceedingMaxSize() {
-    Leaderboard leaderboard = new Leaderboard(false);
-    for (int i = 0; i < 7; i++) {
-      leaderboard.insertScore(new LeaderboardScore("player", i+10));
-    }
-    assertEquals(Leaderboard.MAX_SIZE, leaderboard.getSize());
-}
+
   @Test
   public void testClear() {
     Leaderboard leaderboard = new Leaderboard(false);

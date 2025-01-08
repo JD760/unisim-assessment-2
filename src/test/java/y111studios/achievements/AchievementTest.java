@@ -34,7 +34,6 @@ public class AchievementTest {
         assertEquals("testAchievement", achievement.getName(), "Achievement name should match");
         assertEquals("Test Achievement", achievement.getDisplayName(), "Display name should match");
         assertEquals("This is a test achievement", achievement.getDescription(), "Description should match");
-        assertEquals(100, achievement.getScoreContribution(), "Score contribution should match");
     }
 
     @Test

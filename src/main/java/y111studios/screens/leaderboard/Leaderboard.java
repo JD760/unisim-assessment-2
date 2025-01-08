@@ -49,8 +49,8 @@ public class Leaderboard {
 
     scores.add(score);
     scores.sort(new SortByScore());
-    while(scores.size() >= MAX_SIZE)
-      scores.remove(MAX_SIZE - 1);
+    while(scores.size() > MAX_SIZE)
+      scores.remove(MAX_SIZE);
 
     return scores.contains(score);
   }

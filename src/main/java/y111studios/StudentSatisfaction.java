@@ -29,7 +29,7 @@ public class StudentSatisfaction {
   private int[][] natureAreas;
   private @Setter Event currentEvent;
 
-  StudentSatisfaction(BuildingManager buildingManager, int[][] natureAreas) {
+  public StudentSatisfaction(BuildingManager buildingManager, int[][] natureAreas) {
     this.buildingManager = buildingManager;
     satisfaction = 0;
     this.natureAreas = natureAreas;

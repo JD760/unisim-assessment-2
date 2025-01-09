@@ -24,7 +24,8 @@ public class SnowEvent extends Event {
     this.gameState = gameState;
     this.camera = camera;
     snowflakes = new Vector3[50000];
-    snowflakeTexture = game.getAsset(AssetPaths.SNOWFLAKE);
+    if (game != null)
+      snowflakeTexture = game.getAsset(AssetPaths.SNOWFLAKE);
 
     for (int i = 0; i < 50000; i++) {
       snowflakes[i] = new Vector3(

@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -24,9 +23,10 @@ import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.RecreationVariant;
 import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
-import y111studios.utils.UnreachableException;
 import y111studios.utils.MenuTab;
+import y111studios.utils.UnreachableException;
 import static y111studios.utils.MenuTab.*;
+
 /**
  * A class to interact with LibGDX to render the game window.
  */
@@ -56,7 +56,7 @@ public class BuildingMenu {
    * @param game Reference to game manager
    */
   @SuppressWarnings("unchecked")
-public BuildingMenu(final Main game, Stage stage) {
+  public BuildingMenu(final Main game, Stage stage) {
     this.game = game;
     viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
@@ -176,13 +176,12 @@ public BuildingMenu(final Main game, Stage stage) {
     // Draw the menu background
     float menuHeight = viewport.getScreenHeight() * 0.15f;
     game.spritebatch.draw(menuBackground, 0, 0, viewport.getScreenWidth(), menuHeight, 0, 0, 1,
-      menuBackground.getHeight(), false, false);
+        menuBackground.getHeight(), false, false);
     if (currentMenuItem >= 0 && currentMenuItem < 6) {
       buildingNameLayout = new GlyphLayout(game.font, setCurrentMenuItem(currentMenuItem));
       game.font.draw(game.spritebatch, buildingNameLayout,
           viewport.getScreenWidth() * 0.5f - buildingNameLayout.width * 0.5f,
-          menuHeight + game.font.getLineHeight()
-      );
+          menuHeight + game.font.getLineHeight());
     }
 
     game.spritebatch.end();
@@ -272,10 +271,10 @@ public BuildingMenu(final Main game, Stage stage) {
       for (Cell<Actor> labelCell : hotkeyTable.getCells()) {
         if (i == cellNum) {
           labelCell.width(
-            viewport.getScreenHeight() * 0.1f
-                * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
-            .height(viewport.getScreenHeight() * 0.035f).pad(viewport.getScreenHeight() * 0.01f);
-          ((Label)labelCell.getActor()).setFontScale(viewport.getScreenHeight() * 0.001f);
+              viewport.getScreenHeight() * 0.1f
+                  * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1))
+              .height(viewport.getScreenHeight() * 0.035f).pad(viewport.getScreenHeight() * 0.01f);
+          ((Label) labelCell.getActor()).setFontScale(viewport.getScreenHeight() * 0.001f);
         }
         i++;
       }
@@ -288,7 +287,7 @@ public BuildingMenu(final Main game, Stage stage) {
     for (Cell<Actor> cell : tabLabelTable.getCells()) {
       cell.width(
           viewport.getScreenHeight() * 0.025f * 6.667f).height(viewport.getScreenHeight() * 0.025f);
-      ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.00105f);
+      ((Label) cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.00105f);
     }
   }
 
@@ -307,7 +306,8 @@ public BuildingMenu(final Main game, Stage stage) {
   }
 
   /**
-   * updates highlighting of currently selected menu item, returns said menu item's name to be rendered
+   * updates highlighting of currently selected menu item, returns said menu
+   * item's name to be rendered.
    *
    * @param itemNum reference to current menu item
    * @return Returns the name of the currently selected menu item
@@ -321,7 +321,7 @@ public BuildingMenu(final Main game, Stage stage) {
       return selectedVariant.getName();
     } else if (itemNum == 6) {
       return "item delete";
-    } else{
+    } else {
       return "None selected";
     }
   }

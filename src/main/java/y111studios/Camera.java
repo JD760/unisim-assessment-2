@@ -57,7 +57,7 @@ public class Camera {
 
   /**
    * Resets the camera's velocity.
-   * 
+   *
    */
   public void velocityReset() {
     this.vx = 0;

@@ -8,9 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import y111studios.screens.Leaderboard;
 import y111studios.screens.StartScreen;
+import y111studios.screens.leaderboard.Leaderboard;
 
 /**
  * Holds most driver code for the game, handles graphics/windowing and textures management.

@@ -127,7 +127,7 @@ public class StudentSatisfaction {
 
       boolean inNatureRegion = false;
       for (int i = 0; i < natureAreas.length; i++) {
-        // Calculate intersectionusing the seperating axis theorem
+        // Calculate intersection using the seperating axis theorem
         final int border = 4;
         boolean buildingIntersectsArea =
           !(building.getArea().getOrigin().getX() > natureAreas[i][0] + natureAreas[i][2] + border
@@ -147,6 +147,8 @@ public class StudentSatisfaction {
       natureBonus = Math.min(natureBonus, 0.2);
       if (currentEvent instanceof FloodEvent) {
         natureBonus *= 2;
+      } else if (currentEvent instanceof PandemicEvent) {
+        natureBonus *= 3;
       }
 
       if (building.getVariant() instanceof AccommodationVariant) {
@@ -216,7 +218,7 @@ public class StudentSatisfaction {
     satisfaction = satisfaction * (1.0 - buildingVariants.size() / 250.0)
       + 100.0 * buildingVariants.size() / 250.0;
     // Punish building rotations being all the same
-    satisfaction /= 1 + Math.abs(buildingRotationTotal) / 100.0;
+    satisfaction /= 1 + Math.abs(buildingRotationTotal) / 300.0;
     // Apply reward for road flow
     double averageRoadFlow = Math.min(totalRoadFlow / Math.max(numRoads, 1), 0.12);
     satisfaction = satisfaction * (1.0 - averageRoadFlow) + 100.0 * averageRoadFlow;
@@ -233,6 +235,10 @@ public class StudentSatisfaction {
     }
 
     return satisfaction;
+  }
+
+  public void setSatisfaction(double satisfaction) {
+    this.satisfaction = satisfaction;
   }
 
   private double getSquaredDistance(Building building1, Building building2) {

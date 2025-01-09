@@ -14,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import y111studios.AssetPaths;
-import y111studios.GameState;
 import y111studios.Main;
-import y111studios.utils.Score;
+import y111studios.screens.leaderboard.Leaderboard;
+import y111studios.screens.leaderboard.LeaderboardScore;
 
 
 /**
@@ -30,7 +30,8 @@ public class LeaderboardScreen extends ScreenWithBackground {
   private Label[] leaderboardRows;
   private Stage stage;
   private Table table;
-  private Cell<Actor> backButtonCell;
+  private Cell<TextButton> backButtonCell;
+  private Cell<Image> titleCell;
   public static final Skin SKIN = new Skin(
       Gdx.files.internal("assets/skins/default/uiskin.json"));
 
@@ -65,9 +66,9 @@ public class LeaderboardScreen extends ScreenWithBackground {
       }
     });
 
-    table.add(leaderboardTitle);
+    titleCell = table.add(leaderboardTitle).colspan(2);
     createLeaderboard();
-    backButtonCell = table.add(backButton);
+    backButtonCell = table.add(backButton).colspan(2);
     stage.addActor(table);
 
     InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -86,13 +87,13 @@ public class LeaderboardScreen extends ScreenWithBackground {
     leaderboardRows[Leaderboard.MAX_SIZE] = new Label("-- Name --", SKIN);
     leaderboardRows[Leaderboard.MAX_SIZE + 1] = new Label("-- Score --", SKIN);
     table.row();
-    table.add(leaderboardRows[Leaderboard.MAX_SIZE]).padTop(height * 0.05f);
-    table.add(leaderboardRows[Leaderboard.MAX_SIZE + 1]).padTop(height * 0.05f);
-    table.row().padTop(width * 0.05f);
+    table.add(leaderboardRows[Leaderboard.MAX_SIZE]);
+    table.add(leaderboardRows[Leaderboard.MAX_SIZE + 1]);
+    table.row();
     // programmatically create labels for each element in the leaderboard
     // this approach allows us to have leaderboards of any MAX_SIZE
     for (int i = 1; i < 2 * Leaderboard.MAX_SIZE; i += 2) {
-      Score score = leaderboard.getScore(i / 2);
+      LeaderboardScore score = leaderboard.getScore(i / 2);
       if (score == null) {
         leaderboardRows[i] = new Label(((i  / 2) + 1) + ". -- empty --", SKIN);
         leaderboardRows[i + 1] = new Label("-- empty --", SKIN);
@@ -101,8 +102,8 @@ public class LeaderboardScreen extends ScreenWithBackground {
         leaderboardRows[i + 1] = new Label(Double.toString(score.getScore()), SKIN);
       }
       table.row();
-      table.add(leaderboardRows[i]).padTop(height * 0.05f);
-      table.add(leaderboardRows[i + 1]).padTop(height * 0.05f);
+      table.add(leaderboardRows[i]);
+      table.add(leaderboardRows[i + 1]);
     }
     table.row();
   }
@@ -120,14 +121,16 @@ public class LeaderboardScreen extends ScreenWithBackground {
     super.resize(width, height);
     this.width = width;
     this.height = height;
-    leaderboardTitle.setSize(width * 0.5f, height * 0.1f);
     final float guiScale = height * 0.75f;
     backButtonCell.width(guiScale / 3).height(height * 0.06f);
+    titleCell.width(height * 0.45f).height(height * 0.08f);
     for (Cell<Actor> cell : table.getCells()) {
       if (cell.getActor() instanceof TextButton) {
         ((TextButton) (cell.getActor())).getLabel().setFontScale(height * 0.0015f);
+        cell.pad(height * 0.04f);
       } else if (cell.getActor() instanceof Label) {
         ((Label) (cell.getActor())).setFontScale(height * 0.0015f);
+        cell.pad(height * 0.02f);
       }
     }
   }

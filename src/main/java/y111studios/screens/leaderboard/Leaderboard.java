@@ -1,4 +1,4 @@
-package y111studios.screens;
+package y111studios.screens.leaderboard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -8,14 +8,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import y111studios.utils.Score;
 
 /**
  * Represents the leaderboard. Contains the names associated with the top 5 recent scores.
  */
 public class Leaderboard {
   public static final int MAX_SIZE = 5;
-  List<Score> scores = new ArrayList<>(MAX_SIZE);
+  List<LeaderboardScore> scores = new ArrayList<>(MAX_SIZE);
   boolean persistent;
   FileHandle leaderboardFile;
 
@@ -40,26 +39,20 @@ public class Leaderboard {
    * the leaderboard properly ordered.
    *
    * @param score - The score to insert to the leaderboard
-   * @return - false if the name or score are invalid.
+   * @return - false if the name or score are invalid, or if the score is not in
+   *           the top MAX_SIZE scores
    */
-  public boolean insertScore(Score score) {
+  public boolean insertScore(LeaderboardScore score) {
     if (score.getScore() < 0 || score.getName() == null || score.getName() == "") {
       return false;
     }
 
-    // make space by removing the lowest score if a new score is added.
-    if (scores.size() >= MAX_SIZE) {
-      // only add a new score if it is higher than the current lowest score
-      if (score.getScore() > scores.get(MAX_SIZE - 1).getScore()) {
-        scores.set(scores.size() - 1, null);
-      } else {
-        return false;
-      }
-    }
-
     scores.add(score);
     scores.sort(new SortByScore());
-    return true;
+    while(scores.size() > MAX_SIZE)
+      scores.remove(MAX_SIZE);
+
+    return scores.contains(score);
   }
 
   /**
@@ -108,7 +101,7 @@ public class Leaderboard {
     scores.clear();
   }
 
-  public List<Score> getScores() {
+  public List<LeaderboardScore> getScores() {
     return scores;
   }
 
@@ -123,22 +116,24 @@ public class Leaderboard {
    * @param index - the position of the score to return
    * @return - the Score at the provided position, or null if no such position exists.
    */
-  public Score getScore(int index) {
+  public LeaderboardScore getScore(int index) {
     if (index < 0 || index >= scores.size()) {
       return null;
     }
     return scores.get(index);
   }
 
-  class SortByScore implements Comparator<Score> {
-    public int compare(Score a, Score b) {
-      if (a == null || b == null) {
-        // any null item should be smaller than any non-null item so the leaderboard has no gaps
+  class SortByScore implements Comparator<LeaderboardScore> {
+    public int compare(LeaderboardScore a, LeaderboardScore b) {
+      // any null item should be smaller than any non-null item so the leaderboard has no gaps
+      if (a == null) {
+        return 1;
+      }
+      if (b == null) {
         return -1;
       }
       // sort scores from highest to lowest.
       return a.getScore() > b.getScore() ? -1 : 1;
     }
   }
-
 }

@@ -2,6 +2,7 @@ package y111studios.achievements;
 
 import lombok.Getter;
 import y111studios.AssetPaths;
+import y111studios.GameState;
 import y111studios.World;
 import y111studios.screens.MapScreen;
 
@@ -15,6 +16,7 @@ public abstract class Achievement {
   private AchievementManager manager;
   private @Getter String displayName;
   private @Getter String description;
+  private final int scoreContribution;
   private AssetPaths notificationPath;
 
   /**
@@ -25,11 +27,12 @@ public abstract class Achievement {
    */
   public Achievement(
       String name, AchievementManager manager, String displayName, String description,
-      World world, AssetPaths notificationPath) {
+      int scoreContribution, World world, AssetPaths notificationPath) {
     this.name = name;
     this.manager = manager;
     this.displayName = displayName;
     this.description = description;
+    this.scoreContribution = scoreContribution;
     this.world = world;
     this.notificationPath = notificationPath;
 
@@ -53,6 +56,8 @@ public abstract class Achievement {
   public void result() {
     MapScreen screen = (MapScreen) world.getGame().getScreen();
     screen.getNotificationManager().createNotification(500, notificationPath);
+    GameState gameState = world.getGameState();
+    gameState.getScoreManager().addScore(scoreContribution);
   }
 
   public boolean isComplete() {

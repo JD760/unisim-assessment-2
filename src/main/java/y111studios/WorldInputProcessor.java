@@ -138,9 +138,7 @@ public class WorldInputProcessor implements InputProcessor {
             buildingMenu.getCurrentMenuTab())[buildingMenu.getCurrentMenuItem()];
         if (world.addObject(
             variant,
-            world.pixelToTile(
-                (int) (screenPos.x * world.getCamera().scale),
-                (int) (screenPos.y * world.getCamera().scale)),
+            world.currentGridPosition(),
             buildingMenu.isFlipped()
         )) {
           if (
@@ -154,8 +152,7 @@ public class WorldInputProcessor implements InputProcessor {
         }
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
         try {
-          world.removeObject(world.pixelToTile((int) (screenPos.x * world.getCamera().scale),
-              (int) (screenPos.y * world.getCamera().scale)));
+          world.removeObject(world.currentGridPosition());
         } catch (IllegalStateException ignored) {}
       }
     }
@@ -165,10 +162,7 @@ public class WorldInputProcessor implements InputProcessor {
 
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
-    world.setCursorScreenPos(world.getViewport().getCamera().unproject(
-        new Vector3(x, y, 0),
-        world.getViewport().getScreenX(), world.getViewport().getScreenY(),
-        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()));
+    world.setCursorScreenPos(new Vector3(x, y, 0));
     if (clickedOnMap) {
       if (Math.max(Math.abs(cursorX - clickX),
           Math.abs(cursorY - clickY)) > 5) {
@@ -189,10 +183,7 @@ public class WorldInputProcessor implements InputProcessor {
   @Override
   public boolean mouseMoved(int x, int y) {
     world.setDeleteMode(buildingMenu.getCurrentMenuItem() == 6);
-    world.setCursorScreenPos(world.getViewport().getCamera().unproject(
-        new Vector3(x, y, 0),
-        world.getViewport().getScreenX(), world.getViewport().getScreenY(),
-        world.getViewport().getScreenWidth(), world.getViewport().getScreenHeight()));
+    world.setCursorScreenPos(new Vector3(x, y, 0));
     return true;
   }
 

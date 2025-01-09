@@ -1,17 +1,17 @@
-package y111studios.utils;
+package y111studios.screens.leaderboard;
 
 import lombok.Getter;
 
-public class Score {
+public class LeaderboardScore {
   private @Getter String name;
   private @Getter double score;
 
-  public Score(String name, double score) {
+  public LeaderboardScore(String name, int score) {
     this.name = name;
     this.score = score;
   }
 
-  public Score() {
+  public LeaderboardScore() {
     this.name = "broken";
     this.score = 50;
   }

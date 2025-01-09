@@ -7,7 +7,7 @@ import y111studios.StudentSatisfaction;
 import y111studios.World;
 
 /**
- * This achievement is granted for reaching a satisfaction of 60%.
+ * This achievement is granted for reaching a satisfaction of 40%.
  */
 public class SatisfactionAchievement extends Achievement {
   private World world;
@@ -16,7 +16,7 @@ public class SatisfactionAchievement extends Achievement {
 
   public SatisfactionAchievement(String name, AchievementManager manager,
       World world, AssetPaths notificationPath) {
-    super(name, manager, DISPLAY_NAME, DESCRIPTION, world, notificationPath);
+    super(name, manager, DISPLAY_NAME, DESCRIPTION, 50, world, notificationPath);
     this.world = world;
   }
 
@@ -24,7 +24,7 @@ public class SatisfactionAchievement extends Achievement {
   public boolean condition() {
     GameState state = world.getGameState();
     StudentSatisfaction satisfaction = state.getStudentSatisfaction();
-    if (satisfaction.getSatisfaction() > 0) {
+    if (satisfaction.getSatisfaction() > 40) {
       return true;
     }
     return false;

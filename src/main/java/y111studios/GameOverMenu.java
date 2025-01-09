@@ -1,9 +1,7 @@
 package y111studios;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -12,18 +10,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import lombok.Getter;
+import y111studios.score.ScoreManager;
 import y111studios.screens.StartScreen;
-import y111studios.utils.Score;
+import y111studios.screens.leaderboard.LeaderboardScore;
+
 /**
- * A class to interact with LibGDX to render the game window.
+ * Draws the game over menu when the timer runs out.
  */
 public class GameOverMenu {
   private final Main game;
+  private final GameState gameState;
   private final Texture menuBackground;
   private @Getter Viewport viewport;
   private Table titleTable;
@@ -42,11 +41,15 @@ public class GameOverMenu {
    */
   public GameOverMenu(GameState gameState, final Main game, Stage stage) {
     this.game = game;
+    this.gameState = gameState;
     viewport = stage.getViewport();
     menuBackground = game.getAsset(AssetPaths.MENU_BACKGROUND);
 
+    ScoreManager scoreManager = gameState.getScoreManager();
+    int score = scoreManager.calculateScore();
+
     titleTable = new Table();
-    titleTable.add(new Label("Game Over", SKIN));
+    titleTable.add(new Label("Game Over - Score: " + score, SKIN));
 
     mainTable = new Table();
     nameInput = new TextField("", SKIN);
@@ -59,8 +62,7 @@ public class GameOverMenu {
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         String name = nameInput.getText();
         name = name == "" ? "Unnamed Player" : name;
-        Score score = new Score(name, gameState.getStudentSatisfaction().getSatisfaction());
-        game.leaderboard.insertScore(score);
+        game.leaderboard.insertScore(new LeaderboardScore(name, score));
         game.leaderboard.saveJson();
         gameState.setScreen(new StartScreen(game));
       }
@@ -83,7 +85,7 @@ public class GameOverMenu {
     // Draw the menu background
     float menuHeight = viewport.getScreenHeight() * 0.15f;
     game.spritebatch.draw(menuBackground, 0, 0, viewport.getScreenWidth(), menuHeight, 0, 0, 1,
-      menuBackground.getHeight(), false, false);
+        menuBackground.getHeight(), false, false);
 
     game.spritebatch.end();
   }
@@ -100,7 +102,7 @@ public class GameOverMenu {
     for (Cell<Actor> cell : titleTable.getCells()) {
       cell.width(
           viewport.getScreenHeight() * 0.14f).height(viewport.getScreenHeight() * 0.025f);
-          ((Label)cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.0016f);
+      ((Label) cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.0016f);
     }
 
     mainTable.setBounds(0, 0, width, height * 0.08f);

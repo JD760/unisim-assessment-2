@@ -1,6 +1,6 @@
 package y111studios;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -62,7 +62,7 @@ public class World {
     this.game = game;
     this.gameState = gameState;
     this.parentScreen = parentScreen;
-    buildings = new LinkedList<>();
+    buildings = new ArrayList<>();
     camera = new Camera(2000, 1000, width, height);
     gameState.setCamera(camera);
     if (game != null) {
@@ -162,12 +162,12 @@ public class World {
    * @return A {@link GridPosition} containing the tile coordinates.
    */
   public GridPosition pixelToTile(float x, float y) {
-    float sum = (x + camera.x - 129) / 32;
-    float diff = (y - camera.y - (height * camera.scale) + 1343) / 16;
-    int tileY = (int) ((sum - diff) / 2);
-    int tileX = (int) (sum - tileY);
+    x += 7f;
+    y += 1f;
+    int tileX = (int) ((x - 2*y) * 0.0156f);
+    int tileY = (int) ((x + 2*y) * 0.0156f);
     try {
-      return new GridPosition(tileX, tileY);
+      return new GridPosition(tileX + 39, tileY - 44);
     } catch (IllegalArgumentException e) {
       return new GridPosition(10000, 10000);
     }
@@ -179,7 +179,7 @@ public class World {
    * @return The current grid position of the cursor.
    */
   public GridPosition currentGridPosition() {
-    return pixelToTile((cursorScreenPos.x * camera.scale), (cursorScreenPos.y * camera.scale));
+    return pixelToTile((cursorScreenPos.x * camera.scale + camera.x), (cursorScreenPos.y * camera.scale + camera.y));
   }
 
   public void renderBuilding(Building building) {
@@ -191,6 +191,10 @@ public class World {
       if (gameState.isPaused()) {
         game.spritebatch.setColor(NOT_BUILT);
       } else {
+        float opacity = ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5;
+        if (gameState.getCurrentEvent() instanceof SnowEvent
+            || gameState.getCurrentEvent() instanceof FloodEvent)
+          opacity /= 2;
         game.spritebatch.setColor(new Color(
             NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
             ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f));
@@ -200,9 +204,6 @@ public class World {
     texture = game.getAsset(building.getTexturePath());
 
     float[] pixelCoords = tileToPixel(building.getArea().getOrigin());
-    // draw under the cursor
-    // game.font.draw(game.spritebatch, "Test!", Gdx.input.getX() + 9, height -
-    // Gdx.input.getY());
     game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
         (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
@@ -210,11 +211,13 @@ public class World {
         2f * texture.getHeight() / camera.scale,
         0, 0, texture.getWidth(), texture.getHeight(),
         building.getFlipped(), false);
+
+    Color color = game.spritebatch.getColor();
+    if (building.getAge() < y111studios.buildings.MapObject.BUILDING_TIME && !gameState.isPaused())
+      color.a /= 2;
+    game.spritebatch.setColor(color);
+    // Render snowy and rainy buildings on top of the plain building
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
-      game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
       texture = game.getAsset(building.getTexturePathSnow());
       game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
@@ -223,12 +226,7 @@ public class World {
         2f * texture.getHeight() / camera.scale,
         0, 0, texture.getWidth(), texture.getHeight(),
         building.getFlipped(), false);
-    }
-    else if (gameState.getCurrentEvent() instanceof FloodEvent) {
-      game.spritebatch.setColor(new Color(
-        1f, 1f, 1f,
-        (float)Math.sqrt(gameState.getCurrentEvent().getIntensity())
-      ));
+    } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
       texture = game.getAsset(building.getTexturePathFlood());
       game.spritebatch.draw(texture,
         pixelCoords[0] / camera.scale,
@@ -238,6 +236,7 @@ public class World {
         0, 0, texture.getWidth(), texture.getHeight(),
         building.getFlipped(), false);
     }
+
     game.spritebatch.setColor(NORMAL);
   }
 
@@ -297,6 +296,7 @@ public class World {
           (int) camera.y - floodedMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     }
+    game.spritebatch.setColor(NORMAL);
 
     // Render buildings
     buildings.forEach(this::renderBuilding);

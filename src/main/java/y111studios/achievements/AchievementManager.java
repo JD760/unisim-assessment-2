@@ -71,5 +71,7 @@ public class AchievementManager {
   public void setupAchievements() {
     add(new SatisfactionAchievement(
         "satisfactionAchievement", this, world, AssetPaths.SATISFACTION_ACHIEVEMENT));
+    add(new BuildingHoarderAchievement(
+        "buildingHoarderAchievement", this, world, AssetPaths.BUILDING_HOARDER_ACHIEVEMENT));
   }
 }

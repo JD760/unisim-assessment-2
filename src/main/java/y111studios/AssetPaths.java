@@ -114,7 +114,8 @@ public enum AssetPaths {
   SNOW_EVENT("assets/events/SnowEvent.png"),
   PANDEMIC_EVENT("assets/events/PandemicEvent.png"),
   OPEN_DAY_EVENT("assets/events/OpenDayEvent.png"),
-  SATISFACTION_ACHIEVEMENT("assets/achievements/satisfactionAchievement.png");
+  SATISFACTION_ACHIEVEMENT("assets/achievements/satisfactionAchievement.png"),
+  BUILDING_HOARDER_ACHIEVEMENT("assets/achievements/buildingHoarderAchievement.png");
 
   private final String path;
 

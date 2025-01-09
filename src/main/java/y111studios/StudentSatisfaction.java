@@ -25,7 +25,7 @@ import y111studios.events.SnowEvent;
 
 public class StudentSatisfaction {
   private final BuildingManager buildingManager;
-  private @Getter double satisfaction;
+  private @Setter @Getter double satisfaction;
   private int[][] natureAreas;
   private @Setter Event currentEvent;
 
@@ -42,7 +42,7 @@ public class StudentSatisfaction {
     satisfaction = satisfaction * 0.997 + satisfactionLimit * 0.003;
   }
 
-  private double calculate() {
+  public double calculate() {
     // Set up counters for buildings that have actually been built
     Map<BuildingType, Integer> buildingCounts = new HashMap<>();
     buildingCounts.put(BuildingType.ACCOMMODATION, 0);
@@ -235,10 +235,6 @@ public class StudentSatisfaction {
     }
 
     return satisfaction;
-  }
-
-  public void setSatisfaction(double satisfaction) {
-    this.satisfaction = satisfaction;
   }
 
   private double getSquaredDistance(Building building1, Building building2) {

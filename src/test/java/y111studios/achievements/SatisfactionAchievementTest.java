@@ -21,16 +21,16 @@ public class SatisfactionAchievementTest {
         gameState = new GameState(100, 100, null);
         dummyWorld = new World(null, gameState, null); // Initialize the dummy world
         achievementManager = new AchievementManager(dummyWorld); // Create the AchievementManager
-        satisfactionAchievement = new SatisfactionAchievement("satisfactionAchievement", 
+        satisfactionAchievement = new SatisfactionAchievement("satisfactionAchievement",
             achievementManager, dummyWorld, 
             AssetPaths.ACHIEVEMENT_NOTIFICATION); // Create the SatisfactionAchievement
     }
-    
+
     @Test
     void testConditionNotMet() {
         // Set satisfaction to a value below 40%
         dummyWorld.getGameState().getStudentSatisfaction().setSatisfaction(30);
-        assertFalse(satisfactionAchievement.condition(), 
+        assertFalse(satisfactionAchievement.condition(),
             "Condition should not be met when satisfaction is below 40%");
     }
 
@@ -38,8 +38,7 @@ public class SatisfactionAchievementTest {
     void testConditionMet() {
         // Set satisfaction to a value above 40%
         dummyWorld.getGameState().getStudentSatisfaction().setSatisfaction(50);
-        assertTrue(satisfactionAchievement.condition(), 
+        assertTrue(satisfactionAchievement.condition(),
             "Condition should be met when satisfaction is above 40%");
     }
-
 }

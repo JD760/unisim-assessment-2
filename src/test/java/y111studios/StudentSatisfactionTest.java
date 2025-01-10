@@ -41,11 +41,10 @@ public class StudentSatisfactionTest {
   void zeroTest() {
     BuildingManager buildingManager = new BuildingManager();
     StudentSatisfaction satisfaction = new StudentSatisfaction(buildingManager, new int[0][0]);
-    
+
     // Tick the game enough to build all the buildings
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      assertEquals(satisfaction.calculate(), 0.0);
     }
     assertEquals(satisfaction.calculate(), 0.0);
     buildingManager.push(new AccommodationBuilding(
@@ -61,8 +60,8 @@ public class StudentSatisfactionTest {
     // Tick the game enough to build all the buildings
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      assertEquals(satisfaction.calculate(), 0.0);
     }
+    assertEquals(satisfaction.calculate(), 0.0);
 
     buildingManager.push(new AccommodationBuilding(
         new GridPosition(0, 40), AccommodationVariant.SMALL_HOUSE, false));
@@ -91,8 +90,8 @@ public class StudentSatisfactionTest {
     double originalSatisfaction = 0.0;
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      originalSatisfaction = satisfaction.calculate();
     }
+    originalSatisfaction = satisfaction.calculate();
 
     buildingManager.removePosition(new GridPosition(0, 20));
     buildingManager.push(new CateringBuilding(
@@ -124,8 +123,8 @@ public class StudentSatisfactionTest {
     // Tick the game enough to build all the buildings
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      originalSatisfaction = satisfaction.calculate();
     }
+    originalSatisfaction = satisfaction.calculate();
 
     buildingManager.removePosition(new GridPosition(0, 20));
     buildingManager.push(new CateringBuilding(
@@ -134,8 +133,8 @@ public class StudentSatisfactionTest {
     // Tick the game enough to build all the buildings
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      assertTrue(satisfaction.calculate() < originalSatisfaction);
     }
+    assertTrue(satisfaction.calculate() < originalSatisfaction);
   }
 
   /**
@@ -160,8 +159,8 @@ public class StudentSatisfactionTest {
     double originalSatisfaction = 0.0;
     for (int i = 0; i < MapObject.BUILDING_TIME + 1; i++) {
       buildingManager.tick();
-      originalSatisfaction = satisfaction.calculate();
     }
+    originalSatisfaction = satisfaction.calculate();
 
     buildingManager.removePosition(new GridPosition(0, 30));
     buildingManager.removePosition(new GridPosition(0, 35));

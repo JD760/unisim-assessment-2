@@ -35,7 +35,9 @@ public enum CateringVariant implements VariantProperties {
     this.texturePathFlood = texturePath;
     this.name = name;
   }
-  CateringVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
+
+  CateringVariant(
+      int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -44,7 +46,9 @@ public enum CateringVariant implements VariantProperties {
     this.name = name;
   }
 
-  CateringVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+  CateringVariant(
+      int width, int height, AssetPaths texturePath, String name,
+      AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;

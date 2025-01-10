@@ -16,6 +16,7 @@ import y111studios.position.GridPosition;
  * fixed size array of
  * buildings, helped by the building counter.
  * </p>
+ *
  * @see BuildingCounter
  * @see BuildingController
  */
@@ -249,6 +250,9 @@ public class BuildingManager implements BuildingController {
     return getCount() >= MAX_BUILDINGS;
   }
 
+  /**
+   * Runs once per game tick, calls the tick() method on each placed building.
+   */
   public void tick() {
     for (Building building : buildings) {
       if (building != null) {

@@ -8,6 +8,7 @@ import y111studios.position.GridArea;
 
 /**
  * Tests the Map Object class by creating a mock.
+ * Tests FR_BUILDING_PLACEMENT
  */
 public class MapObjectTest {
 
@@ -15,21 +16,21 @@ public class MapObjectTest {
   public void testNonNullMapArea() {
     GridArea area = null;
     try {
-      new MapObjectMock(area, AssetPaths.ACC1,AssetPaths.ACC1,AssetPaths.ACC1, true);
-      new MapObjectMock(area, AssetPaths.ACC1,AssetPaths.ACC1,AssetPaths.ACC1, false);
+      new MapObjectMock(area, AssetPaths.ACC1, AssetPaths.ACC1, AssetPaths.ACC1, true);
+      new MapObjectMock(area, AssetPaths.ACC1, AssetPaths.ACC1, AssetPaths.ACC1, false);
     } catch (IllegalArgumentException e) {
       return;
     }
     fail("Map Object with null map area created");
   }
-  
+
   @Test
   public void testNonNullTexturePath() {
     GridArea area = new GridArea(0, 0, 10, 10);
     AssetPaths path = null;
     try {
-      new MapObjectMock(area, path,path,path, true);
-      new MapObjectMock(area, path,path,path, false);
+      new MapObjectMock(area, path, path, path, true);
+      new MapObjectMock(area, path, path, path, false);
     } catch (IllegalArgumentException e) {
       return;
     }
@@ -37,7 +38,9 @@ public class MapObjectTest {
   }
 
   class MapObjectMock extends MapObject {
-    public MapObjectMock(GridArea area, AssetPaths path, AssetPaths pathSnow, AssetPaths pathFlood, boolean flipped) {
+    public MapObjectMock(
+        GridArea area, AssetPaths path, AssetPaths pathSnow,
+        AssetPaths pathFlood, boolean flipped) {
       super(area, path, pathSnow, pathFlood, flipped);
     }
   }

@@ -27,7 +27,8 @@ public abstract class Building extends MapObject {
       new GridArea(
         position, flipped ? variant.getHeight() : variant.getWidth(),
         flipped ? variant.getWidth() : variant.getHeight()
-      ), variant.getTexturePath(), variant.getTexturePathSnow(), variant.getTexturePathFlood(), flipped
+      ), variant.getTexturePath(), variant.getTexturePathSnow(),
+        variant.getTexturePathFlood(), flipped
     );
     this.variant = variant;
     this.position = position;

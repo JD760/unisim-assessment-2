@@ -1,11 +1,10 @@
 package y111studios;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
+import java.util.ArrayList;
+import java.util.List;
 import y111studios.buildings.premade_variants.MiscellaneousVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.screens.InstructionsScreen;
@@ -151,9 +150,7 @@ public class WorldInputProcessor implements InputProcessor {
           }
         }
       } else if (buildingMenu.getCurrentMenuItem() == 6) {
-        try {
-          world.removeObject(world.currentGridPosition());
-        } catch (IllegalStateException ignored) {}
+        world.removeObject(world.currentGridPosition());
       }
     }
     dragging = true;
@@ -188,7 +185,7 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean scrolled(float amountX, float amountY) {
-    world.getCamera().vZoom += 0.001f * amountY;
+    world.getCamera().zoomV += 0.001f * amountY;
     return true;
   }
 }

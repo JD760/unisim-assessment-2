@@ -2,6 +2,9 @@ package y111studios.screens.leaderboard;
 
 import lombok.Getter;
 
+/**
+ * Represents a single score on the leaderboard.
+ */
 public class LeaderboardScore {
   private @Getter String name;
   private @Getter double score;

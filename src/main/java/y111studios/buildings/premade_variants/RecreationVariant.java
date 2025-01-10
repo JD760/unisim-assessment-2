@@ -33,7 +33,8 @@ public enum RecreationVariant implements VariantProperties {
     this.name = name;
   }
 
-  RecreationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
+  RecreationVariant(
+      int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -42,7 +43,9 @@ public enum RecreationVariant implements VariantProperties {
     this.name = name;
   }
 
-  RecreationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+  RecreationVariant(
+      int width, int height, AssetPaths texturePath,
+      String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -80,7 +83,7 @@ public enum RecreationVariant implements VariantProperties {
   }
 
   @Override
-  public String getName(){
+  public String getName() {
     return name;
   }
 

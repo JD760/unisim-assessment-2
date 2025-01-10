@@ -14,15 +14,15 @@ public class Camera {
 
   public float vx;
   public float vy;
-  public float vZoom;
+  public float zoomV;
 
   public float scale;
 
   private float time;
   // class variable in case of usage in future animations
-  private final float timeStepSize = 1/1000f;
+  private final float timeStepSize = 1 / 1000f;
 
-    /**
+  /**
    * Initializes the camera at the given coordinates.
    */
   public Camera(int x, int y, int width, int height) {
@@ -32,7 +32,7 @@ public class Camera {
     this.height = height;
     vx = 0;
     vy = 0;
-    vZoom = 0;
+    zoomV = 0;
     scale = 1080f / height;
   }
 
@@ -64,16 +64,27 @@ public class Camera {
     this.vy = 0;
   }
 
+  /**
+   * Called when the game window changes in size.
+   *
+   * @param width - the new width of the camera viewport
+   * @param height - the new height of the camera viewport
+   */
   public void resize(int width, int height) {
     x += this.width * scale / 2;
     y += this.height * scale / 2;
-    scale *= (float)this.height / height;
+    scale *= (float) this.height / height;
     this.width = width;
     this.height = height;
     x -= this.width * scale / 2;
     y -= this.height * scale / 2;
   }
 
+  /**
+   * Called when the user zooms in using the scroll wheel.
+   *
+   * @param factor - the degree by which to change the zoom
+   */
   public void zoom(float factor) {
     x += width * scale / 2;
     y += height * scale / 2;
@@ -87,11 +98,16 @@ public class Camera {
     y -= height * scale / 2;
   }
 
+  /**
+   * Adjusts the zoom to prevent a 'bouncing' effect when zooming in and out quickly.
+   *
+   * @param delta - the time per frame in seconds
+   */
   public void updateZoom(float delta) {
     time += delta;
     while (time > 0) {
-      vZoom *= 0.99f;
-      zoom(1.0f + vZoom);
+      zoomV *= 0.99f;
+      zoom(1.0f + zoomV);
       time -= timeStepSize;
     }
   }

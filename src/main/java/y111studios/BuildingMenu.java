@@ -1,5 +1,11 @@
 package y111studios;
 
+import static y111studios.utils.MenuTab.ACCOMMODATION;
+import static y111studios.utils.MenuTab.CATERING;
+import static y111studios.utils.MenuTab.MISCELLANEOUS;
+import static y111studios.utils.MenuTab.RECREATION;
+import static y111studios.utils.MenuTab.TEACHING;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -25,7 +31,7 @@ import y111studios.buildings.premade_variants.TeachingVariant;
 import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.utils.MenuTab;
 import y111studios.utils.UnreachableException;
-import static y111studios.utils.MenuTab.*;
+
 
 /**
  * A class to interact with LibGDX to render the game window.
@@ -348,6 +354,9 @@ public class BuildingMenu {
     updateBuildingRotations();
   }
 
+  /**
+   * Removes all elements from the Building Menu.
+   */
   public void removeActors() {
     buildingTable.remove();
     hotkeyTable.remove();

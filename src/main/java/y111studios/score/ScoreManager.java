@@ -1,8 +1,10 @@
 package y111studios.score;
 
 import lombok.Getter;
+
 /**
- * Handles logic related to tracking and calculating the total score as the game progresses.
+ * Handles logic related to tracking and calculating the total score as the game
+ * progresses.
  */
 public class ScoreManager {
   private @Getter int score;
@@ -37,7 +39,8 @@ public class ScoreManager {
   }
 
   /**
-   * Adds value to the current score for this game, for example as an achievement reward.
+   * Adds value to the current score for this game, for example as an achievement
+   * reward.
    *
    * @param value - the amount to add to the score
    */

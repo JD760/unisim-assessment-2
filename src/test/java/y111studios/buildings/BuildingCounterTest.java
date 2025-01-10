@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test the Building Counter class.
+ * Tests UR_BUILDING_COUNTER
  */
 public class BuildingCounterTest {
   private BuildingCounter buildingCounter;

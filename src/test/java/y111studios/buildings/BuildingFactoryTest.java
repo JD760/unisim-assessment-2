@@ -25,6 +25,10 @@ public class BuildingFactoryTest {
   @Tag("Constructor")
   class ConstructorTests {
 
+    /**
+     * Ensure that attempting to create a building with a null variant
+     * will throw an IllegalArgumentException.
+     */
     @Test
     void preventNullCreation() {
       assertThrows(IllegalArgumentException.class, () -> {

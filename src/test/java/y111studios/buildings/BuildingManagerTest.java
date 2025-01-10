@@ -17,6 +17,7 @@ import y111studios.position.GridPosition;
 
 /**
  * Test the Building Manager.
+ * Tests UR_BUILDING_MANAGER and UR_BUILDING_COUNTER
  */
 public class BuildingManagerTest {
 

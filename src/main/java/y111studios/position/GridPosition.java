@@ -33,9 +33,10 @@ public class GridPosition {
 
   @Override
   public boolean equals(Object other) {
-    if (other == null || other.getClass() != getClass())
-        return false;
-    GridPosition gp = (GridPosition)other;
+    if (other == null || other.getClass() != getClass()) {
+      return false;
+    }
+    GridPosition gp = (GridPosition) other;
     return x == gp.getX() && y == gp.getY();
   }
 }

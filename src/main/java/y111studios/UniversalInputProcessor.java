@@ -7,7 +7,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 /**
- * Runs before any other input processors and handles key presses that do things that should happen
+ * Runs before any other input processors and handles key presses that do things
+ * that should happen.
  * on all screens such as full-screening the window
  */
 @SuppressWarnings("OuterTypeFilename")
@@ -16,6 +17,12 @@ public class UniversalInputProcessor implements InputProcessor {
   int windowHeight;
   boolean fullscreen = false;
 
+  /**
+   * Called when the screen size changes.
+   *
+   * @param width - the new width of the screen
+   * @param height - the new height of the screen
+   */
   public void resize(int width, int height) {
     if (!fullscreen) {
       windowWidth = width;
@@ -23,20 +30,26 @@ public class UniversalInputProcessor implements InputProcessor {
     }
   }
 
+  /**
+   * Called when a key is pressed down, and before it is released.
+   *
+   * @param keycode - the identifier for the key that was pressed
+   * @return - whether the event is handled or should be passed down the processor hierarchy
+   */
   public boolean keyDown(int keycode) {
-      // Toggle fullscreen
-      if (keycode == Keys.F11) {
-          Monitor currentMonitor = Gdx.graphics.getMonitor();
-          DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
-          fullscreen = !fullscreen;
-          if (fullscreen) {
-              Gdx.graphics.setFullscreenMode(displayMode);
-          } else {
-              Gdx.graphics.setWindowedMode(windowWidth, windowHeight);
-          }
-          return true;
+    // Toggle fullscreen
+    if (keycode == Keys.F11) {
+      Monitor currentMonitor = Gdx.graphics.getMonitor();
+      DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
+      fullscreen = !fullscreen;
+      if (fullscreen) {
+        Gdx.graphics.setFullscreenMode(displayMode);
+      } else {
+        Gdx.graphics.setWindowedMode(windowWidth, windowHeight);
       }
-      return false;
+      return true;
+    }
+    return false;
   }
 
   public boolean keyUp(int keycode) {

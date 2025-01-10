@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Collection of tests to ensure the leaderboard handles adding, removing
  * and sorting scores properly.
+ * Tests FR_LEADERBOARD, FR_ADD_TO_BOARD
  */
 public class LeaderboardTest {
   @Test
@@ -40,15 +41,16 @@ public class LeaderboardTest {
     // prevent null string
     assertFalse(leaderboard.insertScore(new LeaderboardScore(null, 100)));
   }
-  
-  @Test 
+
+  @Test
   public void testInsertScoresExceedingMaxSize() {
     Leaderboard leaderboard = new Leaderboard(false);
     for (int i = 0; i < 7; i++) {
-      leaderboard.insertScore(new LeaderboardScore("player", i+10));
+      leaderboard.insertScore(new LeaderboardScore("player", i + 10));
     }
     assertEquals(Leaderboard.MAX_SIZE, leaderboard.getSize());
-}
+  }
+
   @Test
   public void testClear() {
     Leaderboard leaderboard = new Leaderboard(false);

@@ -24,8 +24,9 @@ public abstract class Event {
    */
   public Event(Main game, AssetPaths texturePath) {
     this.texturePath = texturePath;
-    if (game != null)
+    if (game != null) {
       this.screen = (MapScreen) game.getScreen();
+    }
   }
 
   public void setNotification() {

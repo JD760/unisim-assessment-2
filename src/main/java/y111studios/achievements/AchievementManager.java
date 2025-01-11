@@ -1,6 +1,7 @@
 package y111studios.achievements;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import lombok.Getter;
 import y111studios.AssetPaths;
@@ -40,14 +41,18 @@ public class AchievementManager {
   }
 
   /**
-   * Check the conditions of all achievements and award any that have met their requirements. 
+   * Check the conditions of all achievements and award any that have met their requirements.
    */
   public void checkConditions() {
+    HashSet<Achievement> achievementsToAward = new HashSet<>();
     for (String key : achievements.keySet()) {
       Achievement achievement = achievements.get(key);
       if (achievement.condition()) {
-        awardAchievement(achievement);
+        achievementsToAward.add(achievement);
       }
+    }
+    for (Achievement achievement : achievementsToAward) {
+      awardAchievement(achievement);
     }
   }
 

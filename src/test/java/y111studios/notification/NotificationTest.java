@@ -1,18 +1,20 @@
 package y111studios.notification;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import y111studios.Main;
+import y111studios.AssetPaths;
 
 public class NotificationTest {
-    Notification notification = new Notification(5, null, null);
-    
-   
+    private Main testGame;
+    private Notification notification;
+
+    @BeforeEach
+    void setUp() {
+        testGame = new Main(); // Initialize the Main game instance
+        notification = new Notification(5, AssetPaths.ACHIEVEMENT_NOTIFICATION, testGame); // Create notification
+    }
 
     @Test
     void testNotificationCreation() {
@@ -25,16 +27,16 @@ public class NotificationTest {
     @Test
     void testSetActive() {
         notification.setActive();
-        assertTrue(notification.isActive(), "Notification should be active after calling setActive.");
+        assertTrue(notification.isActive(), "Notification shold be active after calling setActive.");
     }
 
     @Test
     void testTick() {
-        // Test ticking
+        // Test that the notification ticks correctly
         assertTrue(notification.tick(), "Notification should still be active after 1 tick.");
         assertEquals(1, notification.getAge(), "Age should be incremented to 1.");
 
-        // Tick until max age
+        // Continue ticking until reaching max age
         for (int i = 1; i < 5; i++) {
             notification.tick();
         }
@@ -47,5 +49,4 @@ public class NotificationTest {
         notification.remove();
         assertEquals(5, notification.getAge(), "Age should be set to maxAge after remove is called.");
     }
-
 }

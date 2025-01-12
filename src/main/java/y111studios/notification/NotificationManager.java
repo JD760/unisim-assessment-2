@@ -130,7 +130,7 @@ public class NotificationManager {
    */
   public void resize(int width, int height) {
     for (Cell<Image> cell : notificationCells) {
-      cell.width(height * 0.4f).height(height * 0.2f);
+      cell.width(height * 0.3f).height(height * 0.15f);
     }
   }
 

@@ -47,15 +47,6 @@ public class StartScreen extends ScreenWithBackground {
     this.game = game;
 
     stage = new Stage(viewport);
-    stage.addListener(new InputListener() {
-      @Override
-      public boolean keyDown(InputEvent event, int keycode) {
-        if (keycode == Keys.SPACE) {
-          game.setScreen(new MapScreen(game));
-        }
-        return false;
-      }
-    });
 
     createMenu();
     InputMultiplexer inputMultiplexer = new InputMultiplexer();

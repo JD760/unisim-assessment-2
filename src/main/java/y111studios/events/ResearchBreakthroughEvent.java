@@ -11,7 +11,7 @@ public class ResearchBreakthroughEvent extends Event {
   private GameState gameState;
 
   public ResearchBreakthroughEvent(Main game, GameState gameState) {
-    super(game, AssetPaths.SNOW_EVENT);
+    super(game, AssetPaths.RESEARCH_BREAKTHROUGH_EVENT);
     this.gameState = gameState;
   }
 

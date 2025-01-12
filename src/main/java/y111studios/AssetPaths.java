@@ -115,6 +115,7 @@ public enum AssetPaths {
   PANDEMIC_EVENT("assets/events/PandemicEvent.png"),
   FLOOD_EVENT("assets/events/floodEvent.png"),
   OPEN_DAY_EVENT("assets/events/OpenDayEvent.png"),
+  RESEARCH_BREAKTHROUGH_EVENT("assets/events/ResearchBreakthroughEvent.png"),
   SATISFACTION_ACHIEVEMENT("assets/achievements/satisfactionAchievement.png"),
   BUILDING_HOARDER_ACHIEVEMENT("assets/achievements/buildingHoarderAchievement.png"),
   HESITANT_ACHIEVEMENT("assets/achievements/hesitantAchievement.png");

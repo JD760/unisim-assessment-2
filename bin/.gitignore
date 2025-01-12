@@ -1,0 +1,4 @@
+# Maven build directory
+/target
+# Generated files from shade plugin
+dependency-reduced-pom.xml

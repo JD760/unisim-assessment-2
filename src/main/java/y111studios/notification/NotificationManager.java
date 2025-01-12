@@ -95,7 +95,7 @@ public class NotificationManager {
       Notification notification = activeNotifications.get(i);
       // we know this always exists as we prefill all these values up to MAX_NOTIFICATIONS
       Cell<Image> cell = notificationCells.get(i);
-      
+
       if (notification == null) {
         cell.setActor(null);
       } else {
@@ -123,6 +123,18 @@ public class NotificationManager {
   }
 
   /**
+   * Called whenever the window size changes.
+   *
+   * @param width - the new width of the window
+   * @param height - the new height of the window
+   */
+  public void resize(int width, int height) {
+    for (Cell<Image> cell : notificationCells) {
+      cell.width(height * 0.4f).height(height * 0.2f);
+    }
+  }
+
+  /**
    * Used to sort the activeNotifications array based on remaining time.
    */
   class NotificationComparator implements Comparator<Notification> {
@@ -133,8 +145,8 @@ public class NotificationManager {
       } else if (otherNotification == null) {
         return -1;
       }
-      
-      
+
+
       return (notification.getMaxAge() - notification.getAge()) 
         - (otherNotification.getMaxAge() - otherNotification.getAge());
     }

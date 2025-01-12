@@ -19,13 +19,14 @@ public class HesitantAchievement extends Achievement {
   public HesitantAchievement(String name, AchievementManager manager,
       World world, AssetPaths notificationPath) {
     super(name, manager, DISPLAY_NAME, DESCRIPTION, -50, world, notificationPath);
+    this.world = world;
   }
 
   @Override
   public boolean condition() {
     GameState state = world.getGameState();
-    if (state.buildingManager.counter.getCount() >= lastBuildingCount) {
-      timeSinceLastPlaced = 0;
+    if (state.buildingManager.counter.getCount() > lastBuildingCount) {
+      ticksSinceLastPlaced = 0;
     }
     lastBuildingCount = state.buildingManager.counter.getCount();
 

@@ -143,6 +143,7 @@ public class MapScreen extends ScreenAdapter {
     table.setSize(width, height * 0.9f);
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
+    notificationManager.resize(width, height);
   }
 
   @Override

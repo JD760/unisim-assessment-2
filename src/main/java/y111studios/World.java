@@ -235,9 +235,10 @@ public class World {
         && !gameState.isPaused()) {
       color.a /= 2;
     }
-    game.spritebatch.setColor(color);
     // Render snowy and rainy buildings on top of the plain building
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
+      color.a *= (float) Math.sqrt(gameState.getCurrentEvent().getIntensity());
+      game.spritebatch.setColor(color);
       texture = game.getAsset(building.getTexturePathSnow());
       game.spritebatch.draw(texture,
           pixelCoords[0] / camera.scale,
@@ -247,6 +248,8 @@ public class World {
           0, 0, texture.getWidth(), texture.getHeight(),
           building.getFlipped(), false);
     } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
+      color.a *= (float) Math.sqrt(gameState.getCurrentEvent().getIntensity());
+      game.spritebatch.setColor(color);
       texture = game.getAsset(building.getTexturePathFlood());
       game.spritebatch.draw(texture,
           pixelCoords[0] / camera.scale,

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import lombok.Getter;
+import main.java.y111studios.achievements.HesitantAchievement;
 import y111studios.AssetPaths;
 import y111studios.World;
 
@@ -78,5 +79,7 @@ public class AchievementManager {
         "satisfactionAchievement", this, world, AssetPaths.SATISFACTION_ACHIEVEMENT));
     add(new BuildingHoarderAchievement(
         "buildingHoarderAchievement", this, world, AssetPaths.BUILDING_HOARDER_ACHIEVEMENT));
+    add(new HesitantAchievement(
+        "hesitantAchievement", this, world, AssetPaths.HESITANT_ACHIEVEMENT));
   }
 }

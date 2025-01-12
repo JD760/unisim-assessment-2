@@ -30,7 +30,7 @@ public class FloodEvent extends Event {
    * @param camera - the camera to apply the graphical effects to
    */
   public FloodEvent(final Main game, GameState gameState, Camera camera) {
-    super(game, AssetPaths.SNOW_EVENT);
+    super(game, AssetPaths.FLOOD_EVENT);
     this.game = game;
     this.gameState = gameState;
     this.camera = camera;

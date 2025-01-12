@@ -10,7 +10,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Represents the leaderboard. Contains the names associated with the top 5 recent scores.
+ * Represents the leaderboard. Contains the names associated with the top 5
+ * recent scores.
  */
 public class Leaderboard {
   public static final int MAX_SIZE = 5;
@@ -18,6 +19,11 @@ public class Leaderboard {
   boolean persistent;
   FileHandle leaderboardFile;
 
+  /**
+   * Creates a new leaderboard that is initially empty.
+   *
+   * @param persistent - whether to read/write to a file or keep the leaderboard solely in memory
+   */
   public Leaderboard(boolean persistent) {
     this.persistent = persistent;
     if (!persistent) {
@@ -40,7 +46,7 @@ public class Leaderboard {
    *
    * @param score - The score to insert to the leaderboard
    * @return - false if the name or score are invalid, or if the score is not in
-   *           the top MAX_SIZE scores
+   *         the top MAX_SIZE scores
    */
   public boolean insertScore(LeaderboardScore score) {
     if (score.getScore() < 0 || score.getName() == null || score.getName() == "") {
@@ -49,8 +55,9 @@ public class Leaderboard {
 
     scores.add(score);
     scores.sort(new SortByScore());
-    while(scores.size() > MAX_SIZE)
+    while (scores.size() > MAX_SIZE) {
       scores.remove(MAX_SIZE);
+    }
 
     return scores.contains(score);
   }
@@ -79,7 +86,8 @@ public class Leaderboard {
   /**
    * Attempt to load a JSON string representation of the leaderboard scores.
    *
-   * @param jsonStr - a string that should be valid JSON encoding a {@link Scores} object
+   * @param jsonStr - a string that should be valid JSON encoding a {@link Scores}
+   *                object
    */
   public void loadJson(String jsonStr) {
     Json json = new Json();
@@ -110,11 +118,13 @@ public class Leaderboard {
   }
 
   /**
-   * Get the score at the given position in the leaderboard. 
-   * This is generally NOT equal to the order of insertion as the leaderboard sorts itself.
+   * Get the score at the given position in the leaderboard.
+   * This is generally NOT equal to the order of insertion as the leaderboard
+   * sorts itself.
    *
    * @param index - the position of the score to return
-   * @return - the Score at the provided position, or null if no such position exists.
+   * @return - the Score at the provided position, or null if no such position
+   *         exists.
    */
   public LeaderboardScore getScore(int index) {
     if (index < 0 || index >= scores.size()) {
@@ -125,7 +135,8 @@ public class Leaderboard {
 
   class SortByScore implements Comparator<LeaderboardScore> {
     public int compare(LeaderboardScore a, LeaderboardScore b) {
-      // any null item should be smaller than any non-null item so the leaderboard has no gaps
+      // any null item should be smaller than any non-null item so the leaderboard has
+      // no gaps
       if (a == null) {
         return 1;
       }

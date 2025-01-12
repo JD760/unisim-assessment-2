@@ -13,11 +13,11 @@ import y111studios.buildings.AccommodationBuilding;
  */
 public enum AccommodationVariant implements VariantProperties {
 
-  SMALL_HOUSE(5, 5, AssetPaths.ACC1 , "Small House",AssetPaths.ACC1SNOW),
-  MEDIUM_HOUSE(3, 3, AssetPaths.ACC2 , "Medium House", AssetPaths.ACC2SNOW),
-  MODERN_FLAT(2, 2, AssetPaths.ACC3, "Modern Flat" ,AssetPaths.ACC3SNOW),
-  LUXURY_FLAT(3, 3, AssetPaths.ACC4, "Luxury Flat",AssetPaths.ACC4SNOW),
-  PRIVATE_HOUSE(3, 3, AssetPaths.ACC5, "Private House" ,AssetPaths.ACC5SNOW);
+  SMALL_HOUSE(5, 5, AssetPaths.ACC1, "Small House", AssetPaths.ACC1SNOW),
+  MEDIUM_HOUSE(3, 3, AssetPaths.ACC2, "Medium House", AssetPaths.ACC2SNOW),
+  MODERN_FLAT(2, 2, AssetPaths.ACC3, "Modern Flat", AssetPaths.ACC3SNOW),
+  LUXURY_FLAT(3, 3, AssetPaths.ACC4, "Luxury Flat", AssetPaths.ACC4SNOW),
+  PRIVATE_HOUSE(3, 3, AssetPaths.ACC5, "Private House", AssetPaths.ACC5SNOW);
 
 
   private final int width;
@@ -36,7 +36,9 @@ public enum AccommodationVariant implements VariantProperties {
     this.texturePathSnow = texturePath;
     this.texturePathFlood = texturePath;
   }
-  AccommodationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
+
+  AccommodationVariant(
+      int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -45,7 +47,9 @@ public enum AccommodationVariant implements VariantProperties {
     this.name = name;
   }
 
-  AccommodationVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+  AccommodationVariant(
+      int width, int height, AssetPaths texturePath, String name,
+      AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -65,12 +69,15 @@ public enum AccommodationVariant implements VariantProperties {
   }
 
   @Override
-  public String getName() { return name; }
+  public String getName() {
+    return name;
+  }
 
   @Override
   public AssetPaths getTexturePath() {
     return texturePath;
   }
+
   public AssetPaths getTexturePathSnow() {
     return texturePathSnow;
   }

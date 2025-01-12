@@ -35,7 +35,8 @@ public enum TeachingVariant implements VariantProperties {
     this.name = name;
   }
 
-  TeachingVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
+  TeachingVariant(
+      int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -44,7 +45,9 @@ public enum TeachingVariant implements VariantProperties {
     this.name = name;
   }
 
-  TeachingVariant(int width, int height, AssetPaths texturePath, String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
+  TeachingVariant(
+      int width, int height, AssetPaths texturePath,
+      String name, AssetPaths texturePathSnow, AssetPaths texturePathFlood) {
     this.width = width;
     this.height = height;
     this.texturePath = texturePath;
@@ -64,7 +67,9 @@ public enum TeachingVariant implements VariantProperties {
   }
 
   @Override
-  public String getName(){ return name; }
+  public String getName() {
+    return name; 
+  }
 
   @Override
   public AssetPaths getTexturePath() {

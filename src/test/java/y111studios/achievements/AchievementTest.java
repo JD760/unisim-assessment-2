@@ -1,5 +1,10 @@
 package y111studios;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,57 +14,62 @@ import y111studios.achievements.Achievement;
 import y111studios.achievements.AchievementManager;
 import y111studios.screens.MapScreen;
 
+/**
+ * Test the Achievement class.
+ * Tests UR_ACHIEVEMENTS
+ */
 public class AchievementTest {
 
-    private AchievementManager achievementManager;
-    private World dummyWorld;
+  private AchievementManager achievementManager;
+  private World dummyWorld;
 
-    @BeforeEach
-    void setUp() {
-        achievementManager = new AchievementManager(dummyWorld); // Create the AchievementManager
-    }
+  @BeforeEach
+  void setUp() {
+    achievementManager = new AchievementManager(dummyWorld); // Create the AchievementManager
+  }
 
-    @Test
-    void testAchievementCreation() {
-        Achievement achievement = new Achievement("testAchievement", achievementManager, 
-            "Test Achievement", "This is a test achievement", 100, dummyWorld, 
-            AssetPaths.ACHIEVEMENT_NOTIFICATION) {
-                
-            public boolean condition() {
-                return false; // Stubbed condition
-            }
-        };
+  @Test
+  void testAchievementCreation() {
+    Achievement achievement = new Achievement("testAchievement", achievementManager,
+        "Test Achievement", "This is a test achievement", 100, dummyWorld,
+        AssetPaths.ACHIEVEMENT_NOTIFICATION) {
 
-        assertNotNull(achievement, "Achievement should be created successfully");
-        assertEquals("testAchievement", achievement.getName(), "Achievement name should match");
-        assertEquals("Test Achievement", achievement.getDisplayName(), "Display name should match");
-        assertEquals("This is a test achievement", achievement.getDescription(), "Description should match");
-    }
+      public boolean condition() {
+        return false; // Stubbed condition
+      }
+    };
 
-    @Test
-    void testUniqueAchievementName() {
-        Achievement achievement1 = new Achievement("testAchievement", achievementManager, 
-            "Test Achievement", "This is a test achievement", 100, dummyWorld, 
-            AssetPaths.ACHIEVEMENT_NOTIFICATION) {
-            
-            @Override
-            public boolean condition() {
-                return false; // Stubbed condition
-            }
-        };
+    assertNotNull(achievement, "Achievement should be created successfully");
+    assertEquals("testAchievement", achievement.getName(), "Achievement name should match");
+    assertEquals("Test Achievement", achievement.getDisplayName(), "Display name should match");
+    assertEquals(
+        "This is a test achievement", achievement.getDescription(), "Description should match");
+  }
 
-        achievementManager.add(achievement1); // Add the initial achievement
+  @Test
+  void testUniqueAchievementName() {
+    Achievement achievement1 = new Achievement("testAchievement", achievementManager,
+        "Test Achievement", "This is a test achievement", 100, dummyWorld,
+        AssetPaths.ACHIEVEMENT_NOTIFICATION) {
 
-        // Attempt to create a duplicate achievement
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Achievement("testAchievement", achievementManager, "Another Achievement", 
-                "This is another test achievement", 50, dummyWorld, AssetPaths.ACHIEVEMENT_NOTIFICATION) {
-                
-                @Override
-                public boolean condition() {
-                    return false; // Stubbed condition
-                }
-            };
-        }, "Achievement names must be unique");
-    }
+      @Override
+      public boolean condition() {
+        return false; // Stubbed condition
+      }
+    };
+
+    achievementManager.add(achievement1); // Add the initial achievement
+
+    // Attempt to create a duplicate achievement
+    assertThrows(IllegalArgumentException.class, () -> {
+      new Achievement("testAchievement", achievementManager, "Another Achievement",
+          "This is another test achievement", 50, dummyWorld, AssetPaths.ACHIEVEMENT_NOTIFICATION) {
+
+        @Override
+        public boolean condition() {
+          return false; // Stubbed condition
+        }
+      };
+    }, "Achievement names must be unique");
+  }
 }

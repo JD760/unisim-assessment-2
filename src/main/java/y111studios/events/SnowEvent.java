@@ -8,6 +8,9 @@ import y111studios.Camera;
 import y111studios.GameState;
 import y111studios.Main;
 
+/**
+ * Occurs randomly throughout gameplay, provides a positive bonus to student satisfaction.
+ */
 public class SnowEvent extends Event {
   private static final Vector3 minStartPoint = new Vector3(-3000f, -5000f, 1f);
   private static final Vector3 maxStartPoint = new Vector3(7500f, 2000f, 30f);
@@ -18,22 +21,33 @@ public class SnowEvent extends Event {
   private Texture snowflakeTexture;
   private Random random = new Random();
 
+  /**
+   * Create a new SnowEvent which will begin running immediately.
+   *
+   * @param game - an instance of the main class
+   * @param gameState - an instance of the GameState
+   * @param camera - a reference to the camera object currently in use
+   */
   public SnowEvent(final Main game, GameState gameState, Camera camera) {
     super(game, AssetPaths.SNOW_EVENT);
     this.game = game;
     this.gameState = gameState;
     this.camera = camera;
     snowflakes = new Vector3[50000];
-    snowflakeTexture = game.getAsset(AssetPaths.SNOWFLAKE);
-
-    for (int i = 0; i < 50000; i++) {
-      snowflakes[i] = new Vector3(
-          minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x),
-          minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y),
-          minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z));
+    if (game != null) {
+      snowflakeTexture = game.getAsset(AssetPaths.SNOWFLAKE);
+      for (int i = 0; i < 50000; i++) {
+        snowflakes[i] = new Vector3(
+            minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x),
+            minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y),
+            minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z));
+      }
     }
   }
 
+  /**
+   * Called on each game tick, draws the snow effect on the screen.
+   */
   public void render(float delta) {
     int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
     int numSnowflakes = (int) (getIntensity() * 50000);
@@ -43,9 +57,12 @@ public class SnowEvent extends Event {
         snowflakes[i].y -= snowflakes[i].z * delta * 10;
         snowflakes[i].z *= (float) Math.pow(0.6f, delta);
         if (snowflakes[i].z < 1f) {
-          snowflakes[i].x = minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x);
-          snowflakes[i].y = minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y);
-          snowflakes[i].z = minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z);
+          snowflakes[i].x
+            = minStartPoint.x + random.nextFloat() * (maxStartPoint.x - minStartPoint.x);
+          snowflakes[i].y
+            = minStartPoint.y + random.nextFloat() * (maxStartPoint.y - minStartPoint.y);
+          snowflakes[i].z
+            = minStartPoint.z + random.nextFloat() * (maxStartPoint.z - minStartPoint.z);
         }
       }
 

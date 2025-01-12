@@ -234,8 +234,9 @@ public class GameState implements GameTimer, BuildingController {
             }
           }
           studentSatisfaction.setCurrentEvent(currentEvent);
-          if (currentEvent != null)
+          if (currentEvent != null) {
             currentEvent.setNotification();
+          }
         }
 
         numTicks++;

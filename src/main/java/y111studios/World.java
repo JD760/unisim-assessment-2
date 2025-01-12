@@ -1,28 +1,36 @@
 package y111studios;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-import lombok.Getter;
-import lombok.Setter;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import y111studios.position.GridPosition;
-import y111studios.screens.MapScreen;
-import y111studios.utils.UnreachableException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import lombok.Getter;
+import lombok.Setter;
 import y111studios.buildings.Building;
 import y111studios.buildings.BuildingFactory;
 import y111studios.buildings.ObstacleBuilding;
-import y111studios.buildings.premade_variants.*;
+import y111studios.buildings.premade_variants.AccommodationVariant;
+import y111studios.buildings.premade_variants.CateringVariant;
+import y111studios.buildings.premade_variants.MiscellaneousVariant;
+import y111studios.buildings.premade_variants.ObstacleVariant;
+import y111studios.buildings.premade_variants.RecreationVariant;
+import y111studios.buildings.premade_variants.TeachingVariant;
+import y111studios.buildings.premade_variants.VariantProperties;
 import y111studios.events.FloodEvent;
 import y111studios.events.SnowEvent;
+import y111studios.position.GridPosition;
+import y111studios.screens.MapScreen;
+import y111studios.utils.UnreachableException;
 
+/**
+ * Represents the game world, handles building placement and most rendering.
+ */
 public class World {
   // Proportional width of the display.
   private int width = 1;
@@ -53,7 +61,7 @@ public class World {
   private @Getter MapScreen parentScreen;
 
   /**
-   * Sets up the camera and loads the background
+   * Sets up the camera and loads the background.
    *
    * @param game Reference to game manager
    */
@@ -148,8 +156,10 @@ public class World {
    * @return The pixel coordinates.
    */
   public float[] tileToPixel(GridPosition coords) {
-    float pixelX = 129 + (coords.getX() + coords.getY()) * 32 - camera.x;
-    float pixelY = -1343 + (coords.getX() - coords.getY()) * 16 + camera.y + (height * camera.scale);
+    float pixelX = 129 + (coords.getX() + coords.getY())
+        * 32 - camera.x;
+    float pixelY = -1343 + (coords.getX() - coords.getY())
+        * 16 + camera.y + (height * camera.scale);
     return new float[] { pixelX, pixelY };
   }
 
@@ -164,8 +174,8 @@ public class World {
   public GridPosition pixelToTile(float x, float y) {
     x += 7f;
     y += 1f;
-    int tileX = (int) ((x - 2*y) * 0.0156f);
-    int tileY = (int) ((x + 2*y) * 0.0156f);
+    int tileX = (int) ((x - 2 * y) * 0.0156f);
+    int tileY = (int) ((x + 2 * y) * 0.0156f);
     try {
       return new GridPosition(tileX + 39, tileY - 44);
     } catch (IllegalArgumentException e) {
@@ -179,9 +189,16 @@ public class World {
    * @return The current grid position of the cursor.
    */
   public GridPosition currentGridPosition() {
-    return pixelToTile((cursorScreenPos.x * camera.scale + camera.x), (cursorScreenPos.y * camera.scale + camera.y));
+    return pixelToTile((
+      cursorScreenPos.x * camera.scale + camera.x), (cursorScreenPos.y * camera.scale + camera.y));
   }
 
+  /**
+   * Draw the building on the screen, with the texture drawn depending on the
+   * state of the building.
+   *
+   * @param building - a reference to the building to render
+   */
   public void renderBuilding(Building building) {
     if (deleteMode && building.getArea().contains(currentGridPosition())
         && !(building instanceof ObstacleBuilding)) {
@@ -193,8 +210,9 @@ public class World {
       } else {
         float opacity = ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5;
         if (gameState.getCurrentEvent() instanceof SnowEvent
-            || gameState.getCurrentEvent() instanceof FloodEvent)
+            || gameState.getCurrentEvent() instanceof FloodEvent) {
           opacity /= 2;
+        }
         game.spritebatch.setColor(new Color(
             NOT_BUILT.r, NOT_BUILT.g, NOT_BUILT.b,
             ((float) Math.sin(System.currentTimeMillis() * 0.005) + 3f) / 5f));
@@ -213,28 +231,30 @@ public class World {
         building.getFlipped(), false);
 
     Color color = game.spritebatch.getColor();
-    if (building.getAge() < y111studios.buildings.MapObject.BUILDING_TIME && !gameState.isPaused())
+    if (building.getAge() < y111studios.buildings.MapObject.BUILDING_TIME
+        && !gameState.isPaused()) {
       color.a /= 2;
+    }
     game.spritebatch.setColor(color);
     // Render snowy and rainy buildings on top of the plain building
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
       texture = game.getAsset(building.getTexturePathSnow());
       game.spritebatch.draw(texture,
-        pixelCoords[0] / camera.scale,
-        (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
-        2f * texture.getWidth() / camera.scale,
-        2f * texture.getHeight() / camera.scale,
-        0, 0, texture.getWidth(), texture.getHeight(),
-        building.getFlipped(), false);
+          pixelCoords[0] / camera.scale,
+          (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+          2f * texture.getWidth() / camera.scale,
+          2f * texture.getHeight() / camera.scale,
+          0, 0, texture.getWidth(), texture.getHeight(),
+          building.getFlipped(), false);
     } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
       texture = game.getAsset(building.getTexturePathFlood());
       game.spritebatch.draw(texture,
-        pixelCoords[0] / camera.scale,
-        (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
-        2f * texture.getWidth() / camera.scale,
-        2f * texture.getHeight() / camera.scale,
-        0, 0, texture.getWidth(), texture.getHeight(),
-        building.getFlipped(), false);
+          pixelCoords[0] / camera.scale,
+          (pixelCoords[1] - building.getArea().getHeight() * 16) / camera.scale,
+          2f * texture.getWidth() / camera.scale,
+          2f * texture.getHeight() / camera.scale,
+          0, 0, texture.getWidth(), texture.getHeight(),
+          building.getFlipped(), false);
     }
 
     game.spritebatch.setColor(NORMAL);
@@ -256,43 +276,51 @@ public class World {
     // Draw the game map
     game.spritebatch.draw(gameMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-    game.spritebatch.draw(gameMap[1], 0, 0, width, height, (int) camera.x - gameMap[0].getWidth() + 3,
+    game.spritebatch.draw(
+        gameMap[1], 0, 0, width, height, (int) camera.x - gameMap[0].getWidth() + 3,
         (int) camera.y + 1,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     game.spritebatch.draw(gameMap[2], 0, 0, width, height, (int) camera.x + 1,
         (int) camera.y - gameMap[0].getHeight() + 3,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-    game.spritebatch.draw(gameMap[3], 0, 0, width, height, (int) camera.x - gameMap[0].getWidth() + 3,
+    game.spritebatch.draw(
+        gameMap[3], 0, 0, width, height, (int) camera.x - gameMap[0].getWidth() + 3,
         (int) camera.y - gameMap[0].getHeight() + 3,
         (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     if (gameState.getCurrentEvent() instanceof SnowEvent) {
       game.spritebatch.setColor(new Color(
           1f, 1f, 1f,
           (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
-      game.spritebatch.draw(snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
+      game.spritebatch.draw(
+          snowyMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-      game.spritebatch.draw(snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
+      game.spritebatch.draw(
+          snowyMap[1], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
           (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(snowyMap[2], 0, 0, width, height, (int) camera.x + 1,
           (int) camera.y - snowyMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-      game.spritebatch.draw(snowyMap[3], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
+      game.spritebatch.draw(
+          snowyMap[3], 0, 0, width, height, (int) camera.x - snowyMap[0].getWidth() + 3,
           (int) camera.y - snowyMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     } else if (gameState.getCurrentEvent() instanceof FloodEvent) {
       game.spritebatch.setColor(new Color(
           1f, 1f, 1f,
           (float) Math.sqrt(gameState.getCurrentEvent().getIntensity())));
-      game.spritebatch.draw(floodedMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
+      game.spritebatch.draw(
+          floodedMap[0], 0, 0, width, height, (int) camera.x + 1, (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-      game.spritebatch.draw(floodedMap[1], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
+      game.spritebatch.draw(
+          floodedMap[1], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
           (int) camera.y + 1,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
       game.spritebatch.draw(floodedMap[2], 0, 0, width, height, (int) camera.x + 1,
           (int) camera.y - floodedMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
-      game.spritebatch.draw(floodedMap[3], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
+      game.spritebatch.draw(
+          floodedMap[3], 0, 0, width, height, (int) camera.x - floodedMap[0].getWidth() + 3,
           (int) camera.y - floodedMap[0].getHeight() + 3,
           (int) (width * camera.scale), (int) (height * camera.scale), false, false);
     }
@@ -314,8 +342,9 @@ public class World {
       game.spritebatch.setColor(NORMAL);
     }
 
-    if (gameState.getCurrentEvent() != null)
+    if (gameState.getCurrentEvent() != null) {
       gameState.getCurrentEvent().render(delta);
+    }
 
     game.spritebatch.end();
 
@@ -339,6 +368,13 @@ public class World {
     viewport.update(width, height, true);
   }
 
+  /**
+   * Set the building in the cursor to the provided building reference. Used to
+   * allow keybinds
+   * to set the building.
+   *
+   * @param building - a reference to the building to be selected
+   */
   public void setSelectedBuilding(Building building) {
     selectedBuilding = building;
     if (building != null) {
@@ -350,6 +386,10 @@ public class World {
     return game;
   }
 
+  /**
+   * Undo the most recently placed building. Uses a stack to allow multiple undo
+   * operations.
+   */
   public void undoPlacement() {
     Gdx.app.log("#INFO", "Recently Placed: " + recentlyPlaced.size());
     if (recentlyPlaced.size() == 0) {

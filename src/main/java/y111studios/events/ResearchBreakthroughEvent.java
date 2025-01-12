@@ -4,6 +4,9 @@ import y111studios.AssetPaths;
 import y111studios.GameState;
 import y111studios.Main;
 
+/**
+ * Occurs randomly throughout the game, provides a positive bonus to student satisfaction.
+ */
 public class ResearchBreakthroughEvent extends Event {
   private GameState gameState;
 
@@ -16,6 +19,6 @@ public class ResearchBreakthroughEvent extends Event {
 
   public float getIntensity() {
     int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
-    return (float)Math.sin((float)timeSinceEventStart / (60 * 62) * Math.PI);
+    return (float) Math.sin((float) timeSinceEventStart / (60 * 62) * Math.PI);
   }
 }

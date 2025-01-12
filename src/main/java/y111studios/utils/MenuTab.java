@@ -13,12 +13,12 @@ public enum MenuTab {
    * @return the tab's order in the list
    */
   public int toInt() {
-      return switch (this) {
-          case ACCOMMODATION -> 0;
-          case CATERING -> 1;
-          case TEACHING -> 2;
-          case RECREATION -> 3;
-          case MISCELLANEOUS -> 4;
-      };
+    return switch (this) {
+      case ACCOMMODATION -> 0;
+      case CATERING -> 1;
+      case TEACHING -> 2;
+      case RECREATION -> 3;
+      case MISCELLANEOUS -> 4;
+    };
   }
 }

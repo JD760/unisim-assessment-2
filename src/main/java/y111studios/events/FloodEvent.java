@@ -35,7 +35,9 @@ public class FloodEvent extends Event {
     this.gameState = gameState;
     this.camera = camera;
     snowflakes = new Vector3[50000];
-    raindropTexture = game.getAsset(AssetPaths.RAINDROP);
+    if (game != null) {
+      raindropTexture = game.getAsset(AssetPaths.RAINDROP);
+    }
 
     for (int i = 0; i < 50000; i++) {
       snowflakes[i] = new Vector3(

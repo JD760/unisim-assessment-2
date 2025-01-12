@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test the Game clock.
+ * Tests FR_TIMER_START, FR_TIMER_COUNTDOWN, FR_GAME_PAUSE
  */
 public class ClockTest {
 

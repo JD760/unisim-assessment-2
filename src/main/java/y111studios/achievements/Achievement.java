@@ -54,8 +54,10 @@ public abstract class Achievement {
    * is marked as completed.
    */
   public void result() {
-    MapScreen screen = (MapScreen) world.getGame().getScreen();
-    screen.getNotificationManager().createNotification(500, notificationPath);
+    if (world.getGame() != null) {
+      MapScreen screen = (MapScreen) world.getGame().getScreen();
+      screen.getNotificationManager().createNotification(500, notificationPath);
+    }
     GameState gameState = world.getGameState();
     gameState.getScoreManager().addScore(scoreContribution);
   }

@@ -100,14 +100,13 @@ public class GameOverMenu {
   public void resize(int width, int height) {
     titleTable.setBounds(0, height * 0.08f, width, height * 0.11f);
     for (Cell<Actor> cell : titleTable.getCells()) {
-      cell.width(
-          viewport.getScreenHeight() * 0.14f).height(viewport.getScreenHeight() * 0.025f);
       ((Label) cell.getActor()).setFontScale(viewport.getScreenHeight() * 0.0016f);
     }
 
     mainTable.setBounds(0, 0, width, height * 0.08f);
-    nameInputCell.height(height * 0.03f).width(height * 0.14f);
+    nameInputCell.height(height * 0.03f).width(height * 0.24f);
     backButtonCell.pad(height * 0.02f);
+    ((TextButton) backButtonCell.getActor()).getLabel().setFontScale(viewport.getScreenHeight() * 0.0013f);
   }
 
   public int getScreenHeight() {

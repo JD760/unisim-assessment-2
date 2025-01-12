@@ -28,7 +28,9 @@ public abstract class MapObject {
    *
    * @throws IllegalArgumentException if the area or texture are null
    */
-  protected MapObject(GridArea area, AssetPaths texturePath, AssetPaths texturePathSnow, AssetPaths texturePathFlood, boolean flipped) {
+  protected MapObject(
+      GridArea area, AssetPaths texturePath, AssetPaths texturePathSnow,
+      AssetPaths texturePathFlood, boolean flipped) {
     if (area == null) {
       throw new IllegalArgumentException("GridArea must not be null");
     }

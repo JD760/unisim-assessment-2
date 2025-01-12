@@ -116,11 +116,11 @@ public class GameState implements GameTimer, BuildingController {
     if (position == null) {
       return false;
     }
+    
     // Get building being removed
     final Building building = this.buildingManager.getBuilding(position);
     if (building == null || building instanceof ObstacleBuilding) {
-      // This should never happen provided push is correctly implemented
-      throw new IllegalStateException("Building not found at position: " + position);
+      return false;
     }
     // Remove the building from the collision detection
     this.collisionDetection.removeBuilding(building.getArea());

@@ -7,7 +7,7 @@ import y111studios.Main;
 
 /**
  * Represents a notification drawn onto the screen when, for example, an event occurs
- * or an achievement is earned.
+ * or an achevement is earned.
  */
 public class Notification {
   private Main game;

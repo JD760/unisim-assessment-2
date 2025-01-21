@@ -207,12 +207,13 @@ public class GameState implements GameTimer, BuildingController {
         scoreManager.tick(studentSatisfaction.getSatisfaction());
 
         // Update the current event every 62 seconds
-        if (numTicks % (60 * 62) == 0 && numTicks > 0) {
+        if (numTicks % (10 * 62) == 0 && numTicks > 0) {
+          currentEvent = new SnowEvent(game, this, camera);
           if (numTicks > 60 * 62 * 4) {
             currentEvent = null;
           } else if (numTicks == 60 * 62 * 4) {
             currentEvent = new OpenDayEvent(game, this);
-          } else {
+          } else {/*
             int eventIndex = new Random().nextInt(unplayedEvents.size());
             int eventNum = unplayedEvents.get(eventIndex).intValue();
             unplayedEvents.remove(eventIndex);
@@ -231,7 +232,7 @@ public class GameState implements GameTimer, BuildingController {
                 break;
               default:
                 break;
-            }
+            }*/
           }
           studentSatisfaction.setCurrentEvent(currentEvent);
           if (currentEvent != null) {

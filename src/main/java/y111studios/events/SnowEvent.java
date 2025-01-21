@@ -49,7 +49,7 @@ public class SnowEvent extends Event {
    * Called on each game tick, draws the snow effect on the screen.
    */
   public void render(float delta) {
-    int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
+    int timeSinceEventStart = gameState.getNumTicks() % (10 * 62);
     int numSnowflakes = (int) (getIntensity() * 50000);
     for (int i = 0; i < numSnowflakes; i++) {
       if (!gameState.isPaused()) {
@@ -75,7 +75,7 @@ public class SnowEvent extends Event {
   }
 
   public float getIntensity() {
-    int timeSinceEventStart = gameState.getNumTicks() % (60 * 62);
-    return (float) Math.sin((float) timeSinceEventStart / (60 * 62) * Math.PI);
+    int timeSinceEventStart = gameState.getNumTicks() % (10 * 62);
+    return (float) Math.sin((float) timeSinceEventStart / (10 * 62) * Math.PI);
   }
 }

@@ -55,7 +55,7 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
-    if (width + height > 0) {
+    if (width > 0 && height > 0) {
       font.getData().setScale(height * 0.00165f);
       super.resize(width, height);
       universalInputProcessor.resize(width, height);
